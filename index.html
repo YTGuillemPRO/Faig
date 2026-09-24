@@ -300,6 +300,7 @@
 
 <script>
   /* ================== CONFIGURACIÓ ================== */
+  // 👇 Enganxa aquí l'URL del teu magatzem (botó "Activar mur públic" o jsonblob.com)
   const BLOB_URL = '';          // ex: 'https://jsonblob.com/api/jsonBlob/1234567890'
   const CODI_MODERACIO = '';    // posa una contrasenya (ex: 'univers2025') per poder esborrar opinions amb el botó ✕
 
@@ -606,9 +607,16 @@
 
   /* ---------- APP TIKTOK ---------- */
   const feedTikTok = [
-    { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Primer vídeo del projecte — llisca per veure més', so: 'so original', base: 128 },
-    { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Segon vídeo: explica aquí de què va', so: 'so original', base: 342 },
-    { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Tercer vídeo — el final de la història', so: 'so original', base: 57 },
+    // ---- 🧪 TESTS de música GRATUÏTA (NCS, lliure de drets) ----
+    { tipus: 'yt', id: 'K4DyBUG242c',  usuari: '@ncs', desc: 'TEST · On & On 🎵',          so: 'On & On · Cartoon',            base: 128 },
+    { tipus: 'yt', id: 'bM7SZ5SBzyY',  usuari: '@ncs', desc: 'TEST · Fade 🎵',             so: 'Fade · Alan Walker',           base: 342 },
+    { tipus: 'yt', id: '3nQNiWdeH2Q',  usuari: '@ncs', desc: 'TEST · Heroes Tonight 🎵',   so: 'Heroes Tonight · Janji',       base: 57 },
+    { tipus: 'yt', id: 'TW9d8vYrVFQ',  usuari: '@ncs', desc: 'TEST · Sky High 🎵',         so: 'Sky High · Elektronomia',      base: 211 },
+    { tipus: 'yt', id: 'EP625xQIGzs',  usuari: '@ncs', desc: 'TEST · Hope 🎵',             so: 'Hope · Tobu',                  base: 94 },
+    { tipus: 'yt', id: 'J2X5mJ3HDYE',  usuari: '@ncs', desc: 'TEST · Invincible 🎵',       so: 'Invincible · Deaf Kev',        base: 63 },
+
+    // ---- TikToks reals: còpia la ID de l'URL i descomenta ----
+    // { tipus: 'tt', id: '7106594312292457990', usuari: '@el_nostre_compte', desc: 'El nostre primer TikTok', so: 'so original', base: 0 },
   ];
 
   const svgComentari = '<svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>';
@@ -635,14 +643,16 @@
     if (typeof YT === 'undefined' || !YT.Player){ setTimeout(buildFeed, 300); return; }
     const feed = document.getElementById('feed');
     feedTikTok.forEach((v, i) => {
+      const esTT = v.tipus === 'tt';
       const slide = document.createElement('div');
       slide.className = 'slide';
       slide.id = 'tiktok-' + i;
       slide.innerHTML = `
         <div class="video-box">
           <div id="player-${i}"></div>
+          ${esTT ? '' : `
           <div class="click-cap" data-i="${i}"></div>
-          <div class="icona-pausa" id="pausa-${i}">${svgPlay}</div>
+          <div class="icona-pausa" id="pausa-${i}">${svgPlay}</div>`}
           <div class="info">
             <div class="usuari">${v.usuari}</div>
             <div class="descripcio">${v.desc}</div>
@@ -657,18 +667,29 @@
               <span class="cercle">${svgCompartir}</span><span>comparteix</span>
             </button>
           </div>
-          <button class="mute">${svgSilenci}</button>
+          ${esTT ? '' : `<button class="mute">${svgSilenci}</button>`}
           ${i === 0 ? '<div class="pista">↓ llisca per veure més</div>' : ''}
         </div>`;
       feed.appendChild(slide);
     });
 
     feedTikTok.forEach((v, i) => {
-      players[i] = new YT.Player('player-' + i, {
-        videoId: v.id,
-        playerVars: { autoplay:0, mute:1, controls:0, rel:0, loop:1, playlist:v.id,
-                      modestbranding:1, playsinline:1, iv_load_policy:3, fs:0 }
-      });
+      if (v.tipus === 'tt'){
+        // TikTok real: reproductor oficial incrustat (porta el seu propi so i controls)
+        const holder = document.getElementById('player-' + i);
+        const f = document.createElement('iframe');
+        f.src = 'https://www.tiktok.com/embed/v2/' + v.id;
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.setAttribute('data-tt', '1');
+        holder.replaceWith(f);
+        players[i] = null;
+      } else {
+        players[i] = new YT.Player('player-' + i, {
+          videoId: v.id,
+          playerVars: { autoplay:0, mute:1, controls:0, rel:0, loop:1, playlist:v.id,
+                        modestbranding:1, playsinline:1, iv_load_policy:3, fs:0 }
+        });
+      }
     });
 
     const io = new IntersectionObserver(entrades => {
@@ -718,7 +739,9 @@
     document.querySelectorAll('.compartir').forEach(b => {
       b.onclick = async () => {
         const i = +b.dataset.i;
-        const url = location.origin + location.pathname + '#tiktok-' + i;
+        const url = feedTikTok[i].tipus === 'tt'
+          ? 'https://www.tiktok.com/video/' + feedTikTok[i].id
+          : location.origin + location.pathname + '#tiktok-' + i;
         try {
           if (navigator.share) await navigator.share({ title: 'El Nostre Univers', url });
           else { await navigator.clipboard.writeText(url); toast("Enllaç copiat! Envia'l a qui vulguis"); }
@@ -749,6 +772,7 @@
     app.classList.remove('obert');
     document.body.style.overflow = '';
     pausaTot();
+    document.querySelectorAll('#feed iframe[data-tt]').forEach(f => { f.src = f.src; });
   }
   document.getElementById('btn-tiktok').onclick = () => obreTiktok();
   document.getElementById('btn-vertical').onclick = () => obreTiktok();
