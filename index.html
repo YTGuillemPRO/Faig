@@ -10,75 +10,147 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    font-family:'Space Grotesk',sans-serif;
-    background:#04060c;color:#e8ecf4;
-    overflow-x:hidden;
-  }
+  body{font-family:'Space Grotesk',sans-serif;background:#04060c;color:#e8ecf4;overflow-x:hidden}
   #estrelles{position:fixed;inset:0;z-index:-3}
   .nebulosa{position:fixed;inset:0;z-index:-2;background:
     radial-gradient(ellipse 700px 500px at 20% 15%, rgba(70,100,170,.08), transparent),
-    radial-gradient(ellipse 600px 450px at 80% 85%, rgba(130,80,150,.06), transparent);
-  }
-  .vialactia{
-    position:fixed;top:-15%;left:-15%;width:130%;height:75%;z-index:-2;
+    radial-gradient(ellipse 600px 450px at 80% 85%, rgba(130,80,150,.06), transparent)}
+  .vialactia{position:fixed;top:-15%;left:-15%;width:130%;height:75%;z-index:-2;
     background:linear-gradient(115deg, transparent 32%, rgba(190,205,255,.045) 46%,
       rgba(255,255,255,.03) 50%, rgba(190,205,255,.045) 54%, transparent 68%);
-    transform:rotate(-14deg);filter:blur(28px);
-  }
+    transform:rotate(-14deg);filter:blur(28px)}
 
   /* ---------- CAPÇALERA ---------- */
   header{text-align:center;padding:80px 20px 60px}
   .sol-wrap{position:relative;width:150px;height:150px;margin:0 auto 42px}
   .sol-wrap canvas{width:100%;height:100%;display:block;position:relative;z-index:1;border-radius:50%}
-  .corona{
-    position:absolute;inset:-55%;z-index:0;border-radius:50%;
+  .corona{position:absolute;inset:-55%;z-index:0;border-radius:50%;
     background:radial-gradient(circle, rgba(255,150,50,.26) 0%, rgba(255,110,20,.09) 42%, transparent 68%);
-    animation:pols 9s ease-in-out infinite;
-  }
+    animation:pols 9s ease-in-out infinite}
   @keyframes pols{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.05);opacity:1}}
-
   h1{font-size:clamp(2rem,5.5vw,3.6rem);color:#f4f6fb;letter-spacing:.02em;margin-bottom:14px;font-weight:700}
   .subtitol{color:#9aa5b5;font-size:1.05rem;max-width:520px;margin:0 auto;line-height:1.65}
-  .boto{
-    display:inline-block;margin-top:36px;padding:13px 30px;border-radius:999px;
+  .fila-capsalera{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+  .boto{display:inline-block;padding:13px 30px;border-radius:999px;
     color:#fcd34d;text-decoration:none;font-weight:500;font-size:.95rem;
     border:1px solid rgba(252,211,77,.35);background:rgba(252,211,77,.05);
-    transition:background .3s, border-color .3s;
-  }
+    transition:background .3s,border-color .3s}
   .boto:hover{background:rgba(252,211,77,.12);border-color:rgba(252,211,77,.55)}
+  .tiktok-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:999px;
+    text-decoration:none;font-weight:500;font-size:.95rem;color:#e8ecf4;
+    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.04);
+    transition:border-color .3s,background .3s,box-shadow .3s}
+  .tiktok-btn svg{width:16px;height:16px;fill:#e8ecf4;transition:fill .3s}
+  .tiktok-btn:hover{border-color:rgba(254,44,85,.65);background:rgba(254,44,85,.07);box-shadow:0 0 24px rgba(254,44,85,.18)}
+  .tiktok-btn:hover svg{fill:#fe2c55}
 
   /* ---------- SECCIONS ---------- */
   .seccio{max-width:1080px;margin:0 auto;padding:70px 20px;text-align:center;
-    opacity:0;transform:translateY(20px);transition:opacity .8s, transform .8s}
+    opacity:0;transform:translateY(20px);transition:opacity .8s,transform .8s}
   .seccio.visible{opacity:1;transform:none}
   h2{font-size:clamp(1.5rem,3.5vw,2rem);margin-bottom:10px;color:#f4f6fb}
   .subtext{color:#9aa5b5;max-width:560px;margin:0 auto 40px;line-height:1.6}
 
+  /* ---------- GALERIA ---------- */
   .reixeta{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-  .targeta{
-    background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;overflow:hidden;transition:transform .3s, border-color .3s;text-align:left;
-  }
+  .targeta{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;overflow:hidden;transition:transform .3s,border-color .3s;text-align:left}
   .targeta:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.18)}
   .targeta iframe{width:100%;aspect-ratio:16/9;border:0;display:block;background:#000}
   .cos{padding:16px 18px}
   .cos h3{margin-bottom:6px;font-size:1.05rem;color:#e8ecf4}
   .cos p{color:#8b95a7;font-size:.92rem;line-height:1.55}
 
-  /* ---------- GISCUS ---------- */
-  .giscus-wrap{max-width:740px;margin:0 auto;background:rgba(255,255,255,.03);
-    border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px}
-
-  /* ---------- BOTÓ D'OPINIÓ (racó) ---------- */
-  #btn-opinio{
-    position:fixed;bottom:22px;right:22px;z-index:50;
-    padding:12px 20px;border-radius:999px;cursor:pointer;
-    font-family:inherit;font-size:.92rem;font-weight:500;color:#dfe5ee;
-    background:rgba(14,17,26,.78);border:1px solid rgba(255,255,255,.15);
-    backdrop-filter:blur(8px);transition:color .3s, border-color .3s;
+  /* ---------- APP ESTIL TIKTOK ---------- */
+  #tiktok{height:100vh;height:100svh;position:relative;background:#02030a}
+  .titol-feed{position:absolute;top:16px;left:0;right:0;text-align:center;z-index:2;pointer-events:none;
+    font-weight:700;letter-spacing:.05em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.85)}
+  .feed{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
+  .feed::-webkit-scrollbar{display:none}
+  .slide{height:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;
+    display:flex;align-items:center;justify-content:center}
+  .video-box{position:relative;width:100%;height:100%;background:#000}
+  @media(min-width:760px){
+    .video-box{height:min(94%,900px);width:auto;aspect-ratio:9/16;border-radius:18px;overflow:hidden;
+      box-shadow:0 0 80px rgba(0,0,0,.7)}
   }
+  .video-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .click-cap{position:absolute;inset:0;z-index:1;cursor:pointer}
+  .icona-pausa{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1;
+    width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.45);
+    display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;pointer-events:none}
+  .icona-pausa svg{width:30px;height:30px;fill:#fff}
+  .icona-pausa.visible{opacity:1}
+  .info{position:absolute;left:14px;bottom:16px;z-index:2;max-width:70%;text-align:left;pointer-events:none}
+  .usuari{font-weight:700;font-size:1rem;margin-bottom:6px;text-shadow:0 1px 6px rgba(0,0,0,.85)}
+  .descripcio{font-size:.9rem;color:#e5e9f0;line-height:1.45;text-shadow:0 1px 6px rgba(0,0,0,.85)}
+  .so{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:.82rem;color:#cfd6e0}
+  .so svg{width:13px;height:13px;fill:#cfd6e0}
+  .accions{position:absolute;right:12px;bottom:22px;z-index:2;display:flex;flex-direction:column;gap:18px}
+  .acc{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;
+    font-family:inherit;color:#fff;font-size:.75rem;text-shadow:0 1px 4px rgba(0,0,0,.85)}
+  .acc .cercle{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.12);
+    display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s;backdrop-filter:blur(4px)}
+  .acc svg{width:22px;height:22px;fill:#fff;transition:fill .2s}
+  .acc:active .cercle{transform:scale(1.15)}
+  .acc.liker.actiu .cercle{background:rgba(254,44,85,.2)}
+  .acc.liker.actiu svg{fill:#fe2c55;animation:pop .3s}
+  @keyframes pop{50%{transform:scale(1.35)}}
+  .mute{position:absolute;top:14px;right:14px;z-index:2;width:40px;height:40px;border-radius:50%;
+    background:rgba(0,0,0,.45);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .mute svg{width:19px;height:19px;fill:#fff}
+  .pista{position:absolute;bottom:14px;left:50%;z-index:2;color:#aab4c4;font-size:.8rem;
+    animation:puja 1.6s ease-in-out infinite;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+  @keyframes puja{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-7px)}}
+
+  /* ---------- OPINIONS (disseny propi) ---------- */
+  .opinio-caixa{max-width:640px;margin:0 auto;background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:26px;text-align:left}
+  .camp{margin-bottom:18px}
+  .camp label{display:block;font-size:.85rem;color:#9aa5b5;margin-bottom:8px}
+  .camp input,.camp textarea{width:100%;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);
+    border-radius:10px;padding:12px 14px;color:#e8ecf4;font-family:inherit;font-size:.95rem;outline:none;
+    transition:border-color .3s}
+  .camp input:focus,.camp textarea:focus{border-color:rgba(252,211,77,.5)}
+  .camp textarea{min-height:96px;resize:vertical}
+  .estrelles{display:flex;gap:4px}
+  .estrelles button{background:none;border:none;cursor:pointer;padding:2px}
+  .estrelles svg{width:26px;height:26px;fill:#3a4356;transition:fill .15s,transform .15s}
+  .estrelles button.encesa svg{fill:#fcd34d}
+  .estrelles button:hover svg{transform:scale(1.15)}
+  .enviar{width:100%;padding:13px;border:none;border-radius:10px;cursor:pointer;
+    font-family:inherit;font-weight:700;font-size:.95rem;color:#0a0c12;
+    background:#fcd34d;transition:filter .3s,transform .2s}
+  .enviar:hover{filter:brightness(1.08)}
+  .enviar:active{transform:scale(.98)}
+  .llista-opinions{max-width:640px;margin:26px auto 0;display:flex;flex-direction:column;gap:14px}
+  .opinio-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;padding:16px 18px;text-align:left;display:flex;gap:14px}
+  .avatar{flex-shrink:0;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-weight:700;color:#fff}
+  .opinio-contingut{flex:1;min-width:0}
+  .opinio-cap{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .opinio-cap strong{font-size:.95rem}
+  .opinio-cap time{font-size:.78rem;color:#7c8698}
+  .mini-estrelles{display:inline-flex;gap:1px;margin-left:8px;vertical-align:-2px}
+  .mini-estrelles svg{width:13px;height:13px;fill:#fcd34d}
+  .mini-estrelles svg.buida{fill:#3a4356}
+  .opinio-contingut p{color:#c3ccd9;font-size:.92rem;line-height:1.55;margin-top:5px;
+    overflow-wrap:break-word;white-space:pre-wrap}
+  .buit{color:#7c8698;font-size:.92rem;padding:18px;text-align:center;
+    border:1px dashed rgba(255,255,255,.12);border-radius:14px}
+
+  /* ---------- BOTÓ FLOTANT I TOAST ---------- */
+  #btn-opinio{position:fixed;bottom:22px;right:22px;z-index:50;padding:12px 20px;border-radius:999px;
+    cursor:pointer;font-family:inherit;font-size:.92rem;font-weight:500;color:#dfe5ee;
+    background:rgba(14,17,26,.78);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);
+    transition:color .3s,border-color .3s}
   #btn-opinio:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
+  #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(15px);z-index:100;
+    background:rgba(14,17,26,.92);border:1px solid rgba(255,255,255,.15);color:#e8ecf4;
+    padding:11px 20px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;
+    transition:opacity .3s,transform .3s;backdrop-filter:blur(8px)}
+  #toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
   @media(max-width:520px){#btn-opinio{bottom:16px;right:16px;font-size:.85rem;padding:11px 16px}}
 </style>
 </head>
@@ -89,13 +161,16 @@
 <div class="vialactia"></div>
 
 <header>
-  <div class="sol-wrap">
-    <div class="corona"></div>
-    <canvas id="sol"></canvas>
-  </div>
+  <div class="sol-wrap"><div class="corona"></div><canvas id="sol"></canvas></div>
   <h1>El Nostre Univers</h1>
-  <p class="subtitol">Tots els vídeos del nostre projecte en un sol lloc. Mireu-los i deixa'ns la vostra opinió.</p>
-  <a href="#videos" class="boto">Veure els vídeos ↓</a>
+  <p class="subtitol">Tots els vídeos del nostre projecte en un sol lloc: galeria, feed vertical estil TikTok i el teu espai d'opinió.</p>
+  <div class="fila-capsalera">
+    <a href="#videos" class="boto">Veure els vídeos ↓</a>
+    <a href="#tiktok" class="tiktok-btn">
+      <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+      El nostre TikTok
+    </a>
+  </div>
 </header>
 
 <section id="videos" class="seccio">
@@ -104,43 +179,49 @@
   <div class="reixeta" id="galeria"></div>
 </section>
 
+<!-- APP ESTIL TIKTOK -->
+<section id="tiktok">
+  <div class="titol-feed">Per a tu</div>
+  <div class="feed" id="feed"></div>
+</section>
+
 <section id="opinio" class="seccio">
   <h2>Dóna'ns la teva opinió</h2>
-  <p class="subtext">Què t'ha semblat el projecte? Deixa'ns un comentari aquí sota.</p>
-  <div class="giscus-wrap">
-    <!-- ⚙️ CONFIGURA GISCUS: canvia les línies marcades amb 👇 -->
-    <script src="https://giscus.app/client.js"
-      data-repo="EL-TEU-USUARI/EL-TEU-REPO"
-      data-repo-id="PEGA_AQUI_EL_REPO_ID"
-      data-category="General"
-      data-category-id="PEGA_AQUI_EL_CATEGORY_ID"
-      data-mapping="title"
-      data-strict="0"
-      data-reactions-enabled="1"
-      data-emit-metadata="0"
-      data-input-position="top"
-      data-theme="transparent_dark"
-      data-lang="ca"
-      data-loading="lazy"
-      crossorigin="anonymous"
-      async>
-    </script>
+  <p class="subtext">Valora el projecte amb les estrelles i deixa'ns un comentari.</p>
+
+  <div class="opinio-caixa">
+    <form id="form-opinio">
+      <div class="camp">
+        <label for="nom">Nom <span style="color:#5c6678">(opcional)</span></label>
+        <input id="nom" type="text" maxlength="40" placeholder="Com et dius?">
+      </div>
+      <div class="camp">
+        <label>Puntuació</label>
+        <div class="estrelles" id="selector-estrelles"></div>
+      </div>
+      <div class="camp">
+        <label for="text">La teva opinió</label>
+        <textarea id="text" maxlength="500" placeholder="Què t'ha semblat el projecte?" required></textarea>
+      </div>
+      <button type="submit" class="enviar">Enviar opinió</button>
+    </form>
   </div>
+
+  <div class="llista-opinions" id="llista-opinions"></div>
 </section>
 
 <button id="btn-opinio">Dóna'ns la teva opinió</button>
+<div id="toast"></div>
 
 <script>
-  /* ---------- SOL REALISTA (granulació + limb darkening) ---------- */
+  /* ---------- SOL REALISTA ---------- */
   const sol = document.getElementById('sol');
   const sctx = sol.getContext('2d');
   const S = 140;
   sol.width = S; sol.height = S;
-
   const G = 96;
   const soroll = new Float32Array(G * G);
   for (let i = 0; i < G * G; i++) soroll[i] = Math.random();
-
   function val(x, y){
     x = ((x % G) + G) % G; y = ((y % G) + G) % G;
     const xi = Math.floor(x), yi = Math.floor(y);
@@ -154,7 +235,6 @@
   function fbm(x, y){
     return 0.5*val(x,y) + 0.25*val(x*2,y*2) + 0.125*val(x*4,y*4) + 0.0625*val(x*8,y*8);
   }
-
   let ultim = 0;
   function pintaSol(t){
     const img = sctx.createImageData(S, S);
@@ -166,8 +246,8 @@
         const r2 = dx*dx + dy*dy;
         const i = (y*S + x) * 4;
         if (r2 > 1){ d[i+3] = 0; continue; }
-        const limb = Math.sqrt(1 - r2);          // enfosquiment de la vora
-        const n = fbm(x/16 + t, y/16 + t*0.6);   // granulació que bull
+        const limb = Math.sqrt(1 - r2);
+        const n = fbm(x/16 + t, y/16 + t*0.6);
         const br = Math.min(1, Math.pow(limb, 0.55) * (0.62 + 0.55*n));
         d[i]   = 255 * br;
         d[i+1] = 255 * Math.pow(br, 1.25);
@@ -183,14 +263,12 @@
   }
   requestAnimationFrame(bucleSol);
 
-  /* ---------- ESTRELES (amb colors naturals) ---------- */
+  /* ---------- ESTRELES I COMETES ---------- */
   const canvas = document.getElementById('estrelles');
   const ctx = canvas.getContext('2d');
   let cometes = [];
-
   function mida(){ canvas.width = innerWidth; canvas.height = innerHeight; }
   mida(); addEventListener('resize', mida);
-
   const tonalitats = ['255,255,255','255,255,255','255,255,255','205,218,255','255,228,196'];
   const estrelles = [];
   for (let i = 0; i < 260; i++) {
@@ -202,7 +280,6 @@
       color: tonalitats[Math.floor(Math.random() * tonalitats.length)]
     });
   }
-
   function anima(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const e of estrelles){
@@ -229,7 +306,6 @@
     requestAnimationFrame(anima);
   }
   anima();
-
   setInterval(() => {
     if (cometes.length < 2){
       cometes.push({
@@ -242,13 +318,12 @@
     }
   }, 6500);
 
-  /* ---------- VÍDEOS (edita aquesta llista per afegir-ne) ---------- */
+  /* ---------- GALERIA DE VÍDEOS ---------- */
   const videos = [
     { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 1', desc: 'Descripció del primer vídeo del projecte.' },
     { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 2', desc: 'Explica aquí què hi veuran els visitants.' },
     { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 3', desc: 'Pots afegir tants vídeos com vulguis.' },
   ];
-
   const galeria = document.getElementById('galeria');
   videos.forEach(v => {
     const card = document.createElement('article');
@@ -260,16 +335,269 @@
     galeria.appendChild(card);
   });
 
-  /* ---------- ANIMACIÓ EN FER SCROLL ---------- */
+  /* ---------- APP ESTIL TIKTOK ----------
+     base = "m'agrades" inicials (decoratiu). Usuari, descripció i so són editables. */
+  const feedTikTok = [
+    { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Primer vídeo del projecte — llisca per veure més', so: 'so original', base: 128 },
+    { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Segon vídeo: explica aquí de què va', so: 'so original', base: 342 },
+    { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Tercer vídeo — el final de la història', so: 'so original', base: 57 },
+  ];
+
+  const svgCor = '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+  const svgComentari = '<svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>';
+  const svgCompartir = '<svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
+  const svgNota = '<svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>';
+  const svgSo = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05A4.47 4.47 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+  const svgSilenci = '<svg viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
+  const svgPlay = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+
+  const fmt = n => n >= 1000 ? (n/1000).toFixed(1).replace('.0','') + 'K' : n;
+  let players = [];
+  let soActiu = false;
+  const likes = JSON.parse(localStorage.getItem('likes_univers') || '{}');
+
+  function aplicaSo(p){
+    if (soActiu){ p.unMute(); p.setVolume(80); } else { p.mute(); }
+  }
+
+  function buildFeed(){
+    const feed = document.getElementById('feed');
+    feedTikTok.forEach((v, i) => {
+      const slide = document.createElement('div');
+      slide.className = 'slide';
+      slide.id = 'tiktok-' + i;
+      slide.innerHTML = `
+        <div class="video-box">
+          <div id="player-${i}"></div>
+          <div class="click-cap" data-i="${i}"></div>
+          <div class="icona-pausa" id="pausa-${i}">${svgPlay}</div>
+          <div class="info">
+            <div class="usuari">${v.usuari}</div>
+            <div class="descripcio">${v.desc}</div>
+            <div class="so">${svgNota}<span>${v.so}</span></div>
+          </div>
+          <div class="accions">
+            <button class="acc liker" data-i="${i}">
+              <span class="cercle">${svgCor}</span><span class="n">${fmt(v.base + (likes[v.id] ? 1 : 0))}</span>
+            </button>
+            <button class="acc comentar">
+              <span class="cercle">${svgComentari}</span><span>opina</span>
+            </button>
+            <button class="acc compartir" data-i="${i}">
+              <span class="cercle">${svgCompartir}</span><span>comparteix</span>
+            </button>
+          </div>
+          <button class="mute">${svgSilenci}</button>
+          ${i === 0 ? '<div class="pista">↓ llisca per veure més</div>' : ''}
+        </div>`;
+      feed.appendChild(slide);
+    });
+
+    // Reproductors de YouTube
+    feedTikTok.forEach((v, i) => {
+      players[i] = new YT.Player('player-' + i, {
+        videoId: v.id,
+        playerVars: { autoplay:0, mute:1, controls:0, rel:0, loop:1, playlist:v.id,
+                      modestbranding:1, playsinline:1, iv_load_policy:3, fs:0 }
+      });
+    });
+
+    // Reproduir només el vídeo que es veu; pausar la resta
+    const io = new IntersectionObserver(entrades => {
+      entrades.forEach(en => {
+        const i = +en.target.id.split('-')[1];
+        const p = players[i];
+        if (!p || !p.playVideo) return;
+        if (en.isIntersecting){ aplicaSo(p); p.playVideo(); }
+        else p.pauseVideo();
+      });
+    }, { root: feed, threshold: 0.6 });
+    document.querySelectorAll('.slide').forEach(s => io.observe(s));
+
+    // Clic al vídeo = pausar / reproduir
+    document.querySelectorAll('.click-cap').forEach(cap => {
+      cap.onclick = () => {
+        const i = +cap.dataset.i, p = players[i];
+        if (!p || !p.getPlayerState) return;
+        if (p.getPlayerState() === YT.PlayerState.PLAYING){
+          p.pauseVideo();
+          document.getElementById('pausa-' + i).classList.add('visible');
+        } else {
+          p.playVideo();
+          document.getElementById('pausa-' + i).classList.remove('visible');
+        }
+      };
+    });
+
+    // M'agrada (es guarda al navegador)
+    document.querySelectorAll('.liker').forEach(b => {
+      const i = +b.dataset.i;
+      if (likes[feedTikTok[i].id]) b.classList.add('actiu');
+      b.onclick = () => {
+        const v = feedTikTok[i];
+        likes[v.id] = !likes[v.id];
+        localStorage.setItem('likes_univers', JSON.stringify(likes));
+        b.classList.toggle('actiu', likes[v.id]);
+        b.querySelector('.n').textContent = fmt(v.base + (likes[v.id] ? 1 : 0));
+      };
+    });
+
+    // Botó "opina" → baixa a la secció d'opinions
+    document.querySelectorAll('.comentar').forEach(b => {
+      b.onclick = () => document.getElementById('opinio').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Compartir = copiar l'enllaç directe d'aquest vídeo
+    document.querySelectorAll('.compartir').forEach(b => {
+      b.onclick = async () => {
+        const i = +b.dataset.i;
+        const url = location.origin + location.pathname + '#tiktok-' + i;
+        try {
+          await navigator.clipboard.writeText(url);
+          toast("Enllaç copiat! Envia'l a qui vulguis");
+        } catch {
+          toast('No sha pogut copiar l\'enllaç');
+        }
+      };
+    });
+
+    // So on/off
+    document.querySelectorAll('.mute').forEach(b => {
+      b.onclick = () => {
+        soActiu = !soActiu;
+        document.querySelectorAll('.mute').forEach(x => x.innerHTML = soActiu ? svgSo : svgSilenci);
+        players.forEach(p => { if (p && p.playVideo) aplicaSo(p); });
+      };
+    });
+
+    // Si algú obre un enllaç compartit (#tiktok-2), baixa directament a aquell vídeo
+    if (location.hash.startsWith('#tiktok-')) {
+      const el = document.querySelector(location.hash);
+      if (el) setTimeout(() => el.scrollIntoView(), 300);
+    }
+  }
+
+  function onYouTubeIframeAPIReady(){ buildFeed(); }
+
+  // Reserva: si l'API de YouTube no carrega, es mostren els vídeos com a iframes normals
+  setTimeout(() => {
+    if (players.length) return;
+    document.querySelectorAll('.slide').forEach((s, i) => {
+      const caja = s.querySelector('.video-box');
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${feedTikTok[i].id}?mute=1&controls=0&loop=1&playlist=${feedTikTok[i].id}&playsinline=1&rel=0`;
+      f.allow = 'autoplay; encrypted-media';
+      caja.prepend(f);
+    });
+  }, 4000);
+
+  /* ---------- OPINIONS ---------- */
+  const CLAU = 'opinions_univers';
+  // Opcional: posa aquí el teu correu (ex: 'nom@gmail.com') i cada opinió també et arribarà per email.
+  // El primer enviament rebreu un correu per activar-ho (servei gratuït formsubmit.co, sense registre).
+  const CORREU = '';
+
+  const estrellesBox = document.getElementById('selector-estrelles');
+  let puntuacio = 0;
+  const svgEstrella = '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+  for (let i = 1; i <= 5; i++) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.innerHTML = svgEstrella;
+    b.setAttribute('aria-label', i + ' estrelles');
+    b.onclick = () => { puntuacio = i; pinta(); };
+    b.onmouseenter = () => pinta(i);
+    b.onmouseleave = () => pinta();
+    estrellesBox.appendChild(b);
+  }
+  function pinta(fins = puntuacio){
+    [...estrellesBox.children].forEach((b, idx) => b.classList.toggle('encesa', idx < fins));
+  }
+  pinta();
+
+  function escap(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function obtenOpinions(){ return JSON.parse(localStorage.getItem(CLAU) || '[]'); }
+
+  function render(){
+    const llista = document.getElementById('llista-opinions');
+    const ops = obtenOpinions().sort((a, b) => b.data - a.data);
+    if (!ops.length){
+      llista.innerHTML = '<div class="buit">Encara no hi ha opinions. Sigues la primera persona en deixar la teva empremta estelar.</div>';
+      return;
+    }
+    llista.innerHTML = ops.map(op => {
+      const inicial = (op.nom || 'A').trim().charAt(0).toUpperCase();
+      const hue = [...(op.nom || 'A')].reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
+      const est = Array.from({length: 5}, (_, k) =>
+        `<svg viewBox="0 0 24 24" class="${k < op.estrelles ? '' : 'buida'}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`).join('');
+      const data = new Date(op.data).toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<div class="opinio-card">
+        <div class="avatar" style="background:hsl(${hue} 45% 42%)">${inicial}</div>
+        <div class="opinio-contingut">
+          <div class="opinio-cap">
+            <span><strong>${escap(op.nom || 'Anònim')}</strong><span class="mini-estrelles">${est}</span></span>
+            <time>${data}</time>
+          </div>
+          <p>${escap(op.text)}</p>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  render();
+
+  document.getElementById('form-opinio').onsubmit = async e => {
+    e.preventDefault();
+    const text = document.getElementById('text').value.trim();
+    if (!text) return;
+    const op = {
+      nom: document.getElementById('nom').value.trim(),
+      estrelles: puntuacio,
+      text,
+      data: Date.now()
+    };
+    const ops = obtenOpinions();
+    ops.push(op);
+    localStorage.setItem(CLAU, JSON.stringify(ops));
+    render();
+    e.target.reset();
+    puntuacio = 0;
+    pinta();
+    toast('Gràcies per la teva opinió!');
+    if (CORREU) {
+      try {
+        await fetch('https://formsubmit.co/ajax/' + CORREU, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: 'Nova opinió — El Nostre Univers',
+            nom: op.nom || 'Anònim',
+            puntuacio: op.estrelles + '/5',
+            opinio: op.text
+          })
+        });
+      } catch {}
+    }
+  };
+
+  /* ---------- EXTRAS ---------- */
+  let toastTimer;
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('visible'), 2600);
+  }
+
+  document.getElementById('btn-opinio').onclick = () =>
+    document.getElementById('opinio').scrollIntoView({ behavior: 'smooth' });
+
   const obs = new IntersectionObserver(entrades => {
     entrades.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.seccio').forEach(s => obs.observe(s));
-
-  /* ---------- BOTÓ D'OPINIÓ ---------- */
-  document.getElementById('btn-opinio').onclick = () =>
-    document.getElementById('opinio').scrollIntoView({ behavior: 'smooth' });
 </script>
+<script src="https://www.youtube.com/iframe_api"></script>
 
 </body>
 </html>
