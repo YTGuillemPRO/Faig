@@ -252,7 +252,7 @@
 <div id="progres"></div>
 
 <header>
-  <div class="sol-wrap" id="sol-wrap" title="...no cliquis el sol ☀️">
+  <div class="sol-wrap" id="sol-wrap" title="☀️ Clica'm!">
     <div class="corona"></div><canvas id="sol"></canvas>
   </div>
   <h1>El Nostre Univers</h1>
@@ -439,25 +439,14 @@
     });
   }
 
+  /* clic al sol = només hipervelocitat (efecte cool) */
   let warpActiu = false, warpT0 = 0;
   function activaWarp(){
     if (REDUIT || warpActiu) return;
     warpActiu = true; warpT0 = performance.now();
     toast('🚀 Hipervelocitat!');
   }
-
-  /* CLICS AL SOL:
-     - clic normal → hipervelocitat
-     - 5 clics ràpids (en 2,5 s) → obre l'accés d'ADMIN 👑 */
-  let clicsSol = [];
-  document.getElementById('sol-wrap').onclick = () => {
-    const ara = Date.now();
-    clicsSol = clicsSol.filter(t => ara - t < 2500);
-    clicsSol.push(ara);
-    if (clicsSol.length >= 5){ clicsSol = []; obreAdminModal(); return; }
-    if (clicsSol.length >= 3){ toast('☀️ ' + (5 - clicsSol.length) + ' clics més...'); return; }
-    activaWarp();
-  };
+  document.getElementById('sol-wrap').onclick = activaWarp;
 
   /* codi Konami també activa warp */
   const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
@@ -838,8 +827,10 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && app.classList.contains('obert')) tancaTiktok(); });
   if (location.hash.startsWith('#tiktok-')) obreTiktok(+location.hash.split('-')[1]);
 
-  /* ---------- ADMIN (contrasenya: 2ESOA) ----------
-     La sessió NO es recorda en recarregar: cal tornar a posar la contrasenya. */
+  /* ---------- ADMIN ----------
+     Accés NOMÉS amb Ctrl+Alt+A (ordinador) o posant #admin al final de l'URL.
+     El sol NO té res a veure amb l'admin: només fa l'efecte d'hipervelocitat.
+     La sessió no es recorda en recarregar: cal tornar a posar la contrasenya. */
   let adminLogat = false;
   const esAdmin = () => adminLogat;
 
@@ -864,7 +855,7 @@
   }
   function tancaSessioAdmin(){
     adminLogat = false;
-    pintaLlista();
+    pintaLlista();   // re-pinta la llista SENSE botons d'esborrar
     toast('Sessió d\'admin tancada');
   }
   function provaAdmin(){
@@ -884,9 +875,13 @@
     if (e.key === 'Escape' && adminModal.classList.contains('obert')) tancaAdminModal();
     if (e.ctrlKey && e.altKey && (e.key === 'a' || e.key === 'A')){ e.preventDefault(); obreAdminModal(); }
   });
+  /* accés alternatiu des del mòbil: afegeix #admin a l'URL */
+  if (location.hash === '#admin') obreAdminModal();
 
+  /* Accions d'admin: SEMPRE comproven la sessió en el moment de clicar */
   document.getElementById('btn-sortir').onclick = tancaSessioAdmin;
   document.getElementById('btn-buidar').onclick = async () => {
+    if (!esAdmin()) return;
     if (!confirm('Segur que vols esborrar TOTES les opinions? Això no es pot desfer.')) return;
     if (!confirm('Última confirmació: esborrar-ho tot?')) return;
     opinionsActuals = [];
@@ -993,6 +988,7 @@
     if (adminMode){
       llistaOp.querySelectorAll('.esborra').forEach(b => {
         b.onclick = async () => {
+          if (!esAdmin()) return;   // doble comprovació de seguretat
           opinionsActuals = opinionsActuals.filter(o => (o.id || '') !== b.dataset.id);
           await desarOps(opinionsActuals);
           pintaLlista();
