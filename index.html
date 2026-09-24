@@ -356,8 +356,8 @@
   /* ================== CONFIGURACIÓ ================== */
   // 👇 Enganxa aquí l'URL del teu magatzem (botó "Activar mur públic" o jsonblob.com)
   const BLOB_URL = '';          // ex: 'https://jsonblob.com/api/jsonBlob/1234567890'
-  // 👇 CANVIA AQUESTA CONTRASENYA per la teva (és per accedir com a admin)
-  const CONTRA_ADMIN = '2n ESO A';
+  // 👇 Contrasenya d'admin (distingeix majúscules de minúscules)
+  const CONTRA_ADMIN = '2ESOA';
 
   const REDUIT = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const RATOLI_FI = matchMedia('(pointer: fine)').matches;
@@ -838,8 +838,10 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && app.classList.contains('obert')) tancaTiktok(); });
   if (location.hash.startsWith('#tiktok-')) obreTiktok(+location.hash.split('-')[1]);
 
-  /* ---------- ADMIN (contrasenya personalitzada) ---------- */
-  const esAdmin = () => sessionStorage.getItem('admin_univers') === '1';
+  /* ---------- ADMIN (contrasenya: 2ESOA) ----------
+     La sessió NO es recorda en recarregar: cal tornar a posar la contrasenya. */
+  let adminLogat = false;
+  const esAdmin = () => adminLogat;
 
   const adminModal = document.getElementById('admin-modal');
   const adminCard = document.getElementById('admin-card');
@@ -855,13 +857,13 @@
     document.getElementById('admin-contra').value = '';
   }
   function activaAdmin(){
-    sessionStorage.setItem('admin_univers', '1');
+    adminLogat = true;
     tancaAdminModal();
     pintaLlista();
     toast('👑 Mode admin activat');
   }
   function tancaSessioAdmin(){
-    sessionStorage.removeItem('admin_univers');
+    adminLogat = false;
     pintaLlista();
     toast('Sessió d\'admin tancada');
   }
