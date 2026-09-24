@@ -198,13 +198,44 @@
   .buit{color:#7c8698;font-size:.92rem;padding:18px;text-align:center;
     border:1px dashed rgba(255,255,255,.12);border-radius:14px}
 
+  /* ---------- ADMIN ---------- */
+  .admin-bar{max-width:640px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;
+    gap:10px;flex-wrap:wrap;background:rgba(252,211,77,.07);border:1px solid rgba(252,211,77,.35);
+    border-radius:12px;padding:12px 16px;text-align:left}
+  .admin-bar span{color:#fde68a;font-weight:700;font-size:.9rem}
+  .admin-accions{display:flex;gap:8px}
+  .btn-admin{padding:8px 14px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:.82rem;
+    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#e8ecf4;transition:all .3s}
+  .btn-admin:hover{border-color:rgba(255,255,255,.4)}
+  .btn-admin.pelic{border-color:rgba(248,113,113,.5);color:#fca5a5}
+  .btn-admin.pelic:hover{background:rgba(248,113,113,.12)}
+  .modal-fons{position:fixed;inset:0;z-index:2000;background:rgba(2,3,10,.75);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-fons.obert{display:flex}
+  .modal{width:100%;max-width:380px;background:#0d1119;border:1px solid rgba(255,255,255,.12);
+    border-radius:18px;padding:28px;text-align:center;animation:apareix .3s}
+  .modal h3{color:#f4f6fb;margin-bottom:6px}
+  .modal p{color:#9aa5b5;font-size:.88rem;margin-bottom:18px;line-height:1.5}
+  .modal input{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.15);border-radius:10px;
+    padding:12px 14px;color:#e8ecf4;font-family:inherit;font-size:.95rem;outline:none;text-align:center;
+    transition:border-color .3s}
+  .modal input:focus{border-color:rgba(252,211,77,.5)}
+  .modal .error{color:#f87171;font-size:.85rem;margin-top:10px;min-height:1.2em}
+  .modal-botons{display:flex;gap:10px;margin-top:16px}
+  .btn-modal{flex:1;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;
+    font-weight:700;font-size:.92rem}
+  .btn-modal.primari{background:#fcd34d;color:#0a0c12}
+  .btn-modal.secundari{background:transparent;color:#9aa5b5;border:1px solid rgba(255,255,255,.15)}
+  .modal.shake{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+
   /* ---------- BOTÓ FLOTANT I TOAST ---------- */
   #btn-opinio{position:fixed;bottom:22px;right:22px;z-index:50;padding:12px 20px;border-radius:999px;
     cursor:pointer;font-family:inherit;font-size:.92rem;font-weight:500;color:#dfe5ee;
     background:rgba(14,17,26,.78);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);
     transition:color .3s,border-color .3s}
   #btn-opinio:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
-  #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(15px);z-index:1500;
+  #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(15px);z-index:2500;
     background:rgba(14,17,26,.92);border:1px solid rgba(255,255,255,.15);color:#e8ecf4;
     padding:11px 20px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;
     transition:opacity .3s,transform .3s;backdrop-filter:blur(8px);max-width:90vw;text-align:center}
@@ -292,8 +323,31 @@
     <button class="actiu" data-o="recents">Recents</button>
     <button data-o="millors">Millor valorades</button>
   </div>
+
+  <div class="admin-bar" id="admin-bar" hidden>
+    <span>👑 Mode admin actiu</span>
+    <div class="admin-accions">
+      <button class="btn-admin pelic" id="btn-buidar">Buidar-ho tot</button>
+      <button class="btn-admin" id="btn-sortir">Tancar sessió</button>
+    </div>
+  </div>
+
   <div class="llista-opinions" id="llista-opinions"></div>
 </section>
+
+<!-- MODAL D'ADMIN -->
+<div class="modal-fons" id="admin-modal">
+  <div class="modal" id="admin-card">
+    <h3>👑 Accés d'administració</h3>
+    <p>Introdueix la contrasenya per gestionar les opinions.</p>
+    <input type="password" id="admin-contra" placeholder="Contrasenya" autocomplete="off">
+    <div class="error" id="admin-error"></div>
+    <div class="modal-botons">
+      <button class="btn-modal secundari" id="admin-cancel">Cancel·la</button>
+      <button class="btn-modal primari" id="admin-entra">Entrar</button>
+    </div>
+  </div>
+</div>
 
 <button id="btn-opinio">Dóna'ns la teva opinió</button>
 <div id="toast"></div>
@@ -302,7 +356,8 @@
   /* ================== CONFIGURACIÓ ================== */
   // 👇 Enganxa aquí l'URL del teu magatzem (botó "Activar mur públic" o jsonblob.com)
   const BLOB_URL = '';          // ex: 'https://jsonblob.com/api/jsonBlob/1234567890'
-  const CODI_MODERACIO = '';    // posa una contrasenya (ex: 'univers2025') per poder esborrar opinions amb el botó ✕
+  // 👇 CANVIA AQUESTA CONTRASENYA per la teva (és per accedir com a admin)
+  const CONTRA_ADMIN = 'canvia-aquesta-contra';
 
   const REDUIT = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const RATOLI_FI = matchMedia('(pointer: fine)').matches;
@@ -356,7 +411,7 @@
   }
   requestAnimationFrame(bucleSol);
 
-  /* ---------- FAVICON DINÀMIC (un solet a la pestanya) ---------- */
+  /* ---------- FAVICON DINÀMIC ---------- */
   const fav = document.createElement('canvas'); fav.width = fav.height = 64;
   const fx = fav.getContext('2d');
   const gf = fx.createRadialGradient(32,32,4,32,32,32);
@@ -384,14 +439,26 @@
     });
   }
 
-  /* hipervelocitat */
   let warpActiu = false, warpT0 = 0;
   function activaWarp(){
     if (REDUIT || warpActiu) return;
     warpActiu = true; warpT0 = performance.now();
     toast('🚀 Hipervelocitat!');
   }
-  document.getElementById('sol-wrap').onclick = activaWarp;
+
+  /* CLICS AL SOL:
+     - clic normal → hipervelocitat
+     - 5 clics ràpids (en 2,5 s) → obre l'accés d'ADMIN 👑 */
+  let clicsSol = [];
+  document.getElementById('sol-wrap').onclick = () => {
+    const ara = Date.now();
+    clicsSol = clicsSol.filter(t => ara - t < 2500);
+    clicsSol.push(ara);
+    if (clicsSol.length >= 5){ clicsSol = []; obreAdminModal(); return; }
+    if (clicsSol.length >= 3){ toast('☀️ ' + (5 - clicsSol.length) + ' clics més...'); return; }
+    activaWarp();
+  };
+
   /* codi Konami també activa warp */
   const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
   let kIdx = 0;
@@ -420,8 +487,6 @@
   function anima(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const w = canvas.width, h = canvas.height;
-
-    /* progrés del warp */
     let wp = 0;
     if (warpActiu){
       const t = performance.now() - warpT0;
@@ -430,7 +495,6 @@
       else if (t < 3300) wp = 1 - (t - 2300) / 1000;
       else { warpActiu = false; wp = 0; }
     }
-
     for (const e of estrelles){
       e.fase += e.vel * (1 + wp * 6);
       const px = e.x * w, py = e.y * h;
@@ -452,8 +516,6 @@
         ctx.fill();
       }
     }
-
-    /* rastre del cursor */
     for (let i = pols.length - 1; i >= 0; i--){
       const p = pols[i];
       p.x += p.vx; p.y += p.vy; p.vida -= 0.025;
@@ -463,7 +525,6 @@
       ctx.fillStyle = `rgba(${p.color},${p.vida * .8})`;
       ctx.fill();
     }
-
     for (let i = cometes.length - 1; i >= 0; i--){
       const c = cometes[i];
       c.x += c.vx; c.y += c.vy; c.vida -= 0.01;
@@ -490,7 +551,7 @@
     }
   }, 6500);
 
-  /* ---------- PARALLAX SUAU AMB EL RATOLÍ ---------- */
+  /* ---------- PARALLAX SUAU ---------- */
   if (RATOLI_FI && !REDUIT){
     addEventListener('mousemove', e => {
       document.documentElement.style.setProperty('--mx', e.clientX / innerWidth - .5);
@@ -551,7 +612,7 @@
     else confetiAnimat = false;
   }
 
-  /* ---------- GALERIA DE VÍDEOS (amb m'agrades) ---------- */
+  /* ---------- GALERIA DE VÍDEOS ---------- */
   const videos = [
     { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 1', desc: 'Descripció del primer vídeo del projecte.', base: 12 },
     { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 2', desc: 'Explica aquí què hi veuran els visitants.', base: 31 },
@@ -585,7 +646,6 @@
     };
   });
 
-  /* botó sorpresa: vídeo a l'atzar */
   document.getElementById('btn-sorpresa').onclick = () => {
     const cards = [...document.querySelectorAll('.targeta')];
     const c = cards[Math.floor(Math.random() * cards.length)];
@@ -594,7 +654,6 @@
     setTimeout(() => c.classList.remove('destacada'), 2400);
   };
 
-  /* compartir la web */
   document.getElementById('btn-compartir').onclick = async () => {
     const url = location.origin + location.pathname;
     if (navigator.share){
@@ -675,7 +734,6 @@
 
     feedTikTok.forEach((v, i) => {
       if (v.tipus === 'tt'){
-        // TikTok real: reproductor oficial incrustat (porta el seu propi so i controls)
         const holder = document.getElementById('player-' + i);
         const f = document.createElement('iframe');
         f.src = 'https://www.tiktok.com/embed/v2/' + v.id;
@@ -780,7 +838,62 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && app.classList.contains('obert')) tancaTiktok(); });
   if (location.hash.startsWith('#tiktok-')) obreTiktok(+location.hash.split('-')[1]);
 
-  /* ---------- OPINIONS (mur públic via jsonblob, sense registre) ---------- */
+  /* ---------- ADMIN (contrasenya personalitzada) ---------- */
+  const esAdmin = () => sessionStorage.getItem('admin_univers') === '1';
+
+  const adminModal = document.getElementById('admin-modal');
+  const adminCard = document.getElementById('admin-card');
+
+  function obreAdminModal(){
+    if (esAdmin()){ toast('👑 Ja ets admin!'); return; }
+    adminModal.classList.add('obert');
+    document.getElementById('admin-error').textContent = '';
+    setTimeout(() => document.getElementById('admin-contra').focus(), 100);
+  }
+  function tancaAdminModal(){
+    adminModal.classList.remove('obert');
+    document.getElementById('admin-contra').value = '';
+  }
+  function activaAdmin(){
+    sessionStorage.setItem('admin_univers', '1');
+    tancaAdminModal();
+    pintaLlista();
+    toast('👑 Mode admin activat');
+  }
+  function tancaSessioAdmin(){
+    sessionStorage.removeItem('admin_univers');
+    pintaLlista();
+    toast('Sessió d\'admin tancada');
+  }
+  function provaAdmin(){
+    const v = document.getElementById('admin-contra').value;
+    if (v === CONTRA_ADMIN){ activaAdmin(); }
+    else {
+      document.getElementById('admin-error').textContent = 'Contrasenya incorrecte';
+      adminCard.classList.remove('shake'); void adminCard.offsetWidth;
+      adminCard.classList.add('shake');
+    }
+  }
+  document.getElementById('admin-cancel').onclick = tancaAdminModal;
+  document.getElementById('admin-entra').onclick = provaAdmin;
+  document.getElementById('admin-contra').addEventListener('keydown', e => { if (e.key === 'Enter') provaAdmin(); });
+  adminModal.onclick = e => { if (e.target === adminModal) tancaAdminModal(); };
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && adminModal.classList.contains('obert')) tancaAdminModal();
+    if (e.ctrlKey && e.altKey && (e.key === 'a' || e.key === 'A')){ e.preventDefault(); obreAdminModal(); }
+  });
+
+  document.getElementById('btn-sortir').onclick = tancaSessioAdmin;
+  document.getElementById('btn-buidar').onclick = async () => {
+    if (!confirm('Segur que vols esborrar TOTES les opinions? Això no es pot desfer.')) return;
+    if (!confirm('Última confirmació: esborrar-ho tot?')) return;
+    opinionsActuals = [];
+    await desarOps([]);
+    pintaLlista();
+    toast('Totes les opinions esborrades');
+  };
+
+  /* ---------- OPINIONS (mur públic via jsonblob) ---------- */
   let BLOB_RUNTIME = BLOB_URL || localStorage.getItem('blob_temporal') || '';
   const CLAU_LOCAL = 'opinions_univers';
   const llistaOp = document.getElementById('llista-opinions');
@@ -833,6 +946,9 @@
   }
 
   function pintaLlista(){
+    const adminMode = esAdmin();
+    document.getElementById('admin-bar').hidden = !adminMode;
+
     let ops = [...opinionsActuals];
     if (ordreActiu === 'recents') ops.sort((a, b) => b.data - a.data);
     else ops.sort((a, b) => (b.estrelles||0) - (a.estrelles||0) || b.data - a.data);
@@ -859,8 +975,7 @@
       const est = Array.from({length: 5}, (_, k) =>
         `<svg viewBox="0 0 24 24" class="${k < (op.estrelles || 0) ? '' : 'buida'}">${svgEstrella}</svg>`).join('');
       const data = new Date(op.data).toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-      const btnEsb = CODI_MODERACIO
-        ? `<button class="esborra" data-id="${op.id || ''}" title="Esborrar opinió">✕</button>` : '';
+      const btnEsb = adminMode ? `<button class="esborra" data-id="${op.id || ''}" title="Esborrar opinió">✕</button>` : '';
       return `<div class="opinio-card">${btnEsb}
         <div class="avatar" style="background:hsl(${hue} 45% 42%)">${inicial}</div>
         <div class="opinio-contingut">
@@ -873,11 +988,9 @@
       </div>`;
     }).join('');
 
-    if (CODI_MODERACIO){
+    if (adminMode){
       llistaOp.querySelectorAll('.esborra').forEach(b => {
         b.onclick = async () => {
-          const c = prompt('Codi de moderació:');
-          if (c !== CODI_MODERACIO){ if (c !== null) toast('Codi incorrecte'); return; }
           opinionsActuals = opinionsActuals.filter(o => (o.id || '') !== b.dataset.id);
           await desarOps(opinionsActuals);
           pintaLlista();
