@@ -12,17 +12,27 @@
   html{scroll-behavior:smooth}
   body{font-family:'Space Grotesk',sans-serif;background:#04060c;color:#e8ecf4;overflow-x:hidden}
   #estrelles{position:fixed;inset:0;z-index:-3}
-  .nebulosa{position:fixed;inset:0;z-index:-2;background:
+  #confeti{position:fixed;inset:0;z-index:999;pointer-events:none}
+  .nebulosa{position:fixed;inset:0;z-index:-2;
+    transform:translate(calc(var(--mx,0)*-10px),calc(var(--my,0)*-8px));background:
     radial-gradient(ellipse 700px 500px at 20% 15%, rgba(70,100,170,.08), transparent),
     radial-gradient(ellipse 600px 450px at 80% 85%, rgba(130,80,150,.06), transparent)}
   .vialactia{position:fixed;top:-15%;left:-15%;width:130%;height:75%;z-index:-2;
+    transform:translate(calc(var(--mx,0)*14px),calc(var(--my,0)*10px)) rotate(-14deg);
     background:linear-gradient(115deg, transparent 32%, rgba(190,205,255,.045) 46%,
       rgba(255,255,255,.03) 50%, rgba(190,205,255,.045) 54%, transparent 68%);
-    transform:rotate(-14deg);filter:blur(28px)}
+    filter:blur(28px)}
+
+  /* ---------- PROGRÉS DE SCROLL ---------- */
+  #progres{position:fixed;top:0;left:0;height:3px;width:0;z-index:1000;
+    background:linear-gradient(90deg,#fcd34d,#f59e0b,#f9a8d4);border-radius:0 3px 3px 0;
+    box-shadow:0 0 10px rgba(252,211,77,.5)}
 
   /* ---------- CAPÇALERA ---------- */
   header{text-align:center;padding:80px 20px 60px}
-  .sol-wrap{position:relative;width:150px;height:150px;margin:0 auto 42px}
+  .sol-wrap{position:relative;width:150px;height:150px;margin:0 auto 42px;cursor:pointer;
+    transition:transform .2s}
+  .sol-wrap:active{transform:scale(.94)}
   .sol-wrap canvas{width:100%;height:100%;display:block;position:relative;z-index:1;border-radius:50%}
   .corona{position:absolute;inset:-55%;z-index:0;border-radius:50%;
     background:radial-gradient(circle, rgba(255,150,50,.26) 0%, rgba(255,110,20,.09) 42%, transparent 68%);
@@ -30,19 +40,20 @@
   @keyframes pols{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.05);opacity:1}}
   h1{font-size:clamp(2rem,5.5vw,3.6rem);color:#f4f6fb;letter-spacing:.02em;margin-bottom:14px;font-weight:700}
   .subtitol{color:#9aa5b5;font-size:1.05rem;max-width:520px;margin:0 auto;line-height:1.65}
-  .fila-capsalera{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:36px}
-  .boto{display:inline-block;padding:13px 30px;border-radius:999px;
-    color:#fcd34d;text-decoration:none;font-weight:500;font-size:.95rem;
+  .fila-capsalera{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+  .boto{display:inline-block;padding:13px 28px;border-radius:999px;cursor:pointer;
+    color:#fcd34d;text-decoration:none;font-weight:500;font-size:.95rem;font-family:inherit;
     border:1px solid rgba(252,211,77,.35);background:rgba(252,211,77,.05);
     transition:background .3s,border-color .3s}
   .boto:hover{background:rgba(252,211,77,.12);border-color:rgba(252,211,77,.55)}
-  .tiktok-btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:999px;
-    text-decoration:none;font-weight:500;font-size:.95rem;color:#e8ecf4;
+  .pill{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:999px;cursor:pointer;
+    text-decoration:none;font-weight:500;font-size:.95rem;color:#e8ecf4;font-family:inherit;
     border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.04);
     transition:border-color .3s,background .3s,box-shadow .3s}
-  .tiktok-btn svg{width:16px;height:16px;fill:#e8ecf4;transition:fill .3s}
-  .tiktok-btn:hover{border-color:rgba(254,44,85,.65);background:rgba(254,44,85,.07);box-shadow:0 0 24px rgba(254,44,85,.18)}
-  .tiktok-btn:hover svg{fill:#fe2c55}
+  .pill svg{width:16px;height:16px;fill:#e8ecf4;transition:fill .3s}
+  .pill:hover{background:rgba(255,255,255,.08)}
+  .pill.tiktok:hover{border-color:rgba(254,44,85,.65);background:rgba(254,44,85,.07);box-shadow:0 0 24px rgba(254,44,85,.18)}
+  .pill.tiktok:hover svg{fill:#fe2c55}
 
   /* ---------- SECCIONS ---------- */
   .seccio{max-width:1080px;margin:0 auto;padding:70px 20px;text-align:center;
@@ -54,24 +65,43 @@
   /* ---------- GALERIA ---------- */
   .reixeta{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
   .targeta{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;overflow:hidden;transition:transform .3s,border-color .3s;text-align:left}
+    border-radius:14px;overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s;text-align:left}
   .targeta:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.18)}
+  .targeta.destacada{border-color:#fcd34d!important;box-shadow:0 0 0 1px #fcd34d,0 0 40px rgba(252,211,77,.3)!important}
   .targeta iframe{width:100%;aspect-ratio:16/9;border:0;display:block;background:#000}
   .cos{padding:16px 18px}
+  .cap-cos{display:flex;justify-content:space-between;align-items:center;gap:10px}
   .cos h3{margin-bottom:6px;font-size:1.05rem;color:#e8ecf4}
   .cos p{color:#8b95a7;font-size:.92rem;line-height:1.55}
+  .like-mini{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;
+    font-family:inherit;font-size:.82rem;color:#8b95a7;padding:4px 8px;border-radius:999px;
+    transition:background .2s;flex-shrink:0}
+  .like-mini svg{width:15px;height:15px;fill:#5c6678;transition:fill .2s,transform .2s}
+  .like-mini:hover{background:rgba(254,44,85,.1)}
+  .like-mini:hover svg{fill:#fe2c55}
+  .like-mini.actiu svg{fill:#fe2c55;transform:scale(1.2)}
+  .like-mini.actiu{color:#fe2c55}
+  .fila-extra{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  .enllac-suau{background:none;border:none;cursor:pointer;font-family:inherit;color:#9aa5b5;
+    font-size:.9rem;text-decoration:underline;text-underline-offset:4px;transition:color .3s;padding:8px}
+  .enllac-suau:hover{color:#fde68a}
 
-  /* ---------- APP ESTIL TIKTOK ---------- */
-  #tiktok{height:100vh;height:100svh;position:relative;background:#02030a}
-  .titol-feed{position:absolute;top:16px;left:0;right:0;text-align:center;z-index:2;pointer-events:none;
+  /* ---------- APP TIKTOK (pantalla completa) ---------- */
+  #tiktok-app{position:fixed;inset:0;z-index:200;background:#02030a;display:none;height:100vh;height:100svh}
+  #tiktok-app.obert{display:block}
+  .titol-feed{position:absolute;top:16px;left:0;right:0;text-align:center;z-index:3;pointer-events:none;
     font-weight:700;letter-spacing:.05em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.85)}
+  #tanca{position:absolute;top:14px;left:14px;z-index:4;width:40px;height:40px;border-radius:50%;
+    background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:1.05rem;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .3s}
+  #tanca:hover{background:rgba(255,255,255,.15)}
   .feed{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
   .feed::-webkit-scrollbar{display:none}
   .slide{height:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;
     display:flex;align-items:center;justify-content:center}
   .video-box{position:relative;width:100%;height:100%;background:#000}
   @media(min-width:760px){
-    .video-box{height:min(94%,900px);width:auto;aspect-ratio:9/16;border-radius:18px;overflow:hidden;
+    .video-box{height:min(92%,860px);width:auto;aspect-ratio:9/16;border-radius:18px;overflow:hidden;
       box-shadow:0 0 80px rgba(0,0,0,.7)}
   }
   .video-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -90,7 +120,7 @@
   .acc{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;
     font-family:inherit;color:#fff;font-size:.75rem;text-shadow:0 1px 4px rgba(0,0,0,.85)}
   .acc .cercle{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.12);
-    display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s;backdrop-filter:blur(4px)}
+    display:flex;align-items:center;justify-content:center;transition:transform .2s;backdrop-filter:blur(4px)}
   .acc svg{width:22px;height:22px;fill:#fff;transition:fill .2s}
   .acc:active .cercle{transform:scale(1.15)}
   .acc.liker.actiu .cercle{background:rgba(254,44,85,.2)}
@@ -103,7 +133,21 @@
     animation:puja 1.6s ease-in-out infinite;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.8)}
   @keyframes puja{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-7px)}}
 
-  /* ---------- OPINIONS (disseny propi) ---------- */
+  /* ---------- OPINIONS ---------- */
+  .setup-card{max-width:640px;margin:0 auto 24px;background:rgba(252,211,77,.06);
+    border:1px solid rgba(252,211,77,.35);border-radius:16px;padding:22px 24px;text-align:left}
+  .setup-card strong{color:#fde68a;display:block;margin-bottom:8px}
+  .setup-card p{color:#c3ccd9;font-size:.9rem;line-height:1.6;margin-bottom:14px}
+  .setup-btn{padding:11px 22px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;
+    font-weight:700;font-size:.9rem;color:#0a0c12;background:#fcd34d;transition:filter .3s}
+  .setup-btn:hover{filter:brightness(1.08)}
+  .setup-btn:disabled{opacity:.6;cursor:wait}
+  .setup-res{margin-top:16px;font-size:.88rem;line-height:1.6}
+  .setup-res code{display:block;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.12);
+    padding:10px 12px;border-radius:8px;margin:10px 0;font-size:.8rem;word-break:break-all;color:#a5f3fc}
+  .copia-linia{background:none;border:1px solid rgba(255,255,255,.25);color:#e8ecf4;border-radius:8px;
+    padding:7px 14px;cursor:pointer;font-family:inherit;font-size:.82rem}
+  .copia-linia:hover{border-color:#fcd34d;color:#fde68a}
   .opinio-caixa{max-width:640px;margin:0 auto;background:rgba(255,255,255,.035);
     border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:26px;text-align:left}
   .camp{margin-bottom:18px}
@@ -112,6 +156,7 @@
     border-radius:10px;padding:12px 14px;color:#e8ecf4;font-family:inherit;font-size:.95rem;outline:none;
     transition:border-color .3s}
   .camp input:focus,.camp textarea:focus{border-color:rgba(252,211,77,.5)}
+  .camp input::placeholder,.camp textarea::placeholder{color:#5c6678}
   .camp textarea{min-height:96px;resize:vertical}
   .estrelles{display:flex;gap:4px}
   .estrelles button{background:none;border:none;cursor:pointer;padding:2px}
@@ -123,9 +168,19 @@
     background:#fcd34d;transition:filter .3s,transform .2s}
   .enviar:hover{filter:brightness(1.08)}
   .enviar:active{transform:scale(.98)}
-  .llista-opinions{max-width:640px;margin:26px auto 0;display:flex;flex-direction:column;gap:14px}
+  .enviar:disabled{opacity:.55;cursor:wait}
+  .stats{color:#9aa5b5;font-size:.92rem;margin:26px 0 4px;display:flex;align-items:center;
+    justify-content:center;gap:8px;flex-wrap:wrap}
+  .stats svg{width:16px;height:16px;fill:#fcd34d}
+  .ordre{display:flex;gap:8px;justify-content:center;margin:14px 0 20px}
+  .ordre button{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#9aa5b5;
+    border-radius:999px;padding:7px 18px;cursor:pointer;font-family:inherit;font-size:.82rem;transition:all .3s}
+  .ordre button.actiu{background:rgba(252,211,77,.12);border-color:rgba(252,211,77,.5);color:#fde68a}
+  .llista-opinions{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
   .opinio-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;padding:16px 18px;text-align:left;display:flex;gap:14px}
+    border-radius:14px;padding:16px 18px;text-align:left;display:flex;gap:14px;position:relative;
+    animation:apareix .4s}
+  @keyframes apareix{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
   .avatar{flex-shrink:0;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;
     justify-content:center;font-weight:700;color:#fff}
   .opinio-contingut{flex:1;min-width:0}
@@ -137,6 +192,9 @@
   .mini-estrelles svg.buida{fill:#3a4356}
   .opinio-contingut p{color:#c3ccd9;font-size:.92rem;line-height:1.55;margin-top:5px;
     overflow-wrap:break-word;white-space:pre-wrap}
+  .esborra{position:absolute;top:8px;right:10px;background:none;border:none;color:#5c6678;cursor:pointer;
+    font-size:.85rem;padding:4px;transition:color .2s}
+  .esborra:hover{color:#f87171}
   .buit{color:#7c8698;font-size:.92rem;padding:18px;text-align:center;
     border:1px dashed rgba(255,255,255,.12);border-radius:14px}
 
@@ -146,10 +204,10 @@
     background:rgba(14,17,26,.78);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);
     transition:color .3s,border-color .3s}
   #btn-opinio:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
-  #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(15px);z-index:100;
+  #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(15px);z-index:1500;
     background:rgba(14,17,26,.92);border:1px solid rgba(255,255,255,.15);color:#e8ecf4;
     padding:11px 20px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;
-    transition:opacity .3s,transform .3s;backdrop-filter:blur(8px)}
+    transition:opacity .3s,transform .3s;backdrop-filter:blur(8px);max-width:90vw;text-align:center}
   #toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
   @media(max-width:520px){#btn-opinio{bottom:16px;right:16px;font-size:.85rem;padding:11px 16px}}
 </style>
@@ -157,37 +215,59 @@
 <body>
 
 <canvas id="estrelles"></canvas>
+<canvas id="confeti"></canvas>
 <div class="nebulosa"></div>
 <div class="vialactia"></div>
+<div id="progres"></div>
 
 <header>
-  <div class="sol-wrap"><div class="corona"></div><canvas id="sol"></canvas></div>
+  <div class="sol-wrap" id="sol-wrap" title="...no cliquis el sol ☀️">
+    <div class="corona"></div><canvas id="sol"></canvas>
+  </div>
   <h1>El Nostre Univers</h1>
-  <p class="subtitol">Tots els vídeos del nostre projecte en un sol lloc: galeria, feed vertical estil TikTok i el teu espai d'opinió.</p>
+  <p class="subtitol">Tots els vídeos del nostre projecte en un sol lloc, i el teu espai per deixar la teva opinió.</p>
   <div class="fila-capsalera">
     <a href="#videos" class="boto">Veure els vídeos ↓</a>
-    <a href="#tiktok" class="tiktok-btn">
+    <button class="pill tiktok" id="btn-tiktok">
       <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
       El nostre TikTok
-    </a>
+    </button>
+    <button class="pill" id="btn-compartir">
+      <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+      Comparteix
+    </button>
   </div>
 </header>
 
+<!-- SECCIÓ NOMÉS DE VÍDEOS -->
 <section id="videos" class="seccio">
   <h2>Els nostres vídeos</h2>
   <p class="subtext">Fes clic a qualsevol vídeo per veure'l.</p>
   <div class="reixeta" id="galeria"></div>
+  <div class="fila-extra">
+    <button class="enllac-suau" id="btn-sorpresa">🎲 Sorpresa: un vídeo a l'atzar</button>
+    <button class="enllac-suau" id="btn-vertical">o mira'ls en format vertical, estil TikTok →</button>
+  </div>
 </section>
 
-<!-- APP ESTIL TIKTOK -->
-<section id="tiktok">
+<!-- APP TIKTOK A PANTALLA COMPLETA -->
+<div id="tiktok-app">
+  <button id="tanca" aria-label="Tancar">✕</button>
   <div class="titol-feed">Per a tu</div>
   <div class="feed" id="feed"></div>
-</section>
+</div>
 
+<!-- OPINIONS -->
 <section id="opinio" class="seccio">
   <h2>Dóna'ns la teva opinió</h2>
-  <p class="subtext">Valora el projecte amb les estrelles i deixa'ns un comentari.</p>
+  <p class="subtext">Valora el projecte amb les estrelles i deixa un comentari. Es queda publicat aquí per a tothom.</p>
+
+  <div class="setup-card" id="setup-card" hidden>
+    <strong>Activa el mur públic en 1 clic</strong>
+    <p>Ara mateix les opinions només es guarden al teu navegador. Clica el botó i es crearà un magatzem gratuït (jsonblob.com, sense registre). Després només caldrà enganxar una línia al codi i publicar de nou.</p>
+    <button class="setup-btn" id="btn-activar">Activar mur públic</button>
+    <div class="setup-res" id="setup-res"></div>
+  </div>
 
   <div class="opinio-caixa">
     <form id="form-opinio">
@@ -203,10 +283,15 @@
         <label for="text">La teva opinió</label>
         <textarea id="text" maxlength="500" placeholder="Què t'ha semblat el projecte?" required></textarea>
       </div>
-      <button type="submit" class="enviar">Enviar opinió</button>
+      <button type="submit" class="enviar" id="btn-enviar">Enviar opinió</button>
     </form>
   </div>
 
+  <div class="stats" id="stats" hidden></div>
+  <div class="ordre" id="ordre" hidden>
+    <button class="actiu" data-o="recents">Recents</button>
+    <button data-o="millors">Millor valorades</button>
+  </div>
   <div class="llista-opinions" id="llista-opinions"></div>
 </section>
 
@@ -214,6 +299,13 @@
 <div id="toast"></div>
 
 <script>
+  /* ================== CONFIGURACIÓ ================== */
+  const BLOB_URL = '';          // ex: 'https://jsonblob.com/api/jsonBlob/1234567890'
+  const CODI_MODERACIO = '';    // posa una contrasenya (ex: 'univers2025') per poder esborrar opinions amb el botó ✕
+
+  const REDUIT = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const RATOLI_FI = matchMedia('(pointer: fine)').matches;
+
   /* ---------- SOL REALISTA ---------- */
   const sol = document.getElementById('sol');
   const sctx = sol.getContext('2d');
@@ -263,10 +355,20 @@
   }
   requestAnimationFrame(bucleSol);
 
-  /* ---------- ESTRELES I COMETES ---------- */
+  /* ---------- FAVICON DINÀMIC (un solet a la pestanya) ---------- */
+  const fav = document.createElement('canvas'); fav.width = fav.height = 64;
+  const fx = fav.getContext('2d');
+  const gf = fx.createRadialGradient(32,32,4,32,32,32);
+  gf.addColorStop(0,'#fff7d6'); gf.addColorStop(.45,'#fcd34d'); gf.addColorStop(1,'rgba(252,211,77,0)');
+  fx.fillStyle = gf; fx.fillRect(0,0,64,64);
+  fx.fillStyle = '#fbbf24'; fx.beginPath(); fx.arc(32,32,14,0,7); fx.fill();
+  const llink = document.createElement('link'); llink.rel = 'icon'; llink.href = fav.toDataURL();
+  document.head.appendChild(llink);
+
+  /* ---------- ESTRELES, COMETES, WARP I RASTRE DEL CURSOR ---------- */
   const canvas = document.getElementById('estrelles');
   const ctx = canvas.getContext('2d');
-  let cometes = [];
+  let cometes = [], pols = [];
   function mida(){ canvas.width = innerWidth; canvas.height = innerHeight; }
   mida(); addEventListener('resize', mida);
   const tonalitats = ['255,255,255','255,255,255','255,255,255','205,218,255','255,228,196'];
@@ -280,16 +382,87 @@
       color: tonalitats[Math.floor(Math.random() * tonalitats.length)]
     });
   }
+
+  /* hipervelocitat */
+  let warpActiu = false, warpT0 = 0;
+  function activaWarp(){
+    if (REDUIT || warpActiu) return;
+    warpActiu = true; warpT0 = performance.now();
+    toast('🚀 Hipervelocitat!');
+  }
+  document.getElementById('sol-wrap').onclick = activaWarp;
+  /* codi Konami també activa warp */
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let kIdx = 0;
+  addEventListener('keydown', e => {
+    kIdx = (e.key === KONAMI[kIdx]) ? kIdx + 1 : (e.key === KONAMI[0] ? 1 : 0);
+    if (kIdx === KONAMI.length){ kIdx = 0; activaWarp(); }
+  });
+
+  /* rastre d'estrelles del cursor */
+  let ultimRastre = 0;
+  if (RATOLI_FI && !REDUIT){
+    addEventListener('mousemove', e => {
+      const ara = performance.now();
+      if (ara - ultimRastre < 28) return;
+      ultimRastre = ara;
+      pols.push({
+        x: e.clientX + (Math.random()-.5)*6, y: e.clientY + (Math.random()-.5)*6,
+        vx: (Math.random()-.5)*.6, vy: -.3 - Math.random()*.5,
+        vida: 1, r: .8 + Math.random()*1.4,
+        color: Math.random() < .3 ? '252,211,77' : '255,255,255'
+      });
+      if (pols.length > 90) pols.shift();
+    }, { passive: true });
+  }
+
   function anima(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const w = canvas.width, h = canvas.height;
+
+    /* progrés del warp */
+    let wp = 0;
+    if (warpActiu){
+      const t = performance.now() - warpT0;
+      if (t < 500) wp = t / 500;
+      else if (t < 2300) wp = 1;
+      else if (t < 3300) wp = 1 - (t - 2300) / 1000;
+      else { warpActiu = false; wp = 0; }
+    }
+
     for (const e of estrelles){
-      e.fase += e.vel;
+      e.fase += e.vel * (1 + wp * 6);
+      const px = e.x * w, py = e.y * h;
       const a = 0.2 + Math.abs(Math.sin(e.fase)) * 0.7;
+      if (wp > 0.02){
+        const dx = px - w/2, dy = py - h/2;
+        const dist = Math.hypot(dx, dy) || 1;
+        const len = wp * wp * (dist * 0.4 + 50);
+        const g2 = ctx.createLinearGradient(px, py, px + dx/dist*len, py + dy/dist*len);
+        g2.addColorStop(0, `rgba(${e.color},${a})`);
+        g2.addColorStop(1, `rgba(${e.color},0)`);
+        ctx.strokeStyle = g2; ctx.lineWidth = e.r;
+        ctx.beginPath(); ctx.moveTo(px, py);
+        ctx.lineTo(px + dx/dist*len, py + dy/dist*len); ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(px, py, e.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${e.color},${a})`;
+        ctx.fill();
+      }
+    }
+
+    /* rastre del cursor */
+    for (let i = pols.length - 1; i >= 0; i--){
+      const p = pols[i];
+      p.x += p.vx; p.y += p.vy; p.vida -= 0.025;
+      if (p.vida <= 0){ pols.splice(i, 1); continue; }
       ctx.beginPath();
-      ctx.arc(e.x * canvas.width, e.y * canvas.height, e.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${e.color},${a})`;
+      ctx.arc(p.x, p.y, p.r * p.vida, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color},${p.vida * .8})`;
       ctx.fill();
     }
+
     for (let i = cometes.length - 1; i >= 0; i--){
       const c = cometes[i];
       c.x += c.vx; c.y += c.vy; c.vida -= 0.01;
@@ -298,10 +471,8 @@
       g.addColorStop(0, `rgba(255,255,255,${c.vida * 0.85})`);
       g.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.strokeStyle = g; ctx.lineWidth = 1.3;
-      ctx.beginPath();
-      ctx.moveTo(c.x, c.y);
-      ctx.lineTo(c.x - c.vx*12, c.y - c.vy*12);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(c.x, c.y);
+      ctx.lineTo(c.x - c.vx*12, c.y - c.vy*12); ctx.stroke();
     }
     requestAnimationFrame(anima);
   }
@@ -318,32 +489,128 @@
     }
   }, 6500);
 
-  /* ---------- GALERIA DE VÍDEOS ---------- */
+  /* ---------- PARALLAX SUAU AMB EL RATOLÍ ---------- */
+  if (RATOLI_FI && !REDUIT){
+    addEventListener('mousemove', e => {
+      document.documentElement.style.setProperty('--mx', e.clientX / innerWidth - .5);
+      document.documentElement.style.setProperty('--my', e.clientY / innerHeight - .5);
+    }, { passive: true });
+  }
+
+  /* ---------- PROGRÉS DE SCROLL I TÍTOL DE PESTANYA ---------- */
+  const progr = document.getElementById('progres');
+  addEventListener('scroll', () => {
+    const d = document.documentElement;
+    progr.style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+  }, { passive: true });
+
+  const TITOL = document.title;
+  document.addEventListener('visibilitychange', () => {
+    document.title = document.hidden ? '🌌 Torna, l\'univers t\'espera!' : TITOL;
+  });
+
+  /* ---------- CONFETI D'ESTRELES ---------- */
+  const cCanvas = document.getElementById('confeti');
+  const cctx = cCanvas.getContext('2d');
+  let confetisArray = [], confetiAnimat = false;
+  function confeti(){
+    if (REDUIT) return;
+    cCanvas.width = innerWidth; cCanvas.height = innerHeight;
+    const colors = ['#fcd34d','#f59e0b','#ffffff','#a5b4fc','#f9a8d4'];
+    for (let i = 0; i < 70; i++){
+      const a = Math.random() * Math.PI * 2, v = 4 + Math.random() * 7;
+      confetisArray.push({
+        x: innerWidth/2, y: innerHeight * .45,
+        vx: Math.cos(a)*v, vy: Math.sin(a)*v - 4,
+        rot: Math.random()*6, vr: (Math.random()-.5)*.3,
+        r: 4 + Math.random()*6, vida: 1,
+        color: colors[Math.floor(Math.random()*colors.length)]
+      });
+    }
+    if (!confetiAnimat){ confetiAnimat = true; animaConfeti(); }
+  }
+  function animaConfeti(){
+    cctx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+    for (let i = confetisArray.length - 1; i >= 0; i--){
+      const c = confetisArray[i];
+      c.x += c.vx; c.y += c.vy; c.vy += .18; c.rot += c.vr; c.vida -= .012;
+      if (c.vida <= 0 || c.y > cCanvas.height + 30){ confetisArray.splice(i, 1); continue; }
+      cctx.save();
+      cctx.translate(c.x, c.y); cctx.rotate(c.rot); cctx.globalAlpha = Math.max(0, c.vida);
+      cctx.fillStyle = c.color;
+      cctx.beginPath();
+      for (let k = 0; k < 10; k++){
+        const a = Math.PI/5*k - Math.PI/2, rad = k % 2 ? c.r*.45 : c.r;
+        cctx.lineTo(Math.cos(a)*rad, Math.sin(a)*rad);
+      }
+      cctx.closePath(); cctx.fill();
+      cctx.restore();
+    }
+    if (confetisArray.length) requestAnimationFrame(animaConfeti);
+    else confetiAnimat = false;
+  }
+
+  /* ---------- GALERIA DE VÍDEOS (amb m'agrades) ---------- */
   const videos = [
-    { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 1', desc: 'Descripció del primer vídeo del projecte.' },
-    { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 2', desc: 'Explica aquí què hi veuran els visitants.' },
-    { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 3', desc: 'Pots afegir tants vídeos com vulguis.' },
+    { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 1', desc: 'Descripció del primer vídeo del projecte.', base: 12 },
+    { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 2', desc: 'Explica aquí què hi veuran els visitants.', base: 31 },
+    { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 3', desc: 'Pots afegir tants vídeos com vulguis.', base: 8 },
   ];
+  const svgCor = '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+  const likesGaleria = JSON.parse(localStorage.getItem('likes_galeria') || '{}');
   const galeria = document.getElementById('galeria');
-  videos.forEach(v => {
+  videos.forEach((v, i) => {
     const card = document.createElement('article');
     card.className = 'targeta';
     card.innerHTML = `
       <iframe src="https://www.youtube-nocookie.com/embed/${v.id}"
         title="${v.titol}" loading="lazy" allowfullscreen></iframe>
-      <div class="cos"><h3>${v.titol}</h3><p>${v.desc}</p></div>`;
+      <div class="cos">
+        <div class="cap-cos"><h3>${v.titol}</h3>
+          <button class="like-mini" data-i="${i}">${svgCor}<span>${v.base + (likesGaleria[i] ? 1 : 0)}</span></button>
+        </div>
+        <p>${v.desc}</p>
+      </div>`;
     galeria.appendChild(card);
   });
+  document.querySelectorAll('.like-mini').forEach(b => {
+    const i = +b.dataset.i;
+    if (likesGaleria[i]) b.classList.add('actiu');
+    b.onclick = () => {
+      likesGaleria[i] = !likesGaleria[i];
+      localStorage.setItem('likes_galeria', JSON.stringify(likesGaleria));
+      b.classList.toggle('actiu', likesGaleria[i]);
+      b.querySelector('span').textContent = videos[i].base + (likesGaleria[i] ? 1 : 0);
+    };
+  });
 
-  /* ---------- APP ESTIL TIKTOK ----------
-     base = "m'agrades" inicials (decoratiu). Usuari, descripció i so són editables. */
+  /* botó sorpresa: vídeo a l'atzar */
+  document.getElementById('btn-sorpresa').onclick = () => {
+    const cards = [...document.querySelectorAll('.targeta')];
+    const c = cards[Math.floor(Math.random() * cards.length)];
+    c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    c.classList.add('destacada');
+    setTimeout(() => c.classList.remove('destacada'), 2400);
+  };
+
+  /* compartir la web */
+  document.getElementById('btn-compartir').onclick = async () => {
+    const url = location.origin + location.pathname;
+    if (navigator.share){
+      try { await navigator.share({ title: document.title, url }); } catch {}
+    } else {
+      try { await navigator.clipboard.writeText(url); toast('Enllaç copiat! ✨'); }
+      catch { toast('No s\'ha pogut copiar l\'enllaç'); }
+    }
+  };
+
+  /* ---------- APP TIKTOK ---------- */
   const feedTikTok = [
     { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Primer vídeo del projecte — llisca per veure més', so: 'so original', base: 128 },
     { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Segon vídeo: explica aquí de què va', so: 'so original', base: 342 },
     { id: 'aqz-KE-bpKQ', usuari: '@el_nostre_univers', desc: 'Tercer vídeo — el final de la història', so: 'so original', base: 57 },
   ];
 
-  const svgCor = '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
   const svgComentari = '<svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>';
   const svgCompartir = '<svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
   const svgNota = '<svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>';
@@ -354,13 +621,18 @@
   const fmt = n => n >= 1000 ? (n/1000).toFixed(1).replace('.0','') + 'K' : n;
   let players = [];
   let soActiu = false;
-  const likes = JSON.parse(localStorage.getItem('likes_univers') || '{}');
+  let tiktokConstruit = false;
+  const likesFeed = JSON.parse(localStorage.getItem('likes_univers') || '{}');
 
   function aplicaSo(p){
     if (soActiu){ p.unMute(); p.setVolume(80); } else { p.mute(); }
   }
+  function pausaTot(){
+    players.forEach(p => { if (p && p.pauseVideo) p.pauseVideo(); });
+  }
 
   function buildFeed(){
+    if (typeof YT === 'undefined' || !YT.Player){ setTimeout(buildFeed, 300); return; }
     const feed = document.getElementById('feed');
     feedTikTok.forEach((v, i) => {
       const slide = document.createElement('div');
@@ -378,11 +650,9 @@
           </div>
           <div class="accions">
             <button class="acc liker" data-i="${i}">
-              <span class="cercle">${svgCor}</span><span class="n">${fmt(v.base + (likes[v.id] ? 1 : 0))}</span>
+              <span class="cercle">${svgCor}</span><span class="n">${fmt(v.base + (likesFeed[v.id] ? 1 : 0))}</span>
             </button>
-            <button class="acc comentar">
-              <span class="cercle">${svgComentari}</span><span>opina</span>
-            </button>
+            <button class="acc comentar"><span class="cercle">${svgComentari}</span><span>opina</span></button>
             <button class="acc compartir" data-i="${i}">
               <span class="cercle">${svgCompartir}</span><span>comparteix</span>
             </button>
@@ -393,7 +663,6 @@
       feed.appendChild(slide);
     });
 
-    // Reproductors de YouTube
     feedTikTok.forEach((v, i) => {
       players[i] = new YT.Player('player-' + i, {
         videoId: v.id,
@@ -402,7 +671,6 @@
       });
     });
 
-    // Reproduir només el vídeo que es veu; pausar la resta
     const io = new IntersectionObserver(entrades => {
       entrades.forEach(en => {
         const i = +en.target.id.split('-')[1];
@@ -414,7 +682,6 @@
     }, { root: feed, threshold: 0.6 });
     document.querySelectorAll('.slide').forEach(s => io.observe(s));
 
-    // Clic al vídeo = pausar / reproduir
     document.querySelectorAll('.click-cap').forEach(cap => {
       cap.onclick = () => {
         const i = +cap.dataset.i, p = players[i];
@@ -429,39 +696,36 @@
       };
     });
 
-    // M'agrada (es guarda al navegador)
     document.querySelectorAll('.liker').forEach(b => {
       const i = +b.dataset.i;
-      if (likes[feedTikTok[i].id]) b.classList.add('actiu');
+      if (likesFeed[feedTikTok[i].id]) b.classList.add('actiu');
       b.onclick = () => {
         const v = feedTikTok[i];
-        likes[v.id] = !likes[v.id];
-        localStorage.setItem('likes_univers', JSON.stringify(likes));
-        b.classList.toggle('actiu', likes[v.id]);
-        b.querySelector('.n').textContent = fmt(v.base + (likes[v.id] ? 1 : 0));
+        likesFeed[v.id] = !likesFeed[v.id];
+        localStorage.setItem('likes_univers', JSON.stringify(likesFeed));
+        b.classList.toggle('actiu', likesFeed[v.id]);
+        b.querySelector('.n').textContent = fmt(v.base + (likesFeed[v.id] ? 1 : 0));
       };
     });
 
-    // Botó "opina" → baixa a la secció d'opinions
     document.querySelectorAll('.comentar').forEach(b => {
-      b.onclick = () => document.getElementById('opinio').scrollIntoView({ behavior: 'smooth' });
+      b.onclick = () => {
+        tancaTiktok();
+        document.getElementById('opinio').scrollIntoView({ behavior: 'smooth' });
+      };
     });
 
-    // Compartir = copiar l'enllaç directe d'aquest vídeo
     document.querySelectorAll('.compartir').forEach(b => {
       b.onclick = async () => {
         const i = +b.dataset.i;
         const url = location.origin + location.pathname + '#tiktok-' + i;
         try {
-          await navigator.clipboard.writeText(url);
-          toast("Enllaç copiat! Envia'l a qui vulguis");
-        } catch {
-          toast('No sha pogut copiar l\'enllaç');
-        }
+          if (navigator.share) await navigator.share({ title: 'El Nostre Univers', url });
+          else { await navigator.clipboard.writeText(url); toast("Enllaç copiat! Envia'l a qui vulguis"); }
+        } catch {}
       };
     });
 
-    // So on/off
     document.querySelectorAll('.mute').forEach(b => {
       b.onclick = () => {
         soActiu = !soActiu;
@@ -469,37 +733,40 @@
         players.forEach(p => { if (p && p.playVideo) aplicaSo(p); });
       };
     });
-
-    // Si algú obre un enllaç compartit (#tiktok-2), baixa directament a aquell vídeo
-    if (location.hash.startsWith('#tiktok-')) {
-      const el = document.querySelector(location.hash);
-      if (el) setTimeout(() => el.scrollIntoView(), 300);
-    }
   }
 
-  function onYouTubeIframeAPIReady(){ buildFeed(); }
+  const app = document.getElementById('tiktok-app');
+  function obreTiktok(slide){
+    if (!tiktokConstruit){ buildFeed(); tiktokConstruit = true; }
+    app.classList.add('obert');
+    document.body.style.overflow = 'hidden';
+    if (slide != null){
+      const el = document.getElementById('tiktok-' + slide);
+      if (el) setTimeout(() => el.scrollIntoView(), 250);
+    }
+  }
+  function tancaTiktok(){
+    app.classList.remove('obert');
+    document.body.style.overflow = '';
+    pausaTot();
+  }
+  document.getElementById('btn-tiktok').onclick = () => obreTiktok();
+  document.getElementById('btn-vertical').onclick = () => obreTiktok();
+  document.getElementById('tanca').onclick = tancaTiktok;
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && app.classList.contains('obert')) tancaTiktok(); });
+  if (location.hash.startsWith('#tiktok-')) obreTiktok(+location.hash.split('-')[1]);
 
-  // Reserva: si l'API de YouTube no carrega, es mostren els vídeos com a iframes normals
-  setTimeout(() => {
-    if (players.length) return;
-    document.querySelectorAll('.slide').forEach((s, i) => {
-      const caja = s.querySelector('.video-box');
-      const f = document.createElement('iframe');
-      f.src = `https://www.youtube-nocookie.com/embed/${feedTikTok[i].id}?mute=1&controls=0&loop=1&playlist=${feedTikTok[i].id}&playsinline=1&rel=0`;
-      f.allow = 'autoplay; encrypted-media';
-      caja.prepend(f);
-    });
-  }, 4000);
+  /* ---------- OPINIONS (mur públic via jsonblob, sense registre) ---------- */
+  let BLOB_RUNTIME = BLOB_URL || localStorage.getItem('blob_temporal') || '';
+  const CLAU_LOCAL = 'opinions_univers';
+  const llistaOp = document.getElementById('llista-opinions');
+  const btnEnviar = document.getElementById('btn-enviar');
+  let opinionsActuals = [];
+  let ordreActiu = 'recents';
 
-  /* ---------- OPINIONS ---------- */
-  const CLAU = 'opinions_univers';
-  // Opcional: posa aquí el teu correu (ex: 'nom@gmail.com') i cada opinió també et arribarà per email.
-  // El primer enviament rebreu un correu per activar-ho (servei gratuït formsubmit.co, sense registre).
-  const CORREU = '';
-
+  const svgEstrella = '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
   const estrellesBox = document.getElementById('selector-estrelles');
   let puntuacio = 0;
-  const svgEstrella = '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
   for (let i = 1; i <= 5; i++) {
     const b = document.createElement('button');
     b.type = 'button';
@@ -516,22 +783,61 @@
   pinta();
 
   function escap(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-  function obtenOpinions(){ return JSON.parse(localStorage.getItem(CLAU) || '[]'); }
+  function local(){ return JSON.parse(localStorage.getItem(CLAU_LOCAL) || '[]'); }
 
-  function render(){
-    const llista = document.getElementById('llista-opinions');
-    const ops = obtenOpinions().sort((a, b) => b.data - a.data);
+  async function llegirOps(){
+    if (BLOB_RUNTIME){
+      try {
+        const r = await fetch(BLOB_RUNTIME);
+        const d = await r.json();
+        return Array.isArray(d) ? d : (Array.isArray(d.opinions) ? d.opinions : []);
+      } catch { return local(); }
+    }
+    return local();
+  }
+  async function desarOps(arr){
+    if (BLOB_RUNTIME){
+      const r = await fetch(BLOB_RUNTIME, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ opinions: arr })
+      });
+      return r.ok;
+    }
+    localStorage.setItem(CLAU_LOCAL, JSON.stringify(arr));
+    return true;
+  }
+
+  function pintaLlista(){
+    let ops = [...opinionsActuals];
+    if (ordreActiu === 'recents') ops.sort((a, b) => b.data - a.data);
+    else ops.sort((a, b) => (b.estrelles||0) - (a.estrelles||0) || b.data - a.data);
+
+    const ambEstrelles = ops.filter(o => o.estrelles > 0);
+    const stats = document.getElementById('stats');
+    if (ambEstrelles.length){
+      const mitj = ambEstrelles.reduce((s, o) => s + o.estrelles, 0) / ambEstrelles.length;
+      stats.hidden = false;
+      stats.innerHTML = `${svgEstrella}<strong style="color:#fde68a">${mitj.toFixed(1)}</strong> de mitjana · ${ops.length} ${ops.length === 1 ? 'opinió' : 'opinions'}`;
+      document.getElementById('ordre').hidden = false;
+    } else {
+      stats.hidden = true;
+      document.getElementById('ordre').hidden = true;
+    }
+
     if (!ops.length){
-      llista.innerHTML = '<div class="buit">Encara no hi ha opinions. Sigues la primera persona en deixar la teva empremta estelar.</div>';
+      llistaOp.innerHTML = '<div class="buit">Encara no hi ha opinions. Sigues la primera persona en deixar la teva empremta estelar.</div>';
       return;
     }
-    llista.innerHTML = ops.map(op => {
+    llistaOp.innerHTML = ops.map(op => {
       const inicial = (op.nom || 'A').trim().charAt(0).toUpperCase();
       const hue = [...(op.nom || 'A')].reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
       const est = Array.from({length: 5}, (_, k) =>
-        `<svg viewBox="0 0 24 24" class="${k < op.estrelles ? '' : 'buida'}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`).join('');
+        `<svg viewBox="0 0 24 24" class="${k < (op.estrelles || 0) ? '' : 'buida'}">${svgEstrella}</svg>`).join('');
       const data = new Date(op.data).toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-      return `<div class="opinio-card">
+      const btnEsb = CODI_MODERACIO
+        ? `<button class="esborra" data-id="${op.id || ''}" title="Esborrar opinió">✕</button>` : '';
+      return `<div class="opinio-card">${btnEsb}
         <div class="avatar" style="background:hsl(${hue} 45% 42%)">${inicial}</div>
         <div class="opinio-contingut">
           <div class="opinio-cap">
@@ -542,40 +848,102 @@
         </div>
       </div>`;
     }).join('');
+
+    if (CODI_MODERACIO){
+      llistaOp.querySelectorAll('.esborra').forEach(b => {
+        b.onclick = async () => {
+          const c = prompt('Codi de moderació:');
+          if (c !== CODI_MODERACIO){ if (c !== null) toast('Codi incorrecte'); return; }
+          opinionsActuals = opinionsActuals.filter(o => (o.id || '') !== b.dataset.id);
+          await desarOps(opinionsActuals);
+          pintaLlista();
+          toast('Opinió esborrada');
+        };
+      });
+    }
   }
-  render();
+
+  async function carregarOpinions(){
+    opinionsActuals = await llegirOps();
+    pintaLlista();
+  }
+  carregarOpinions();
+  setInterval(() => { if (BLOB_RUNTIME && !document.hidden) carregarOpinions(); }, 30000);
+
+  document.querySelectorAll('.ordre button').forEach(b => {
+    b.onclick = () => {
+      ordreActiu = b.dataset.o;
+      document.querySelectorAll('.ordre button').forEach(x => x.classList.toggle('actiu', x === b));
+      pintaLlista();
+    };
+  });
+
+  /* activació del mur públic en 1 clic */
+  if (!BLOB_URL) document.getElementById('setup-card').hidden = false;
+  document.getElementById('btn-activar').onclick = async function(){
+    this.disabled = true; this.textContent = 'Creant magatzem...';
+    const res = document.getElementById('setup-res');
+    try {
+      const r = await fetch('https://jsonblob.com/api/jsonBlob', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ opinions: [] })
+      });
+      const id = r.headers.get('X-jsonblob') || (r.headers.get('Location') || '').split('/').pop();
+      if (!id) throw new Error('sense id');
+      const url = 'https://jsonblob.com/api/jsonBlob/' + id;
+      BLOB_RUNTIME = url;
+      localStorage.setItem('blob_temporal', url);
+      const linia = `const BLOB_URL = '${url}';`;
+      res.innerHTML = `
+        <strong style="color:#86efac">Magatzem creat!</strong> Ja funciona en aquest navegador.
+        Perquè el veu <em>tothom</em>, copia aquesta línia, enganxa-la al codi on posa
+        <code>const BLOB_URL = '';</code> (a dalt del script) i torna a publicar la web:
+        <code>${linia.replace(/</g,'&lt;')}</code>
+        <button class="copia-linia" id="copia-blob">Copiar línia</button>`;
+      document.getElementById('copia-blob').onclick = async () => {
+        await navigator.clipboard.writeText(linia);
+        toast('Línia copiada! Enganxa-la al codi');
+      };
+      carregarOpinions();
+    } catch {
+      res.innerHTML = `
+        <strong style="color:#fca5a5">No s'ha pogut crear automàticament.</strong> Fes-ho manualment (1 min):<br>
+        1. Entra a <strong>jsonblob.com</strong><br>
+        2. Enganxa <code>{"opinions":[]}</code> al quadre i clica <strong>Create</strong><br>
+        3. Copia l'URL que et dona i posa-la a <code>const BLOB_URL = '';</code> del codi`;
+    }
+    this.disabled = false; this.textContent = 'Activar mur públic';
+  };
 
   document.getElementById('form-opinio').onsubmit = async e => {
     e.preventDefault();
     const text = document.getElementById('text').value.trim();
     if (!text) return;
     const op = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       nom: document.getElementById('nom').value.trim(),
       estrelles: puntuacio,
       text,
       data: Date.now()
     };
-    const ops = obtenOpinions();
-    ops.push(op);
-    localStorage.setItem(CLAU, JSON.stringify(ops));
-    render();
-    e.target.reset();
-    puntuacio = 0;
-    pinta();
-    toast('Gràcies per la teva opinió!');
-    if (CORREU) {
-      try {
-        await fetch('https://formsubmit.co/ajax/' + CORREU, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            _subject: 'Nova opinió — El Nostre Univers',
-            nom: op.nom || 'Anònim',
-            puntuacio: op.estrelles + '/5',
-            opinio: op.text
-          })
-        });
-      } catch {}
+    btnEnviar.disabled = true;
+    btnEnviar.textContent = 'Enviant...';
+    opinionsActuals.push(op);
+    let ok = true;
+    try { ok = await desarOps(opinionsActuals); } catch { ok = false; }
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = 'Enviar opinió';
+    if (ok){
+      e.target.reset();
+      puntuacio = 0; pinta();
+      confeti();
+      toast('Gràcies per la teva opinió! 🌟');
+      pintaLlista();
+      if (BLOB_RUNTIME) setTimeout(carregarOpinions, 800);
+    } else {
+      opinionsActuals.pop();
+      toast('Hi ha hagut un error. Torna-ho a provar.');
     }
   };
 
