@@ -24,73 +24,25 @@
   #barra strong{color:#fde68a;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   @media(max-width:560px){#barra strong{display:none}}
 
-  /* ---------- OVERLAY DE CONSTRUCCIÓ ---------- */
-  #overlay{position:fixed;inset:0;z-index:15;display:flex;flex-direction:column;gap:14px;
-    align-items:center;justify-content:center;pointer-events:none;transition:opacity .6s}
-  #overlay.amagat{opacity:0}
-  #overlay .titol{font-size:clamp(1.4rem,4vw,2.4rem);font-weight:700;color:#f4f6fb;
-    text-shadow:0 2px 20px rgba(0,0,0,.8)}
-  #overlay .prog{color:#fcd34d;font-weight:700;font-size:1.05rem;text-shadow:0 1px 12px rgba(0,0,0,.9)}
-  #overlay .barra-prog{width:min(320px,70vw);height:6px;border-radius:999px;
-    background:rgba(255,255,255,.12);overflow:hidden}
-  #overlay .barra-prog i{display:block;height:100%;width:0;border-radius:999px;
-    background:linear-gradient(90deg,#fcd34d,#f59e0b);box-shadow:0 0 10px rgba(252,211,77,.6);
-    transition:width .2s}
-
-  /* ---------- PANELL EXPLICATIU ---------- */
-  #panell-info{position:fixed;left:16px;bottom:16px;z-index:20;width:min(300px,calc(100vw - 32px));
-    background:rgba(10,13,22,.82);border:1px solid rgba(255,255,255,.1);border-radius:16px;
-    padding:16px 18px;backdrop-filter:blur(10px)}
-  #panell-info h2{font-size:.95rem;color:#f4f6fb;margin-bottom:10px}
-  .bloc{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
-  .bloc .ico{flex-shrink:0;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;
-    justify-content:center;font-size:1rem;background:rgba(255,255,255,.06)}
-  .bloc strong{display:block;font-size:.85rem;color:#fde68a;margin-bottom:2px}
-  .bloc p{font-size:.8rem;color:#9aa5b5;line-height:1.5}
-  .nota{font-size:.72rem;color:#6b7688;line-height:1.5;margin-top:10px;
-    border-top:1px dashed rgba(255,255,255,.12);padding-top:10px}
-  .comptadors{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap}
-  .comptadors div{flex:1;min-width:70px;background:rgba(255,255,255,.04);border-radius:10px;
-    padding:8px 10px;text-align:center}
-  .comptadors b{display:block;color:#fde68a;font-size:1.05rem}
-  .comptadors span{font-size:.68rem;color:#7c8698}
-
-  /* ---------- CONTROLS ---------- */
-  #panell-ctrl{position:fixed;right:16px;bottom:16px;z-index:20;width:200px;
-    background:rgba(10,13,22,.82);border:1px solid rgba(255,255,255,.1);border-radius:16px;
-    padding:14px 16px;backdrop-filter:blur(10px)}
-  #panell-ctrl label{display:block;font-size:.75rem;color:#9aa5b5;margin-bottom:6px}
-  #vel{width:100%;accent-color:#fcd34d}
-  #vel-val{color:#fde68a;font-weight:700;font-size:.8rem}
-  .ctrl-botons{display:flex;flex-direction:column;gap:7px;margin-top:12px}
-  .ctrl-botons button{padding:9px 10px;border-radius:10px;cursor:pointer;font-family:inherit;
-    font-size:.8rem;color:#e8ecf4;background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.14);transition:all .25s;text-align:left}
-  .ctrl-botons button:hover{border-color:rgba(252,211,77,.5);color:#fde68a}
-  .ctrl-botons button.off{opacity:.55}
-  #btn-info{display:none;position:fixed;left:16px;bottom:16px;z-index:21;width:46px;height:46px;
-    border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(10,13,22,.85);
-    color:#fde68a;font-size:1.15rem;cursor:pointer;backdrop-filter:blur(10px)}
-  @media(max-width:760px){
-    #panell-info{display:none}
-    #panell-info.obert{display:block}
-    #btn-info{display:block}
-    #panell-ctrl{width:170px}
+  /* ---------- TÍTOL DEL MOVIMENT ---------- */
+  #moviment{position:fixed;top:76px;left:50%;transform:translateX(-50%);z-index:16;
+    text-align:center;pointer-events:none;width:100%}
+  #mov-text{
+    display:inline-block;
+    font-size:clamp(1.8rem,6vw,3.4rem);font-weight:700;letter-spacing:.14em;
+    color:#f4f6fb;text-transform:uppercase;
+    text-shadow:0 2px 24px rgba(0,0,0,.9);
+    opacity:0;transition:opacity .8s;
   }
+  #mov-text.visible{opacity:1}
+  #mov-text.canvi{transition:opacity .5s}
 
-  /* ---------- ETIQUETES 3D ---------- */
-  .etq{position:fixed;z-index:10;pointer-events:none;transform:translate(-50%,-100%);
-    background:rgba(10,13,22,.8);border:1px solid rgba(255,255,255,.16);color:#e8ecf4;
-    padding:4px 10px;border-radius:999px;font-size:.72rem;white-space:nowrap;backdrop-filter:blur(6px)}
-  .etq b{color:#fde68a}
-  .etq.oculta{display:none}
-
-  /* ---------- TOAST ---------- */
-  #toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:50;
-    background:rgba(14,17,26,.92);border:1px solid rgba(252,211,77,.4);color:#fde68a;
-    padding:11px 22px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;
-    transition:opacity .35s,transform .35s;backdrop-filter:blur(8px)}
-  #toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* ---------- INDICADOR SUBTIL D'ESTAT ---------- */
+  #indicador{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:16;
+    display:flex;gap:8px;align-items:center;pointer-events:none}
+  #indicador i{width:26px;height:4px;border-radius:999px;background:rgba(255,255,255,.18);
+    transition:background .6s}
+  #indicador i.actiu{background:#fcd34d;box-shadow:0 0 10px rgba(252,211,77,.7)}
 </style>
 </head>
 <body>
@@ -102,62 +54,9 @@
   <strong>🌍 La Terra: rotació i translació</strong>
 </div>
 
-<div id="overlay">
-  <div class="titol">🧱 Construïm el sistema solar...</div>
-  <div class="barra-prog"><i id="prog-i"></i></div>
-  <div class="prog" id="prog-t">0%</div>
-</div>
+<div id="moviment"><span id="mov-text">Rotació</span></div>
 
-<button id="btn-info" aria-label="Informació">ℹ️</button>
-
-<div id="panell-info">
-  <h2>Què estàs veient?</h2>
-  <div class="bloc">
-    <span class="ico">🔄</span>
-    <div>
-      <strong>Rotació</strong>
-      <p>La Terra gira sobre el seu propi eix, que està <b>inclinat 23,5°</b>. Un gir complet = <b>1 dia (24 h)</b>. És el que fa el dia i la nit.</p>
-    </div>
-  </div>
-  <div class="bloc">
-    <span class="ico">🌞</span>
-    <div>
-      <strong>Translació</strong>
-      <p>Alhora, la Terra volta al voltant del Sol per una òrbita gairebé circular. Una volta completa = <b>1 any (365,25 dies)</b>. És el que fa les estacions (junt amb la inclinació).</p>
-    </div>
-  </div>
-  <div class="bloc">
-    <span class="ico">🌙</span>
-    <div>
-      <strong>La Lluna</strong>
-      <p>De regalència: la Lluna orbita la Terra mentre aquesta fa tot el demés.</p>
-    </div>
-  </div>
-  <div class="comptadors">
-    <div><b id="c-rot">0</b><span>rotacions (dies)</span></div>
-    <div><b id="c-dies">0</b><span>dies de viatge</span></div>
-    <div><b id="c-anys">0</b><span>anys complets</span></div>
-  </div>
-  <div class="nota">⚠️ Velocitats accelerades i no proporcionals a la realitat (si la translació durbés 1 any com de veritat, la rotació seria tan ràpida que no es veuria res!). Arrossega per girar la càmera, roda per apropar-te.</div>
-</div>
-
-<div id="panell-ctrl">
-  <label>Velocitat <span id="vel-val">×1</span></label>
-  <input type="range" id="vel" min="0.25" max="8" step="0.25" value="1">
-  <div class="ctrl-botons">
-    <button id="btn-pausa">⏸ Pausar</button>
-    <button id="btn-rebuild">🧱 Reconstruir peces</button>
-    <button id="btn-orbita">⭕ Òrbita: visible</button>
-    <button id="btn-eix">📏 Eix: visible</button>
-    <button id="btn-labels">🏷 Etiquetes: visibles</button>
-  </div>
-</div>
-
-<div class="etq" id="etq-sol"><b>☀️ Sol</b> · al centre</div>
-<div class="etq" id="etq-terra"><b>🌍 Terra</b> · rotació + translació</div>
-<div class="etq" id="etq-lluna">🌙 Lluna</div>
-
-<div id="toast"></div>
+<div id="indicador"><i id="ind-1" class="actiu"></i><i id="ind-2"></i></div>
 
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
@@ -171,8 +70,8 @@ const CS = 0.5;                       // mida d'una peça LEGO (món)
 const ORBITA_R = 16;                  // radi de l'òrbita de la Terra
 const LLUNA_R = 5.6;                  // radi de l'òrbita de la Lluna
 const INCLINACIO = 23.5;              // graus de l'eix terrestre
-const VEL_GIR    = Math.PI*2 / 3.2;   // 1 rotació cada 3,2 s (a ×1)
-const VEL_ORBITA = Math.PI*2 / 48;    // 1 translació cada 48 s (a ×1)
+const VEL_GIR    = Math.PI*2 / 5;     // 1 rotació cada 5 s (es veu bé i dura una volta completa)
+const VEL_ORBITA = Math.PI*2 / 48;    // 1 translació cada 48 s
 const VEL_LLUNA  = Math.PI*2 / 6;
 
 /* ================== ESCENA BÀSICA ================== */
@@ -220,32 +119,30 @@ function soroll(x,y){
 }
 function fbm(x,y){ return 0.6*soroll(x,y)+0.3*soroll(x*2,y*2)+0.1*soroll(x*4,y*4); }
 
-/* contintents aprox (latMin, latMax, lonMin, lonMax) */
 const CONTINENTS = [
   [55,83,-60,-20], [15,72,-168,-52], [-56,13,-82,-34], [36,71,-10,60],
   [-35,37,-17,51], [5,75,60,180], [60,72,-180,-168], [-39,-11,113,153],
 ];
 function esTerra(lat, lon){
-  if (lat < -66) return true;                       // Antàrtida
+  if (lat < -66) return true;
   for (const [la1,la2,lo1,lo2] of CONTINENTS)
     if (lat>=la1 && lat<=la2 && lon>=lo1 && lon<=lo2)
-      return fbm(lat*0.14+7.3, lon*0.14+2.1) > 0.32; // costes irregulars
+      return fbm(lat*0.14+7.3, lon*0.14+2.1) > 0.32;
   return false;
 }
 function colorVoxel(lat, lon, r){
-  const j = 0.92 + hash(r, r*1.7)*0.16;             // variació "plàstic" LEGO
+  const j = 0.92 + hash(r, r*1.7)*0.16;
   if (esTerra(lat, lon)){
-    if (Math.abs(lat) > 64) return [0.93*j, 0.95*j, 0.98*j];           // neu
+    if (Math.abs(lat) > 64) return [0.93*j, 0.95*j, 0.98*j];
     if (Math.abs(lat) > 12 && Math.abs(lat) < 32 && fbm(lon*0.2,lat*0.2) > 0.5)
-      return [0.85*j, 0.70*j, 0.42*j];                                  // desert
+      return [0.85*j, 0.70*j, 0.42*j];
     const g = 0.32 + soroll(r,3.3)*0.14;
-    return [0.22*j, g*j, 0.16*j];                                       // verd
+    return [0.22*j, g*j, 0.16*j];
   }
   const eq = Math.cos(lat*Math.PI/180);
-  return [0.06*j, 0.18*j + eq*0.10, 0.45*j + eq*0.14];                  // oceà
+  return [0.06*j, 0.18*j + eq*0.10, 0.45*j + eq*0.14];
 }
 
-/* vòxels d'una esfera: [x,y,z,lat,lon] en unitsats de peça */
 function esferaVoxels(R){
   const out = [];
   for (let x=-R; x<=R; x++)
@@ -282,7 +179,7 @@ const geoPeça = new THREE.BoxGeometry(CS*0.92, CS*0.92, CS*0.92);
 
 function creaSistema(vox, material, centre){
   const mesh = new THREE.InstancedMesh(geoPeça, material, vox.length);
-  const M = new THREE.Matrix4(), C = new THREE.Color();
+  const M = new THREE.Matrix4();
   vox.forEach((v,i)=>{
     M.makeScale(0,0,0);
     M.setPosition((v.x+centre.x)*CS, (v.y+centre.y)*CS, (v.z+centre.z)*CS);
@@ -343,14 +240,14 @@ voxLluna.forEach((v,i)=>{
 llunaMesh.instanceColor.needsUpdate = true;
 
 /* ---------- ANELLES, EIX I INDICADORS ---------- */
-function anella(radi, color, op){
+function anella(radi, color){
   const pts = [];
   for (let i=0;i<=96;i++){ const a=i/96*Math.PI*2; pts.push(new THREE.Vector3(Math.cos(a)*radi,0,Math.sin(a)*radi)); }
   const g = new THREE.BufferGeometry().setFromPoints(pts);
-  return new THREE.Line(g, new THREE.LineBasicMaterial({ color, transparent:true, opacity:op }));
+  return new THREE.Line(g, new THREE.LineBasicMaterial({ color, transparent:true, opacity:0 }));
 }
-const anellaOrbita = anella(ORBITA_R, 0xfcd34d, 0.3);  escena.add(anellaOrbita);
-const anellaLluna  = anella(LLUNA_R, 0xaab4c4, 0.18);  anchorTerra.add(anellaLluna);
+const anellaOrbita = anella(ORBITA_R, 0xfcd34d);  escena.add(anellaOrbita);
+const anellaLluna  = anella(LLUNA_R, 0xaab4c4);   anchorTerra.add(anellaLluna);
 
 const matriuEix = new THREE.MeshBasicMaterial({ color:0xfcd34d, transparent:true, opacity:0.5 });
 const eix = new THREE.Group();
@@ -363,7 +260,7 @@ conus2.position.y = -alt/2 - 0.2; conus2.rotation.x = Math.PI;
 eix.add(vareta, conus1, conus2);
 inclinacio.add(eix);
 
-/* anell equatorial puntejat + "satèl·lits" que giren amb la Terra (per veure la rotació) */
+/* anell equatorial puntejat + boletes que giren amb la Terra (per veure la rotació) */
 const eqPts = [];
 for (let i=0;i<=72;i++){ const a=i/72*Math.PI*2; eqPts.push(new THREE.Vector3(Math.cos(a)*4,0,Math.sin(a)*4)); }
 const eqLine = new THREE.Line(
@@ -380,23 +277,23 @@ const matBola = new THREE.MeshBasicMaterial({ color:0xfde68a });
   girTerra.add(b);
 });
 
-/* fletxa de direcció de l'òrbita */
+/* fletxa de direcció de l'òrbita (invisible fins a la translació) */
 const fletxa = new THREE.Mesh(
   new THREE.ConeGeometry(0.3, 0.8, 10),
-  new THREE.MeshBasicMaterial({ color:0xfcd34d, transparent:true, opacity:0.85 })
+  new THREE.MeshBasicMaterial({ color:0xfcd34d, transparent:true, opacity:0 })
 );
-fletcha: fletxa.rotation.x = -Math.PI/2;
+fletxa.rotation.x = -Math.PI/2;
 fletxa.position.set(0, 0, -2.6);
 anchorTerra.add(fletxa);
 
-/* ================== ANIMACIÓ D'ASSEMBLATGE LEGO ================== */
+/* ================== ANIMACIÓ D'ASSEMBLATGE LEGO (sense text) ================== */
 const easeOutCubic = k => 1 - Math.pow(1-k, 3);
 const easeOutBack  = k => { const c=1.7; return 1 + (c+1)*Math.pow(k-1,3) + c*Math.pow(k-1,2); };
 
 const sistemes = [
-  { mesh: solMesh,   vox: voxSol,   inici: 0.15, centre: new THREE.Vector3(0,0,0),      pare: escena },
-  { mesh: terraMesh, vox: voxTerra, inici: 0.8,  centre: new THREE.Vector3(0,0,0),      pare: girTerra },
-  { mesh: llunaMesh, vox: voxLluna, inici: 3.0,  centre: new THREE.Vector3(0,0,0),      pare: anchorLluna },
+  { mesh: solMesh,   vox: voxSol,   inici: 0.15, centre: new THREE.Vector3(0,0,0) },
+  { mesh: terraMesh, vox: voxTerra, inici: 0.8,  centre: new THREE.Vector3(0,0,0) },
+  { mesh: llunaMesh, vox: voxLluna, inici: 3.0,  centre: new THREE.Vector3(0,0,0) },
 ];
 const DUR = 1.25, TOTAL_ASM = 5.2;
 const dades = [];
@@ -415,7 +312,7 @@ sistemes.forEach(s=>{
     });
   });
 });
-let tAsm = 0, assemblant = !REDUIT, asmAcabada = false;
+let tAsm = 0, assemblant = !REDUIT;
 const _p = new THREE.Vector3(), _q = new THREE.Quaternion(), _sc = new THREE.Vector3();
 const _off = new THREE.Vector3(), _M = new THREE.Matrix4(), _c = new THREE.Color();
 
@@ -428,8 +325,6 @@ function aplicaAssemblatge(kGlobal){
     if (k >= 1){ fets++; if (!d.fet){ d.fet = true; d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); } continue; }
     if (k <= 0){ d.s.mesh.setMatrixAt(d.i, _M.makeScale(0,0,0).setPosition(d.sortida)); continue; }
 
-    /* espiral cap al lloc + rebot tipus "clic" de peça */
-    const e = easeOutCubic(k);
     _off.subVectors(d.sortida, d.objectiu);
     const a = (1-k)*1.4, ca = Math.cos(a), sa = Math.sin(a);
     const ox = _off.x*ca + _off.z*sa, oz = -_off.x*sa + _off.z*ca;
@@ -439,7 +334,6 @@ function aplicaAssemblatge(kGlobal){
     _sc.setScalar(s);
     d.s.mesh.setMatrixAt(d.i, _M.compose(_p, _q, _sc));
 
-    /* flaix blanc en aterrar */
     if (d.s.vox === voxTerra && k < 0.3){
       const t = k/0.3;
       _c.setRGB(1,1,1).lerp(new THREE.Color(...colorsTerra[d.i]), t);
@@ -454,7 +348,6 @@ function aplicaAssemblatge(kGlobal){
 if (REDUIT){
   dades.forEach(d=>{ d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); });
   sistemes.forEach(s=>{ s.mesh.instanceMatrix.needsUpdate = true; });
-  document.getElementById('overlay').classList.add('amagat');
 }
 
 /* ================== CÀMERA (arrossegar + zoom) ================== */
@@ -504,72 +397,35 @@ canvas.addEventListener('wheel', e=>{
   camR = Math.max(8, Math.min(90, camR * (1 + e.deltaY*0.001)));
 }, { passive:false });
 
-/* ================== CONTROLS I HUD ================== */
-let velocitat = 1, pausat = false;
-let mostrarOrbita = true, mostrarEix = true, mostrarEtq = !REDUIT;
+/* ================== TEXT: Rotació → Translació ================== */
+const movText = document.getElementById('mov-text');
+const ind1 = document.getElementById('ind-1');
+const ind2 = document.getElementById('ind-2');
 
-const $ = id => document.getElementById(id);
- $('vel').addEventListener('input', e=>{
-  velocitat = +e.target.value;
-  $('vel-val').textContent = '×' + velocitat;
-});
- $('btn-pausa').onclick = function(){
-  pausat = !pausat;
-  this.textContent = pausat ? '▶ Reproduir' : '⏸ Pausar';
-};
- $('btn-rebuild').onclick = ()=>{
-  tAsm = 0; assemblant = true; asmAcabada = false;
-  dades.forEach(d=> d.fet = false);
-  $('overlay').classList.remove('amagat');
-  girTerra.rotation.y = 0; pivOrbita.rotation.y = 0; pivLluna.rotation.y = 0;
-};
- $('btn-orbita').onclick = function(){
-  mostrarOrbita = !mostrarOrbita;
-  anellaOrbita.visible = anellaLluna.visible = fletxa.visible = mostrarOrbita;
-  this.textContent = mostrarOrbita ? '⭕ Òrbita: visible' : '⭕ Òrbita: amagada';
-  this.classList.toggle('off', !mostrarOrbita);
-};
- $('btn-eix').onclick = function(){
-  mostrarEix = !mostrarEix;
-  eix.visible = mostrarEix;
-  this.textContent = mostrarEix ? '📏 Eix: visible' : '📏 Eix: amagat';
-  this.classList.toggle('off', !mostrarEix);
-};
- $('btn-labels').onclick = function(){
-  mostrarEtq = !mostrarEtq;
-  this.textContent = mostrarEtq ? '🏷 Etiquetes: visibles' : '🏷 Etiquetes: amagades';
-  this.classList.toggle('off', !mostrarEtq);
-};
- $('btn-info').onclick = ()=> $('panell-info').classList.toggle('obert');
-addEventListener('keydown', e=>{
-  if (e.code === 'Space' && e.target === document.body){
-    e.preventDefault(); $('btn-pausa').click();
-  }
-});
-
-let toastTimer;
-function toast(msg){
-  const t = $('toast');
-  t.textContent = msg; t.classList.add('visible');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=> t.classList.remove('visible'), 2800);
+/* mostra "Rotació" quan les peces ja són al lloc */
+let textVisibilitzat = false;
+function mostraRotacio(){
+  if (textVisibilitzat) return;
+  textVisibilitzat = true;
+  movText.classList.add('visible');
 }
 
-/* etiquetes 3D → pantalla */
-const _v = new THREE.Vector3();
-function posaEtiqueta(el, obj, offsetY){
-  if (!mostrarEtq){ el.classList.add('oculta'); return; }
-  obj.getWorldPosition(_v); _v.y += offsetY;
-  _v.project(camera);
-  if (_v.z > 1){ el.classList.add('oculta'); return; }
-  el.classList.remove('oculta');
-  el.style.left = ((_v.x*0.5+0.5) * innerWidth) + 'px';
-  el.style.top  = ((-_v.y*0.5+0.5) * innerHeight) + 'px';
+/* canvi suau de text */
+function canviaText(nou){
+  movText.classList.add('canvi');
+  movText.classList.remove('visible');
+  setTimeout(()=>{
+    movText.textContent = nou;
+    movText.classList.add('visible');
+  }, 500);
 }
+
+/* ================== ESTAT DEL MOVIMENT ================== */
+let mode = 'construint';     // 'construint' → 'rotacio' → 'translacio'
+let opOrbita = 0;            // opacitat actual dels elements d'òrbita
 
 /* ================== BUCLE PRINCIPAL ================== */
 const rellotge = new THREE.Clock();
-let anticsAnys = 0;
 
 function anima(){
   requestAnimationFrame(anima);
@@ -584,24 +440,43 @@ function anima(){
     if (k >= 1) introActiva = false;
   }
 
-  /* assemblatge */
+  /* assemblatge de peces (silenciós) */
   if (assemblant){
     tAsm += dt;
-    const frac = aplicaAssemblatge(tAsm);
-    $('prog-i').style.width = (frac*100) + '%';
-    $('prog-t').textContent = Math.round(frac*100) + '%';
+    aplicaAssemblatge(tAsm);
     if (tAsm > TOTAL_ASM){
-      assemblant = false; asmAcabada = true;
-      $('overlay').classList.add('amagat');
-      toast('🌍 Terra construïda! Observa com es mou');
+      assemblant = false;
+      mode = 'rotacio';
+      mostraRotacio();
     }
   }
 
-  /* moviment (només quan les peces ja són al lloc) */
-  const dtM = (assemblant || pausat) ? 0 : dt*velocitat;
-  girTerra.rotation.y  += dtM * VEL_GIR;
-  pivOrbita.rotation.y += dtM * VEL_ORBITA;
-  pivLluna.rotation.y  += dtM * VEL_LLUNA;
+  /* moviments:
+     - rotació: sempre que hàgim acabat de construir
+     - translació: quan la Terra hagi completat UNA volta entera */
+  const dtM = assemblant ? 0 : dt;
+  if (mode === 'rotacio' || mode === 'translacio'){
+    girTerra.rotation.y += dtM * VEL_GIR;
+  }
+  if (mode === 'translacio'){
+    pivOrbita.rotation.y += dtM * VEL_ORBITA;
+    pivLluna.rotation.y  += dtM * VEL_LLUNA;
+  }
+
+  /* detecció de la volta completa (1 rotació = 2π) */
+  if (mode === 'rotacio' && girTerra.rotation.y >= Math.PI*2){
+    mode = 'translacio';
+    canviaText('Translació');
+    ind1.classList.remove('actiu');
+    ind2.classList.add('actiu');
+  }
+
+  /* aparició suau de l'òrbita durant la translació */
+  const objectiuOp = mode === 'translacio' ? 1 : 0;
+  opOrbita += (objectiuOp - opOrbita) * Math.min(1, dt*2.5);
+  anellaOrbita.material.opacity = opOrbita * 0.3;
+  anellaLluna.material.opacity  = opOrbita * 0.18;
+  fletxa.material.opacity       = opOrbita * 0.85;
 
   /* sol que respira */
   const t = performance.now()*0.001;
@@ -612,22 +487,6 @@ function anima(){
 
   estrelles1.rotation.y += dt*0.004;
   estrelles2.rotation.y -= dt*0.003;
-
-  /* comptadors */
-  if (asmAcabada && dtM > 0){
-    const rotacions = girTerra.rotation.y / (Math.PI*2);
-    const dies = pivOrbita.rotation.y / (Math.PI*2) * 365.25;
-    const anys = Math.floor(dies / 365.25);
-    $('c-rot').textContent = Math.floor(rotacions);
-    $('c-dies').textContent = dies.toFixed(1);
-    $('c-anys').textContent = anys;
-    if (anys > anticsAnys){ anticsAnys = anys; toast('🎉 ' + anys + (anys===1 ? ' any complet!' : ' anys complets!')); }
-  }
-
-  /* etiquetes */
-  posaEtiqueta($('etq-sol'),   solMesh,      5.2);
-  posaEtiqueta($('etq-terra'), anchorTerra,  4.4);
-  posaEtiqueta($('etq-lluna'), anchorLluna,  1.6);
 
   posaCamera();
   renderer.render(escena, camera);
