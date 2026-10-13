@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Terra: rotació i translació — El Nostre Univers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:'Space Grotesk',sans-serif;background:#02030a;color:#e8ecf4}
+  #escena{position:fixed;inset:0;display:block;touch-action:none;cursor:grab}
+  #escena.arrossegant{cursor:grabbing}
+
+  /* ---------- BARRA SUPERIOR ---------- */
+  #barra{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:14px;
+    padding:12px 18px;background:rgba(4,6,12,.72);backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(255,255,255,.07)}
+  #barra a.tornar{color:#9aa5b5;text-decoration:none;font-size:.88rem;white-space:nowrap;
+    padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);transition:all .3s}
+  #barra a.tornar:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
+  #barra strong{color:#fde68a;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media(max-width:560px){#barra strong{display:none}}
+
+  /* ---------- OVERLAY DE CONSTRUCCIÓ ---------- */
+  #overlay{position:fixed;inset:0;z-index:15;display:flex;flex-direction:column;gap:14px;
+    align-items:center;justify-content:center;pointer-events:none;transition:opacity .6s}
+  #overlay.amagat{opacity:0}
+  #overlay .titol{font-size:clamp(1.4rem,4vw,2.4rem);font-weight:700;color:#f4f6fb;
+    text-shadow:0 2px 20px rgba(0,0,0,.8)}
+  #overlay .prog{color:#fcd34d;font-weight:700;font-size:1.05rem;text-shadow:0 1px 12px rgba(0,0,0,.9)}
+  #overlay .barra-prog{width:min(320px,70vw);height:6px;border-radius:999px;
+    background:rgba(255,255,255,.12);overflow:hidden}
+  #overlay .barra-prog i{display:block;height:100%;width:0;border-radius:999px;
+    background:linear-gradient(90deg,#fcd34d,#f59e0b);box-shadow:0 0 10px rgba(252,211,77,.6);
+    transition:width .2s}
+
+  /* ---------- PANELL EXPLICATIU ---------- */
+  #panell-info{position:fixed;left:16px;bottom:16px;z-index:20;width:min(300px,calc(100vw - 32px));
+    background:rgba(10,13,22,.82);border:1px solid rgba(255,255,255,.1);border-radius:16px;
+    padding:16px 18px;backdrop-filter:blur(10px)}
+  #panell-info h2{font-size:.95rem;color:#f4f6fb;margin-bottom:10px}
+  .bloc{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+  .bloc .ico{flex-shrink:0;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;font-size:1rem;background:rgba(255,255,255,.06)}
+  .bloc strong{display:block;font-size:.85rem;color:#fde68a;margin-bottom:2px}
+  .bloc p{font-size:.8rem;color:#9aa5b5;line-height:1.5}
+  .nota{font-size:.72rem;color:#6b7688;line-height:1.5;margin-top:10px;
+    border-top:1px dashed rgba(255,255,255,.12);padding-top:10px}
+  .comptadors{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap}
+  .comptadors div{flex:1;min-width:70px;background:rgba(255,255,255,.04);border-radius:10px;
+    padding:8px 10px;text-align:center}
+  .comptadors b{display:block;color:#fde68a;font-size:1.05rem}
+  .comptadors span{font-size:.68rem;color:#7c8698}
+
+  /* ---------- CONTROLS ---------- */
+  #panell-ctrl{position:fixed;right:16px;bottom:16px;z-index:20;width:200px;
+    background:rgba(10,13,22,.82);border:1px solid rgba(255,255,255,.1);border-radius:16px;
+    padding:14px 16px;backdrop-filter:blur(10px)}
+  #panell-ctrl label{display:block;font-size:.75rem;color:#9aa5b5;margin-bottom:6px}
+  #vel{width:100%;accent-color:#fcd34d}
+  #vel-val{color:#fde68a;font-weight:700;font-size:.8rem}
+  .ctrl-botons{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+  .ctrl-botons button{padding:9px 10px;border-radius:10px;cursor:pointer;font-family:inherit;
+    font-size:.8rem;color:#e8ecf4;background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.14);transition:all .25s;text-align:left}
+  .ctrl-botons button:hover{border-color:rgba(252,211,77,.5);color:#fde68a}
+  .ctrl-botons button.off{opacity:.55}
+  #btn-info{display:none;position:fixed;left:16px;bottom:16px;z-index:21;width:46px;height:46px;
+    border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(10,13,22,.85);
+    color:#fde68a;font-size:1.15rem;cursor:pointer;backdrop-filter:blur(10px)}
+  @media(max-width:760px){
+    #panell-info{display:none}
+    #panell-info.obert{display:block}
+    #btn-info{display:block}
+    #panell-ctrl{width:170px}
+  }
+
+  /* ---------- ETIQUETES 3D ---------- */
+  .etq{position:fixed;z-index:10;pointer-events:none;transform:translate(-50%,-100%);
+    background:rgba(10,13,22,.8);border:1px solid rgba(255,255,255,.16);color:#e8ecf4;
+    padding:4px 10px;border-radius:999px;font-size:.72rem;white-space:nowrap;backdrop-filter:blur(6px)}
+  .etq b{color:#fde68a}
+  .etq.oculta{display:none}
+
+  /* ---------- TOAST ---------- */
+  #toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:50;
+    background:rgba(14,17,26,.92);border:1px solid rgba(252,211,77,.4);color:#fde68a;
+    padding:11px 22px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;
+    transition:opacity .35s,transform .35s;backdrop-filter:blur(8px)}
+  #toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<canvas id="escena"></canvas>
+
+<div id="barra">
+  <a class="tornar" href="index.html">← Tornar a la web</a>
+  <strong>🌍 La Terra: rotació i translació</strong>
+</div>
+
+<div id="overlay">
+  <div class="titol">🧱 Construïm el sistema solar...</div>
+  <div class="barra-prog"><i id="prog-i"></i></div>
+  <div class="prog" id="prog-t">0%</div>
+</div>
+
+<button id="btn-info" aria-label="Informació">ℹ️</button>
+
+<div id="panell-info">
+  <h2>Què estàs veient?</h2>
+  <div class="bloc">
+    <span class="ico">🔄</span>
+    <div>
+      <strong>Rotació</strong>
+      <p>La Terra gira sobre el seu propi eix, que està <b>inclinat 23,5°</b>. Un gir complet = <b>1 dia (24 h)</b>. És el que fa el dia i la nit.</p>
+    </div>
+  </div>
+  <div class="bloc">
+    <span class="ico">🌞</span>
+    <div>
+      <strong>Translació</strong>
+      <p>Alhora, la Terra volta al voltant del Sol per una òrbita gairebé circular. Una volta completa = <b>1 any (365,25 dies)</b>. És el que fa les estacions (junt amb la inclinació).</p>
+    </div>
+  </div>
+  <div class="bloc">
+    <span class="ico">🌙</span>
+    <div>
+      <strong>La Lluna</strong>
+      <p>De regalència: la Lluna orbita la Terra mentre aquesta fa tot el demés.</p>
+    </div>
+  </div>
+  <div class="comptadors">
+    <div><b id="c-rot">0</b><span>rotacions (dies)</span></div>
+    <div><b id="c-dies">0</b><span>dies de viatge</span></div>
+    <div><b id="c-anys">0</b><span>anys complets</span></div>
+  </div>
+  <div class="nota">⚠️ Velocitats accelerades i no proporcionals a la realitat (si la translació durbés 1 any com de veritat, la rotació seria tan ràpida que no es veuria res!). Arrossega per girar la càmera, roda per apropar-te.</div>
+</div>
+
+<div id="panell-ctrl">
+  <label>Velocitat <span id="vel-val">×1</span></label>
+  <input type="range" id="vel" min="0.25" max="8" step="0.25" value="1">
+  <div class="ctrl-botons">
+    <button id="btn-pausa">⏸ Pausar</button>
+    <button id="btn-rebuild">🧱 Reconstruir peces</button>
+    <button id="btn-orbita">⭕ Òrbita: visible</button>
+    <button id="btn-eix">📏 Eix: visible</button>
+    <button id="btn-labels">🏷 Etiquetes: visibles</button>
+  </div>
+</div>
+
+<div class="etq" id="etq-sol"><b>☀️ Sol</b> · al centre</div>
+<div class="etq" id="etq-terra"><b>🌍 Terra</b> · rotació + translació</div>
+<div class="etq" id="etq-lluna">🌙 Lluna</div>
+
+<div id="toast"></div>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+/* ================== CONFIGURACIÓ ================== */
+const REDUIT = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CS = 0.5;                       // mida d'una peça LEGO (món)
+const ORBITA_R = 16;                  // radi de l'òrbita de la Terra
+const LLUNA_R = 5.6;                  // radi de l'òrbita de la Lluna
+const INCLINACIO = 23.5;              // graus de l'eix terrestre
+const VEL_GIR    = Math.PI*2 / 3.2;   // 1 rotació cada 3,2 s (a ×1)
+const VEL_ORBITA = Math.PI*2 / 48;    // 1 translació cada 48 s (a ×1)
+const VEL_LLUNA  = Math.PI*2 / 6;
+
+/* ================== ESCENA BÀSICA ================== */
+const canvas = document.getElementById('escena');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+
+const escena = new THREE.Scene();
+escena.background = new THREE.Color(0x02030a);
+
+const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 500);
+
+escena.add(new THREE.AmbientLight(0x8899bb, 0.55));
+const llumSol = new THREE.PointLight(0xfff1c9, 2.6, 0, 0);
+escena.add(llumSol);
+
+/* ---------- ESTRELES DE FONS ---------- */
+function creaEstrelles(n, mida, op){
+  const pos = new Float32Array(n*3);
+  for (let i=0;i<n;i++){
+    const r = 90 + Math.random()*90;
+    const t = Math.random()*Math.PI*2, p = Math.acos(2*Math.random()-1);
+    pos[i*3]   = r*Math.sin(p)*Math.cos(t);
+    pos[i*3+1] = r*Math.cos(p);
+    pos[i*3+2] = r*Math.sin(p)*Math.sin(t);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  return new THREE.Points(g, new THREE.PointsMaterial({
+    color:0xffffff, size:mida, sizeAttenuation:true, transparent:true, opacity:op
+  }));
+}
+const estrelles1 = creaEstrelles(1200, 0.28, 0.9);
+const estrelles2 = creaEstrelles(500, 0.5, 0.55);
+escena.add(estrelles1, estrelles2);
+
+/* ================== GENERADOR DE VÒXELS (peces LEGO) ================== */
+function hash(x,y){ const s = Math.sin(x*127.1 + y*311.7)*43758.5453; return s - Math.floor(s); }
+function soroll(x,y){
+  const xi=Math.floor(x), yi=Math.floor(y), xf=x-xi, yf=y-yi;
+  const u=xf*xf*(3-2*xf), v=yf*yf*(3-2*yf);
+  const a=hash(xi,yi), b=hash(xi+1,yi), c=hash(xi,yi+1), d=hash(xi+1,yi+1);
+  return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v;
+}
+function fbm(x,y){ return 0.6*soroll(x,y)+0.3*soroll(x*2,y*2)+0.1*soroll(x*4,y*4); }
+
+/* contintents aprox (latMin, latMax, lonMin, lonMax) */
+const CONTINENTS = [
+  [55,83,-60,-20], [15,72,-168,-52], [-56,13,-82,-34], [36,71,-10,60],
+  [-35,37,-17,51], [5,75,60,180], [60,72,-180,-168], [-39,-11,113,153],
+];
+function esTerra(lat, lon){
+  if (lat < -66) return true;                       // Antàrtida
+  for (const [la1,la2,lo1,lo2] of CONTINENTS)
+    if (lat>=la1 && lat<=la2 && lon>=lo1 && lon<=lo2)
+      return fbm(lat*0.14+7.3, lon*0.14+2.1) > 0.32; // costes irregulars
+  return false;
+}
+function colorVoxel(lat, lon, r){
+  const j = 0.92 + hash(r, r*1.7)*0.16;             // variació "plàstic" LEGO
+  if (esTerra(lat, lon)){
+    if (Math.abs(lat) > 64) return [0.93*j, 0.95*j, 0.98*j];           // neu
+    if (Math.abs(lat) > 12 && Math.abs(lat) < 32 && fbm(lon*0.2,lat*0.2) > 0.5)
+      return [0.85*j, 0.70*j, 0.42*j];                                  // desert
+    const g = 0.32 + soroll(r,3.3)*0.14;
+    return [0.22*j, g*j, 0.16*j];                                       // verd
+  }
+  const eq = Math.cos(lat*Math.PI/180);
+  return [0.06*j, 0.18*j + eq*0.10, 0.45*j + eq*0.14];                  // oceà
+}
+
+/* vòxels d'una esfera: [x,y,z,lat,lon] en unitsats de peça */
+function esferaVoxels(R){
+  const out = [];
+  for (let x=-R; x<=R; x++)
+    for (let y=-R; y<=R; y++)
+      for (let z=-R; z<=R; z++)
+        if (x*x+y*y+z*z <= R*R + 0.4){
+          const r = Math.sqrt(x*x+y*y+z*z) || 1;
+          out.push({
+            x, y, z,
+            lat: Math.asin(y/r)*180/Math.PI,
+            lon: Math.atan2(x, z)*180/Math.PI
+          });
+        }
+  return out;
+}
+
+/* ================== SISTEMA: SOL + TERRA + LLUNA ================== */
+const pivOrbita = new THREE.Group(); escena.add(pivOrbita);   // translació
+const anchorTerra = new THREE.Group();
+anchorTerra.position.x = ORBITA_R;
+pivOrbita.add(anchorTerra);
+
+const inclinacio = new THREE.Group();                          // eix inclinat 23,5°
+inclinacio.rotation.z = THREE.MathUtils.degToRad(INCLINACIO);
+anchorTerra.add(inclinacio);
+
+const girTerra = new THREE.Group();                            // rotació
+inclinacio.add(girTerra);
+
+const pivLluna = new THREE.Group();                            // òrbita de la Lluna
+anchorTerra.add(pivLluna);
+
+const geoPeça = new THREE.BoxGeometry(CS*0.92, CS*0.92, CS*0.92);
+
+function creaSistema(vox, material, centre){
+  const mesh = new THREE.InstancedMesh(geoPeça, material, vox.length);
+  const M = new THREE.Matrix4(), C = new THREE.Color();
+  vox.forEach((v,i)=>{
+    M.makeScale(0,0,0);
+    M.setPosition((v.x+centre.x)*CS, (v.y+centre.y)*CS, (v.z+centre.z)*CS);
+    mesh.setMatrixAt(i, M);
+  });
+  mesh.instanceMatrix.needsUpdate = true;
+  return mesh;
+}
+
+/* SOL */
+const voxSol = esferaVoxels(8);
+const matSol = new THREE.MeshLambertMaterial({ color:0xffffff, emissive:0xff8c1a, emissiveIntensity:0.85 });
+const solMesh = creaSistema(voxSol, matSol, new THREE.Vector3(0,0,0));
+escena.add(solMesh);
+voxSol.forEach((v,i)=>{
+  const t = hash(i, i*2.3);
+  solMesh.setColorAt(i, new THREE.Color(1, 0.55+t*0.35, 0.1+t*0.25));
+});
+solMesh.instanceColor.needsUpdate = true;
+
+/* resplendor del sol */
+const cvGlow = document.createElement('canvas'); cvGlow.width = cvGlow.height = 256;
+const g2 = cvGlow.getContext('2d');
+const grad = g2.createRadialGradient(128,128,10,128,128,128);
+grad.addColorStop(0,'rgba(255,190,80,.85)'); grad.addColorStop(.4,'rgba(255,140,40,.25)');
+grad.addColorStop(1,'rgba(255,120,20,0)');
+g2.fillStyle = grad; g2.fillRect(0,0,256,256);
+const glow = new THREE.Sprite(new THREE.SpriteMaterial({
+  map:new THREE.CanvasTexture(cvGlow), blending:THREE.AdditiveBlending, depthWrite:false, transparent:true
+}));
+glow.scale.setScalar(13); escena.add(glow);
+
+/* TERRA */
+const voxTerra = esferaVoxels(6.4);
+const matTerra = new THREE.MeshLambertMaterial({ color:0xffffff });
+const terraMesh = creaSistema(voxTerra, matTerra, new THREE.Vector3(0,0,0));
+girTerra.add(terraMesh);
+const colorsTerra = [];
+voxTerra.forEach((v,i)=>{
+  const c = colorVoxel(v.lat, v.lon, i);
+  colorsTerra.push(c);
+  terraMesh.setColorAt(i, new THREE.Color(...c));
+});
+terraMesh.instanceColor.needsUpdate = true;
+
+/* LLUNA */
+const voxLluna = esferaVoxels(2);
+const matLluna = new THREE.MeshLambertMaterial({ color:0xffffff });
+const llunaMesh = creaSistema(voxLluna, matLluna, new THREE.Vector3(0,0,0));
+const anchorLluna = new THREE.Group();
+anchorLluna.position.x = LLUNA_R;
+pivLluna.add(anchorLluna);
+anchorLluna.add(llunaMesh);
+voxLluna.forEach((v,i)=>{
+  const t = 0.55 + hash(i,9.1)*0.3;
+  llunaMesh.setColorAt(i, new THREE.Color(t,t,t*1.02));
+});
+llunaMesh.instanceColor.needsUpdate = true;
+
+/* ---------- ANELLES, EIX I INDICADORS ---------- */
+function anella(radi, color, op){
+  const pts = [];
+  for (let i=0;i<=96;i++){ const a=i/96*Math.PI*2; pts.push(new THREE.Vector3(Math.cos(a)*radi,0,Math.sin(a)*radi)); }
+  const g = new THREE.BufferGeometry().setFromPoints(pts);
+  return new THREE.Line(g, new THREE.LineBasicMaterial({ color, transparent:true, opacity:op }));
+}
+const anellaOrbita = anella(ORBITA_R, 0xfcd34d, 0.3);  escena.add(anellaOrbita);
+const anellaLluna  = anella(LLUNA_R, 0xaab4c4, 0.18);  anchorTerra.add(anellaLluna);
+
+const matriuEix = new THREE.MeshBasicMaterial({ color:0xfcd34d, transparent:true, opacity:0.5 });
+const eix = new THREE.Group();
+const alt = 6.4*CS*2 + 2.6;
+const vareta = new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,alt,8), matriuEix);
+const conus1 = new THREE.Mesh(new THREE.ConeGeometry(0.16,0.5,10), matriuEix);
+const conus2 = conus1.clone();
+conus1.position.y =  alt/2 + 0.2;
+conus2.position.y = -alt/2 - 0.2; conus2.rotation.x = Math.PI;
+eix.add(vareta, conus1, conus2);
+inclinacio.add(eix);
+
+/* anell equatorial puntejat + "satèl·lits" que giren amb la Terra (per veure la rotació) */
+const eqPts = [];
+for (let i=0;i<=72;i++){ const a=i/72*Math.PI*2; eqPts.push(new THREE.Vector3(Math.cos(a)*4,0,Math.sin(a)*4)); }
+const eqLine = new THREE.Line(
+  new THREE.BufferGeometry().setFromPoints(eqPts),
+  new THREE.LineDashedMaterial({ color:0xfcd34d, dashSize:0.32, gapSize:0.26, transparent:true, opacity:0.45 })
+);
+eqLine.computeLineDistances();
+girTerra.add(eqLine);
+const geoBola = new THREE.BoxGeometry(0.24,0.24,0.24);
+const matBola = new THREE.MeshBasicMaterial({ color:0xfde68a });
+[0, 2.1, 4.2].forEach(a=>{
+  const b = new THREE.Mesh(geoBola, matBola);
+  b.position.set(Math.cos(a)*4, 0, Math.sin(a)*4);
+  girTerra.add(b);
+});
+
+/* fletxa de direcció de l'òrbita */
+const fletxa = new THREE.Mesh(
+  new THREE.ConeGeometry(0.3, 0.8, 10),
+  new THREE.MeshBasicMaterial({ color:0xfcd34d, transparent:true, opacity:0.85 })
+);
+fletcha: fletxa.rotation.x = -Math.PI/2;
+fletxa.position.set(0, 0, -2.6);
+anchorTerra.add(fletxa);
+
+/* ================== ANIMACIÓ D'ASSEMBLATGE LEGO ================== */
+const easeOutCubic = k => 1 - Math.pow(1-k, 3);
+const easeOutBack  = k => { const c=1.7; return 1 + (c+1)*Math.pow(k-1,3) + c*Math.pow(k-1,2); };
+
+const sistemes = [
+  { mesh: solMesh,   vox: voxSol,   inici: 0.15, centre: new THREE.Vector3(0,0,0),      pare: escena },
+  { mesh: terraMesh, vox: voxTerra, inici: 0.8,  centre: new THREE.Vector3(0,0,0),      pare: girTerra },
+  { mesh: llunaMesh, vox: voxLluna, inici: 3.0,  centre: new THREE.Vector3(0,0,0),      pare: anchorLluna },
+];
+const DUR = 1.25, TOTAL_ASM = 5.2;
+const dades = [];
+sistemes.forEach(s=>{
+  let minY=1e9, maxY=-1e9;
+  s.vox.forEach(v=>{ minY=Math.min(minY,v.y); maxY=Math.max(maxY,v.y); });
+  s.vox.forEach((v,i)=>{
+    const dir = new THREE.Vector3().randomDirection();
+    dades.push({
+      s, i,
+      inici: s.inici + ((v.y-minY)/(maxY-minY))*1.15 + Math.random()*0.35,
+      objectiu: new THREE.Vector3(v.x*CS, v.y*CS, v.z*CS).add(s.centre),
+      sortida: dir.multiplyScalar(15 + Math.random()*18).add(s.centre),
+      eix: new THREE.Vector3().randomDirection(),
+      fet: false
+    });
+  });
+});
+let tAsm = 0, assemblant = !REDUIT, asmAcabada = false;
+const _p = new THREE.Vector3(), _q = new THREE.Quaternion(), _sc = new THREE.Vector3();
+const _off = new THREE.Vector3(), _M = new THREE.Matrix4(), _c = new THREE.Color();
+
+function aplicaAssemblatge(kGlobal){
+  let fets = 0;
+  const flash = [];
+  for (const d of dades){
+    let k = (kGlobal - d.inici) / DUR;
+    k = Math.max(0, Math.min(1, k));
+    if (k >= 1){ fets++; if (!d.fet){ d.fet = true; d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); } continue; }
+    if (k <= 0){ d.s.mesh.setMatrixAt(d.i, _M.makeScale(0,0,0).setPosition(d.sortida)); continue; }
+
+    /* espiral cap al lloc + rebot tipus "clic" de peça */
+    const e = easeOutCubic(k);
+    _off.subVectors(d.sortida, d.objectiu);
+    const a = (1-k)*1.4, ca = Math.cos(a), sa = Math.sin(a);
+    const ox = _off.x*ca + _off.z*sa, oz = -_off.x*sa + _off.z*ca;
+    _p.set(d.objectiu.x + ox, d.objectiu.y + _off.y, d.objectiu.z + oz);
+    const s = Math.max(0.05, 0.35 + 0.65*easeOutBack(Math.min(1, k*1.12)));
+    _q.setFromAxisAngle(d.eix, (1-k)*4);
+    _sc.setScalar(s);
+    d.s.mesh.setMatrixAt(d.i, _M.compose(_p, _q, _sc));
+
+    /* flaix blanc en aterrar */
+    if (d.s.vox === voxTerra && k < 0.3){
+      const t = k/0.3;
+      _c.setRGB(1,1,1).lerp(new THREE.Color(...colorsTerra[d.i]), t);
+      flash.push([d, _c.clone()]);
+    }
+  }
+  flash.forEach(([d,c])=> d.s.mesh.setColorAt(d.i, c));
+  sistemes.forEach(s=>{ s.mesh.instanceMatrix.needsUpdate = true; if (flash.length) s.mesh.instanceColor.needsUpdate = true; });
+  return fets / dades.length;
+}
+
+if (REDUIT){
+  dades.forEach(d=>{ d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); });
+  sistemes.forEach(s=>{ s.mesh.instanceMatrix.needsUpdate = true; });
+  document.getElementById('overlay').classList.add('amagat');
+}
+
+/* ================== CÀMERA (arrossegar + zoom) ================== */
+let camTheta = 0.35, camPhi = 1.12, camR = 52;
+let introActiva = !REDUIT, introT = 0;
+const lookAt = new THREE.Vector3(0, 0.4, 0);
+function posaCamera(){
+  camera.position.set(
+    camR*Math.sin(camPhi)*Math.sin(camTheta),
+    camR*Math.cos(camPhi),
+    camR*Math.sin(camPhi)*Math.cos(camTheta)
+  );
+  camera.lookAt(lookAt);
+}
+const punters = new Map();
+let pinch0 = 0;
+canvas.addEventListener('pointerdown', e=>{
+  punters.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  canvas.classList.add('arrossegant');
+  introActiva = false;
+  canvas.setPointerCapture(e.pointerId);
+  if (punters.size === 2){
+    const [a,b] = [...punters.values()];
+    pinch0 = Math.hypot(a.x-b.x, a.y-b.y);
+  }
+});
+canvas.addEventListener('pointermove', e=>{
+  if (!punters.has(e.pointerId)) return;
+  const p = punters.get(e.pointerId);
+  const dx = e.clientX - p.x, dy = e.clientY - p.y;
+  p.x = e.clientX; p.y = e.clientY;
+  if (punters.size === 1){
+    camTheta -= dx*0.005;
+    camPhi = Math.max(0.15, Math.min(Math.PI-0.15, camPhi - dy*0.005));
+  } else if (punters.size === 2){
+    const [a,b] = [...punters.values()];
+    const d = Math.hypot(a.x-b.x, a.y-b.y);
+    if (pinch0) camR = Math.max(8, Math.min(90, camR * pinch0/d));
+    pinch0 = d;
+  }
+});
+const solta = e=>{ punters.delete(e.pointerId); canvas.classList.remove('arrossegant'); };
+canvas.addEventListener('pointerup', solta);
+canvas.addEventListener('pointercancel', solta);
+canvas.addEventListener('wheel', e=>{
+  e.preventDefault(); introActiva = false;
+  camR = Math.max(8, Math.min(90, camR * (1 + e.deltaY*0.001)));
+}, { passive:false });
+
+/* ================== CONTROLS I HUD ================== */
+let velocitat = 1, pausat = false;
+let mostrarOrbita = true, mostrarEix = true, mostrarEtq = !REDUIT;
+
+const $ = id => document.getElementById(id);
+ $('vel').addEventListener('input', e=>{
+  velocitat = +e.target.value;
+  $('vel-val').textContent = '×' + velocitat;
+});
+ $('btn-pausa').onclick = function(){
+  pausat = !pausat;
+  this.textContent = pausat ? '▶ Reproduir' : '⏸ Pausar';
+};
+ $('btn-rebuild').onclick = ()=>{
+  tAsm = 0; assemblant = true; asmAcabada = false;
+  dades.forEach(d=> d.fet = false);
+  $('overlay').classList.remove('amagat');
+  girTerra.rotation.y = 0; pivOrbita.rotation.y = 0; pivLluna.rotation.y = 0;
+};
+ $('btn-orbita').onclick = function(){
+  mostrarOrbita = !mostrarOrbita;
+  anellaOrbita.visible = anellaLluna.visible = fletxa.visible = mostrarOrbita;
+  this.textContent = mostrarOrbita ? '⭕ Òrbita: visible' : '⭕ Òrbita: amagada';
+  this.classList.toggle('off', !mostrarOrbita);
+};
+ $('btn-eix').onclick = function(){
+  mostrarEix = !mostrarEix;
+  eix.visible = mostrarEix;
+  this.textContent = mostrarEix ? '📏 Eix: visible' : '📏 Eix: amagat';
+  this.classList.toggle('off', !mostrarEix);
+};
+ $('btn-labels').onclick = function(){
+  mostrarEtq = !mostrarEtq;
+  this.textContent = mostrarEtq ? '🏷 Etiquetes: visibles' : '🏷 Etiquetes: amagades';
+  this.classList.toggle('off', !mostrarEtq);
+};
+ $('btn-info').onclick = ()=> $('panell-info').classList.toggle('obert');
+addEventListener('keydown', e=>{
+  if (e.code === 'Space' && e.target === document.body){
+    e.preventDefault(); $('btn-pausa').click();
+  }
+});
+
+let toastTimer;
+function toast(msg){
+  const t = $('toast');
+  t.textContent = msg; t.classList.add('visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('visible'), 2800);
+}
+
+/* etiquetes 3D → pantalla */
+const _v = new THREE.Vector3();
+function posaEtiqueta(el, obj, offsetY){
+  if (!mostrarEtq){ el.classList.add('oculta'); return; }
+  obj.getWorldPosition(_v); _v.y += offsetY;
+  _v.project(camera);
+  if (_v.z > 1){ el.classList.add('oculta'); return; }
+  el.classList.remove('oculta');
+  el.style.left = ((_v.x*0.5+0.5) * innerWidth) + 'px';
+  el.style.top  = ((-_v.y*0.5+0.5) * innerHeight) + 'px';
+}
+
+/* ================== BUCLE PRINCIPAL ================== */
+const rellotge = new THREE.Clock();
+let anticsAnys = 0;
+
+function anima(){
+  requestAnimationFrame(anima);
+  const dt = Math.min(rellotge.getDelta(), 0.05);
+
+  /* intro de càmera */
+  if (introActiva){
+    introT += dt;
+    const k = Math.min(1, introT/4.5), e = k<0.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
+    camR = 52 + (30-52)*e;
+    camTheta = 0.35 + (0.85-0.35)*e;
+    if (k >= 1) introActiva = false;
+  }
+
+  /* assemblatge */
+  if (assemblant){
+    tAsm += dt;
+    const frac = aplicaAssemblatge(tAsm);
+    $('prog-i').style.width = (frac*100) + '%';
+    $('prog-t').textContent = Math.round(frac*100) + '%';
+    if (tAsm > TOTAL_ASM){
+      assemblant = false; asmAcabada = true;
+      $('overlay').classList.add('amagat');
+      toast('🌍 Terra construïda! Observa com es mou');
+    }
+  }
+
+  /* moviment (només quan les peces ja són al lloc) */
+  const dtM = (assemblant || pausat) ? 0 : dt*velocitat;
+  girTerra.rotation.y  += dtM * VEL_GIR;
+  pivOrbita.rotation.y += dtM * VEL_ORBITA;
+  pivLluna.rotation.y  += dtM * VEL_LLUNA;
+
+  /* sol que respira */
+  const t = performance.now()*0.001;
+  solMesh.rotation.y += dt*0.15;
+  const pols = 1 + Math.sin(t*2.2)*0.025;
+  glow.scale.setScalar(13*pols);
+  glow.material.opacity = 0.85 + Math.sin(t*2.2)*0.08;
+
+  estrelles1.rotation.y += dt*0.004;
+  estrelles2.rotation.y -= dt*0.003;
+
+  /* comptadors */
+  if (asmAcabada && dtM > 0){
+    const rotacions = girTerra.rotation.y / (Math.PI*2);
+    const dies = pivOrbita.rotation.y / (Math.PI*2) * 365.25;
+    const anys = Math.floor(dies / 365.25);
+    $('c-rot').textContent = Math.floor(rotacions);
+    $('c-dies').textContent = dies.toFixed(1);
+    $('c-anys').textContent = anys;
+    if (anys > anticsAnys){ anticsAnys = anys; toast('🎉 ' + anys + (anys===1 ? ' any complet!' : ' anys complets!')); }
+  }
+
+  /* etiquetes */
+  posaEtiqueta($('etq-sol'),   solMesh,      5.2);
+  posaEtiqueta($('etq-terra'), anchorTerra,  4.4);
+  posaEtiqueta($('etq-lluna'), anchorLluna,  1.6);
+
+  posaCamera();
+  renderer.render(escena, camera);
+}
+anima();
+
+addEventListener('resize', ()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+
+</body>
+</html>
