@@ -14,7 +14,6 @@
   #escena{position:fixed;inset:0;display:block;touch-action:none;cursor:grab}
   #escena.arrossegant{cursor:grabbing}
 
-  /* ---------- BARRA SUPERIOR ---------- */
   #barra{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:14px;
     padding:12px 18px;background:rgba(4,6,12,.72);backdrop-filter:blur(12px);
     border-bottom:1px solid rgba(255,255,255,.07)}
@@ -24,7 +23,6 @@
   #barra strong{color:#fde68a;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   @media(max-width:560px){#barra strong{display:none}}
 
-  /* ---------- TÍTOL DEL MOVIMENT ---------- */
   #moviment{position:fixed;top:76px;left:50%;transform:translateX(-50%);z-index:16;
     text-align:center;pointer-events:none;width:100%}
   #mov-text{
@@ -35,14 +33,6 @@
     opacity:0;transition:opacity .8s;
   }
   #mov-text.visible{opacity:1}
-  #mov-text.canvi{transition:opacity .5s}
-
-  /* ---------- INDICADOR SUBTIL D'ESTAT ---------- */
-  #indicador{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:16;
-    display:flex;gap:8px;align-items:center;pointer-events:none}
-  #indicador i{width:26px;height:4px;border-radius:999px;background:rgba(255,255,255,.18);
-    transition:background .6s}
-  #indicador i.actiu{background:#fcd34d;box-shadow:0 0 10px rgba(252,211,77,.7)}
 </style>
 </head>
 <body>
@@ -56,22 +46,26 @@
 
 <div id="moviment"><span id="mov-text">Rotació</span></div>
 
-<div id="indicador"><i id="ind-1" class="actiu"></i><i id="ind-2"></i></div>
-
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
 </script>
 <script type="module">
 import * as THREE from 'three';
 
+/* Si estem incrustats dins de la web (iframe), amaguem la barra superior */
+if (window.self !== window.top){
+  document.getElementById('barra').remove();
+  document.getElementById('moviment').style.top = '18px';
+}
+
 /* ================== CONFIGURACIÓ ================== */
 const REDUIT = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const CS = 0.5;                       // mida d'una peça LEGO (món)
-const ORBITA_R = 16;                  // radi de l'òrbita de la Terra
-const LLUNA_R = 5.6;                  // radi de l'òrbita de la Lluna
-const INCLINACIO = 23.5;              // graus de l'eix terrestre
-const VEL_GIR    = Math.PI*2 / 5;     // 1 rotació cada 5 s (es veu bé i dura una volta completa)
-const VEL_ORBITA = Math.PI*2 / 48;    // 1 translació cada 48 s
+const CS = 0.5;
+const ORBITA_R = 16;
+const LLUNA_R = 5.6;
+const INCLINACIO = 23.5;
+const VEL_GIR    = Math.PI*2 / 5;     // 1 rotació cada 5 s → exactament una volta
+const VEL_ORBITA = Math.PI*2 / 48;
 const VEL_LLUNA  = Math.PI*2 / 6;
 
 /* ================== ESCENA BÀSICA ================== */
@@ -89,7 +83,6 @@ escena.add(new THREE.AmbientLight(0x8899bb, 0.55));
 const llumSol = new THREE.PointLight(0xfff1c9, 2.6, 0, 0);
 escena.add(llumSol);
 
-/* ---------- ESTRELES DE FONS ---------- */
 function creaEstrelles(n, mida, op){
   const pos = new Float32Array(n*3);
   for (let i=0;i<n;i++){
@@ -109,7 +102,7 @@ const estrelles1 = creaEstrelles(1200, 0.28, 0.9);
 const estrelles2 = creaEstrelles(500, 0.5, 0.55);
 escena.add(estrelles1, estrelles2);
 
-/* ================== GENERADOR DE VÒXELS (peces LEGO) ================== */
+/* ================== VÒXELS (peces LEGO) ================== */
 function hash(x,y){ const s = Math.sin(x*127.1 + y*311.7)*43758.5453; return s - Math.floor(s); }
 function soroll(x,y){
   const xi=Math.floor(x), yi=Math.floor(y), xf=x-xi, yf=y-yi;
@@ -160,29 +153,29 @@ function esferaVoxels(R){
 }
 
 /* ================== SISTEMA: SOL + TERRA + LLUNA ================== */
-const pivOrbita = new THREE.Group(); escena.add(pivOrbita);   // translació
+const pivOrbita = new THREE.Group(); escena.add(pivOrbita);
 const anchorTerra = new THREE.Group();
 anchorTerra.position.x = ORBITA_R;
 pivOrbita.add(anchorTerra);
 
-const inclinacio = new THREE.Group();                          // eix inclinat 23,5°
+const inclinacio = new THREE.Group();
 inclinacio.rotation.z = THREE.MathUtils.degToRad(INCLINACIO);
 anchorTerra.add(inclinacio);
 
-const girTerra = new THREE.Group();                            // rotació
+const girTerra = new THREE.Group();
 inclinacio.add(girTerra);
 
-const pivLluna = new THREE.Group();                            // òrbita de la Lluna
+const pivLluna = new THREE.Group();
 anchorTerra.add(pivLluna);
 
 const geoPeça = new THREE.BoxGeometry(CS*0.92, CS*0.92, CS*0.92);
 
-function creaSistema(vox, material, centre){
+function creaSistema(vox, material){
   const mesh = new THREE.InstancedMesh(geoPeça, material, vox.length);
   const M = new THREE.Matrix4();
   vox.forEach((v,i)=>{
     M.makeScale(0,0,0);
-    M.setPosition((v.x+centre.x)*CS, (v.y+centre.y)*CS, (v.z+centre.z)*CS);
+    M.setPosition(v.x*CS, v.y*CS, v.z*CS);
     mesh.setMatrixAt(i, M);
   });
   mesh.instanceMatrix.needsUpdate = true;
@@ -192,7 +185,7 @@ function creaSistema(vox, material, centre){
 /* SOL */
 const voxSol = esferaVoxels(8);
 const matSol = new THREE.MeshLambertMaterial({ color:0xffffff, emissive:0xff8c1a, emissiveIntensity:0.85 });
-const solMesh = creaSistema(voxSol, matSol, new THREE.Vector3(0,0,0));
+const solMesh = creaSistema(voxSol, matSol);
 escena.add(solMesh);
 voxSol.forEach((v,i)=>{
   const t = hash(i, i*2.3);
@@ -215,7 +208,7 @@ glow.scale.setScalar(13); escena.add(glow);
 /* TERRA */
 const voxTerra = esferaVoxels(6.4);
 const matTerra = new THREE.MeshLambertMaterial({ color:0xffffff });
-const terraMesh = creaSistema(voxTerra, matTerra, new THREE.Vector3(0,0,0));
+const terraMesh = creaSistema(voxTerra, matTerra);
 girTerra.add(terraMesh);
 const colorsTerra = [];
 voxTerra.forEach((v,i)=>{
@@ -228,7 +221,7 @@ terraMesh.instanceColor.needsUpdate = true;
 /* LLUNA */
 const voxLluna = esferaVoxels(2);
 const matLluna = new THREE.MeshLambertMaterial({ color:0xffffff });
-const llunaMesh = creaSistema(voxLluna, matLluna, new THREE.Vector3(0,0,0));
+const llunaMesh = creaSistema(voxLluna, matLluna);
 const anchorLluna = new THREE.Group();
 anchorLluna.position.x = LLUNA_R;
 pivLluna.add(anchorLluna);
@@ -260,7 +253,7 @@ conus2.position.y = -alt/2 - 0.2; conus2.rotation.x = Math.PI;
 eix.add(vareta, conus1, conus2);
 inclinacio.add(eix);
 
-/* anell equatorial puntejat + boletes que giren amb la Terra (per veure la rotació) */
+/* anell equatorial puntejat + boletes que giren amb la Terra */
 const eqPts = [];
 for (let i=0;i<=72;i++){ const a=i/72*Math.PI*2; eqPts.push(new THREE.Vector3(Math.cos(a)*4,0,Math.sin(a)*4)); }
 const eqLine = new THREE.Line(
@@ -286,16 +279,16 @@ fletxa.rotation.x = -Math.PI/2;
 fletxa.position.set(0, 0, -2.6);
 anchorTerra.add(fletxa);
 
-/* ================== ANIMACIÓ D'ASSEMBLATGE LEGO (sense text) ================== */
+/* ================== ASSEMBLATGE LEGO (automàtic, silenciós) ================== */
 const easeOutCubic = k => 1 - Math.pow(1-k, 3);
 const easeOutBack  = k => { const c=1.7; return 1 + (c+1)*Math.pow(k-1,3) + c*Math.pow(k-1,2); };
 
 const sistemes = [
-  { mesh: solMesh,   vox: voxSol,   inici: 0.15, centre: new THREE.Vector3(0,0,0) },
-  { mesh: terraMesh, vox: voxTerra, inici: 0.8,  centre: new THREE.Vector3(0,0,0) },
-  { mesh: llunaMesh, vox: voxLluna, inici: 3.0,  centre: new THREE.Vector3(0,0,0) },
+  { mesh: solMesh,   vox: voxSol,   inici: 0.15 },
+  { mesh: terraMesh, vox: voxTerra, inici: 0.8  },
+  { mesh: llunaMesh, vox: voxLluna, inici: 3.0  },
 ];
-const DUR = 1.25, TOTAL_ASM = 5.2;
+const DUR = 1.25, TOTAL_ASM = 6.0;   // 6 s: suficient perquè TOTES les peces arribin
 const dades = [];
 sistemes.forEach(s=>{
   let minY=1e9, maxY=-1e9;
@@ -305,8 +298,8 @@ sistemes.forEach(s=>{
     dades.push({
       s, i,
       inici: s.inici + ((v.y-minY)/(maxY-minY))*1.15 + Math.random()*0.35,
-      objectiu: new THREE.Vector3(v.x*CS, v.y*CS, v.z*CS).add(s.centre),
-      sortida: dir.multiplyScalar(15 + Math.random()*18).add(s.centre),
+      objectiu: new THREE.Vector3(v.x*CS, v.y*CS, v.z*CS),
+      sortida: dir.multiplyScalar(15 + Math.random()*18),
       eix: new THREE.Vector3().randomDirection(),
       fet: false
     });
@@ -317,12 +310,11 @@ const _p = new THREE.Vector3(), _q = new THREE.Quaternion(), _sc = new THREE.Vec
 const _off = new THREE.Vector3(), _M = new THREE.Matrix4(), _c = new THREE.Color();
 
 function aplicaAssemblatge(kGlobal){
-  let fets = 0;
   const flash = [];
   for (const d of dades){
     let k = (kGlobal - d.inici) / DUR;
     k = Math.max(0, Math.min(1, k));
-    if (k >= 1){ fets++; if (!d.fet){ d.fet = true; d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); } continue; }
+    if (k >= 1){ if (!d.fet){ d.fet = true; d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); } continue; }
     if (k <= 0){ d.s.mesh.setMatrixAt(d.i, _M.makeScale(0,0,0).setPosition(d.sortida)); continue; }
 
     _off.subVectors(d.sortida, d.objectiu);
@@ -342,15 +334,9 @@ function aplicaAssemblatge(kGlobal){
   }
   flash.forEach(([d,c])=> d.s.mesh.setColorAt(d.i, c));
   sistemes.forEach(s=>{ s.mesh.instanceMatrix.needsUpdate = true; if (flash.length) s.mesh.instanceColor.needsUpdate = true; });
-  return fets / dades.length;
 }
 
-if (REDUIT){
-  dades.forEach(d=>{ d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); });
-  sistemes.forEach(s=>{ s.mesh.instanceMatrix.needsUpdate = true; });
-}
-
-/* ================== CÀMERA (arrossegar + zoom) ================== */
+/* ================== CÀMERA (opcional: arrossegar + zoom) ================== */
 let camTheta = 0.35, camPhi = 1.12, camR = 52;
 let introActiva = !REDUIT, introT = 0;
 const lookAt = new THREE.Vector3(0, 0.4, 0);
@@ -397,22 +383,15 @@ canvas.addEventListener('wheel', e=>{
   camR = Math.max(8, Math.min(90, camR * (1 + e.deltaY*0.001)));
 }, { passive:false });
 
-/* ================== TEXT: Rotació → Translació ================== */
+/* ================== TEXT: Rotació → Translació (automàtic) ================== */
 const movText = document.getElementById('mov-text');
-const ind1 = document.getElementById('ind-1');
-const ind2 = document.getElementById('ind-2');
-
-/* mostra "Rotació" quan les peces ja són al lloc */
-let textVisibilitzat = false;
+let textVisible = false;
 function mostraRotacio(){
-  if (textVisibilitzat) return;
-  textVisibilitzat = true;
+  if (textVisible) return;
+  textVisible = true;
   movText.classList.add('visible');
 }
-
-/* canvi suau de text */
 function canviaText(nou){
-  movText.classList.add('canvi');
   movText.classList.remove('visible');
   setTimeout(()=>{
     movText.textContent = nou;
@@ -420,9 +399,17 @@ function canviaText(nou){
   }, 500);
 }
 
-/* ================== ESTAT DEL MOVIMENT ================== */
-let mode = 'construint';     // 'construint' → 'rotacio' → 'translacio'
-let opOrbita = 0;            // opacitat actual dels elements d'òrbita
+/* ================== ESTAT ================== */
+let mode = 'construint';   // 'construint' → 'rotacio' → 'translacio'
+let opOrbita = 0;
+
+/* mode moviment reduït: tot ja al lloc, comença directament la rotació */
+if (REDUIT){
+  dades.forEach(d=>{ d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); });
+  sistemes.forEach(s=>{ s.mesh.instanceMatrix.needsUpdate = true; });
+  mode = 'rotacio';
+  mostraRotacio();
+}
 
 /* ================== BUCLE PRINCIPAL ================== */
 const rellotge = new THREE.Clock();
@@ -431,7 +418,7 @@ function anima(){
   requestAnimationFrame(anima);
   const dt = Math.min(rellotge.getDelta(), 0.05);
 
-  /* intro de càmera */
+  /* aproximació de càmera a l'inici */
   if (introActiva){
     introT += dt;
     const k = Math.min(1, introT/4.5), e = k<0.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
@@ -440,7 +427,7 @@ function anima(){
     if (k >= 1) introActiva = false;
   }
 
-  /* assemblatge de peces (silenciós) */
+  /* assemblatge automàtic */
   if (assemblant){
     tAsm += dt;
     aplicaAssemblatge(tAsm);
@@ -452,8 +439,8 @@ function anima(){
   }
 
   /* moviments:
-     - rotació: sempre que hàgim acabat de construir
-     - translació: quan la Terra hagi completat UNA volta entera */
+     rotació: sempre (també durant la translació, com a la realitat)
+     translació: s'activa SOLA quan la Terra ha fet UNA volta completa */
   const dtM = assemblant ? 0 : dt;
   if (mode === 'rotacio' || mode === 'translacio'){
     girTerra.rotation.y += dtM * VEL_GIR;
@@ -463,15 +450,13 @@ function anima(){
     pivLluna.rotation.y  += dtM * VEL_LLUNA;
   }
 
-  /* detecció de la volta completa (1 rotació = 2π) */
+  /* una volta entera = 2π → canvi automàtic a translació */
   if (mode === 'rotacio' && girTerra.rotation.y >= Math.PI*2){
     mode = 'translacio';
     canviaText('Translació');
-    ind1.classList.remove('actiu');
-    ind2.classList.add('actiu');
   }
 
-  /* aparició suau de l'òrbita durant la translació */
+  /* aparició suau de l'òrbita */
   const objectiuOp = mode === 'translacio' ? 1 : 0;
   opOrbita += (objectiuOp - opOrbita) * Math.min(1, dt*2.5);
   anellaOrbita.material.opacity = opOrbita * 0.3;
