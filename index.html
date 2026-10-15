@@ -40,11 +40,19 @@
     white-space:nowrap;transition:color .3s,background .3s}
   nav a.llink:hover{color:#e8ecf4;background:rgba(255,255,255,.06)}
   nav a.llink.actiu{color:#fde68a;background:rgba(252,211,77,.1)}
+  #btn-menu{display:none;margin-left:auto;width:40px;height:40px;border-radius:10px;flex-shrink:0;
+    border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#e8ecf4;
+    cursor:pointer;font-size:1.15rem;align-items:center;justify-content:center}
+  @media(max-width:860px){
+    #btn-menu{display:flex}
+    nav{flex-wrap:wrap}
+    nav .llink{display:none;width:100%;text-align:center;margin:3px 0;padding:10px}
+    nav.obert .llink{display:block}
+  }
 
   /* ---------- CAPÇALERA ---------- */
   header{text-align:center;padding:120px 20px 60px}
-  .sol-wrap{position:relative;width:150px;height:150px;margin:0 auto 42px;cursor:pointer;
-    transition:transform .2s}
+  .sol-wrap{position:relative;width:150px;height:150px;margin:0 auto 42px;cursor:pointer;transition:transform .2s}
   .sol-wrap:active{transform:scale(.94)}
   .sol-wrap canvas{width:100%;height:100%;display:block;position:relative;z-index:1;border-radius:50%}
   .corona{position:absolute;inset:-55%;z-index:0;border-radius:50%;
@@ -110,6 +118,12 @@
   .enllac-suau{background:none;border:none;cursor:pointer;font-family:inherit;color:#9aa5b5;
     font-size:.9rem;text-decoration:underline;text-underline-offset:4px;transition:color .3s;padding:8px}
   .enllac-suau:hover{color:#fde68a}
+
+  /* ---------- ANIMACIÓ INCRUSTADA ---------- */
+  .marc-animacio{max-width:880px;margin:0 auto;border:1px solid rgba(255,255,255,.1);
+    border-radius:18px;overflow:hidden;aspect-ratio:16/9;background:#02030a;
+    box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .marc-animacio iframe{width:100%;height:100%;border:0;display:block}
 
   /* ---------- PROJECTE ---------- */
   .projecte-text{max-width:680px;margin:0 auto;text-align:left;color:#c3ccd9;line-height:1.75;font-size:.98rem}
@@ -277,18 +291,27 @@
   .modal.shake{animation:shake .4s}
   @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
-  /* ---------- BOTÓ FLOTANT I TOAST ---------- */
+  /* ---------- BOTONS FLOTANTS I TOAST ---------- */
   #btn-opinio{position:fixed;bottom:22px;right:22px;z-index:950;padding:12px 20px;border-radius:999px;
     cursor:pointer;font-family:inherit;font-size:.92rem;font-weight:500;color:#dfe5ee;
     background:rgba(14,17,26,.78);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);
     transition:color .3s,border-color .3s}
   #btn-opinio:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
+  #btn-amunt{position:fixed;bottom:22px;left:22px;z-index:950;width:44px;height:44px;
+    border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(14,17,26,.78);
+    color:#dfe5ee;cursor:pointer;font-size:1.05rem;backdrop-filter:blur(8px);
+    opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;transform:translateY(8px)}
+  #btn-amunt.visible{opacity:1;pointer-events:auto;transform:none}
+  #btn-amunt:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
   #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(15px);z-index:2500;
     background:rgba(14,17,26,.92);border:1px solid rgba(255,255,255,.15);color:#e8ecf4;
     padding:11px 20px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;
     transition:opacity .3s,transform .3s;backdrop-filter:blur(8px);max-width:90vw;text-align:center}
   #toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
-  @media(max-width:520px){#btn-opinio{bottom:16px;right:16px;font-size:.85rem;padding:11px 16px}}
+  @media(max-width:520px){
+    #btn-opinio{bottom:16px;right:16px;font-size:.85rem;padding:11px 16px}
+    #btn-amunt{left:16px;bottom:16px}
+  }
 </style>
 </head>
 <body>
@@ -299,13 +322,14 @@
 <div class="vialactia"></div>
 <div id="progres"></div>
 
-<!-- ================== MENÚ DE NAVEGACIÓ ================== -->
-<nav>
+<!-- ================== MENÚ ================== -->
+<nav id="nav-principal">
   <a class="marca" href="#inici"><i></i>El Nostre Univers</a>
+  <button id="btn-menu" aria-label="Menú">☰</button>
   <a class="llink" href="#inici">Inici</a>
   <a class="llink" href="#com-funciona">Com funciona</a>
   <a class="llink" href="#videos">Vídeos</a>
-  <a class="llink" href="animacio.html">Animació 3D</a>
+  <a class="llink" href="#animacio">Animació</a>
   <a class="llink" href="#projecte">El projecte</a>
   <a class="llink" href="#equip">L'equip</a>
   <a class="llink" href="#preguntes">Preguntes</a>
@@ -318,10 +342,10 @@
     <div class="corona"></div><canvas id="sol"></canvas>
   </div>
   <h1>El Nostre Univers</h1>
-  <p class="subtitol">Tots els vídeos del nostre projecte en un sol lloc, i el teu espai per deixar la teva opinió.</p>
+  <p class="subtitol">Tots els vídeos del nostre projecte en un sol lloc, una animació 3D de la Terra i el teu espai per deixar la teva opinió.</p>
   <div class="fila-capsalera">
     <a href="#videos" class="boto">Veure els vídeos ↓</a>
-    <a class="pill animacio" href="animacio.html">🌍 Rotació i translació</a>
+    <a class="pill animacio" href="#animacio">🌍 Rotació i translació</a>
     <button class="pill tiktok" id="btn-tiktok">
       <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
       El nostre TikTok
@@ -333,7 +357,7 @@
   </div>
 </header>
 
-<!-- ================== COM FUNCIONA AQUESTA WEB ================== -->
+<!-- ================== COM FUNCIONA ================== -->
 <section id="com-funciona" class="seccio">
   <h2>Com funciona aquesta web</h2>
   <p class="subtext">Guia ràpida perquè sàpigues què pots fer aquí. No cal registrar-se ni instal·lar res.</p>
@@ -347,13 +371,13 @@
     <div class="pas">
       <span class="ico">🌍</span>
       <h3>2. Animació 3D</h3>
-      <p>Descobreix com gira la Terra sobre ella mateixa i com volta al voltant del Sol, amb una escena 3D que es construeix amb peces tipus LEGO.</p>
-      <a href="animacio.html">Veure l'animació →</a>
+      <p>Més avall tens una escena 3D que es construeix sola amb peces tipus LEGO: primer la Terra gira, i en completar una volta comença a orbitar el Sol.</p>
+      <a href="#animacio">Veure l'animació →</a>
     </div>
     <div class="pas">
       <span class="ico">📱</span>
       <h3>3. Mode TikTok</h3>
-      <p>Si prefereixes el format vertical, obre el nostre feed: llisca cap amunt per passar de vídeo, clica per pausar i deixa't portar.</p>
+      <p>Si prefereixes el format vertical, obre el nostre feed: llisca cap amunt per passar de vídeo i deixa't portar.</p>
       <a href="#videos">Provar-ho →</a>
     </div>
     <div class="pas">
@@ -371,7 +395,7 @@
   </div>
 </section>
 
-<!-- ================== GALERIA DE VÍDEOS ================== -->
+<!-- ================== GALERIA ================== -->
 <section id="videos" class="seccio">
   <h2>Els nostres vídeos</h2>
   <p class="subtext">Fes clic a qualsevol vídeo per veure'l.</p>
@@ -382,18 +406,28 @@
   </div>
 </section>
 
-<!-- ================== SOBRE EL PROJECTE ================== -->
+<!-- ================== ANIMACIÓ INCRUSTADA ================== -->
+<section id="animacio" class="seccio">
+  <h2>Rotació i translació</h2>
+  <p class="subtext">L'escena es construeix sola amb peces tipus LEGO: primer la Terra gira sobre el seu eix inclinat 23,5° i, en completar una volta entera, comença a orbitar el Sol. Pots arrossegar per girar la vista i fer zoom.</p>
+  <div class="marc-animacio">
+    <iframe src="animacio.html" title="Animació 3D: rotació i translació de la Terra" loading="lazy"></iframe>
+  </div>
+  <div class="fila-extra">
+    <a class="enllac-suau" href="animacio.html" target="_blank" rel="noopener">obre-la a pantalla completa ↗</a>
+  </div>
+</section>
+
+<!-- ================== PROJECTE ================== -->
 <section id="projecte" class="seccio">
   <h2>Sobre el projecte</h2>
   <p class="subtext">Què és tot això? Aquí t'ho expliquem.</p>
-
-  <!-- ✏️ EDITA AQUÍ: explica el vostre projecte -->
+  <!-- ✏️ EDITA AQUÍ -->
   <div class="projecte-text">
     <p>Aquest projecte ha nascut a l'aula de <strong>2n d'ESO</strong> amb una idea senzilla: explicar alguna cosa que ens importa a través de vídeos curts, fets per nosaltres de principi a fi.</p>
     <p>Hem treballat la idea, el guió, el rodatge i l'edició. I perquè tothom ho pugui veure i dir-nos què en pensa, hem construït aquesta pàgina web: els vídeos, un canal estil TikTok, una animació 3D de la Terra i un mur d'opinions obert a tothom.</p>
   </div>
-
-  <!-- ✏️ EDITA AQUÍ: la cronologia del projecte -->
+  <!-- ✏️ EDITA AQUÍ -->
   <div class="linia-temps">
     <div class="fase">
       <h3>💡 La idea</h3>
@@ -414,14 +448,14 @@
   </div>
 </section>
 
-<!-- ================== L'EQUIP ================== -->
+<!-- ================== EQUIP ================== -->
 <section id="equip" class="seccio">
   <h2>L'equip</h2>
   <p class="subtext">Les persones que hem fet aquest projecte possible.</p>
   <div class="membres" id="membres"></div>
 </section>
 
-<!-- ================== PREGUNTES FREQUENTS ================== -->
+<!-- ================== PREGUNTES ================== -->
 <section id="preguntes" class="seccio">
   <h2>Preguntes freqüents</h2>
   <p class="subtext">El que la gent sol preguntar-nos.</p>
@@ -453,7 +487,7 @@
   </div>
 </section>
 
-<!-- ================== APP TIKTOK A PANTALLA COMPLETA ================== -->
+<!-- ================== APP TIKTOK ================== -->
 <div id="tiktok-app">
   <button id="tanca" aria-label="Tancar">✕</button>
   <div class="titol-feed">Per a tu</div>
@@ -471,7 +505,6 @@
 
   <div class="opinio-caixa">
     <form id="form-opinio">
-      <!-- camp anti-bots (invisible per a les persones) -->
       <input type="text" id="web" name="web" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
       <div class="camp">
         <label for="nom">Nom <span style="color:#5c6678">(opcional)</span></label>
@@ -522,17 +555,23 @@
 </div>
 
 <button id="btn-opinio">Dóna'ns la teva opinió</button>
+<button id="btn-amunt" aria-label="Tornar a dalt">↑</button>
 <div id="toast"></div>
 
 <script>
   /* ================== CONFIGURACIÓ ================== */
-  // ✏️ ENGANXA AQUÍ el teu URL de jsonblob (el mur JA ESTÀ ACTIVAT):
+  // ✏️ ENGANXA AQUÍ el teu URL de jsonblob:
   const BLOB_URL = '';   // ex: 'https://jsonblob.com/api/jsonBlob/1234567890'
-  // ✏️ Contrasenya d'admin (distingeix majúscules):
   const CONTRA_ADMIN = '2ESOA';
 
   const REDUIT = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const RATOLI_FI = matchMedia('(pointer: fine)').matches;
+
+  /* ---------- MENÚ MÒBIL ---------- */
+  const navEl = document.getElementById('nav-principal');
+  document.getElementById('btn-menu').onclick = () => navEl.classList.toggle('obert');
+  document.querySelectorAll('nav a.llink').forEach(a =>
+    a.addEventListener('click', () => navEl.classList.remove('obert')));
 
   /* ---------- SOL REALISTA ---------- */
   const sol = document.getElementById('sol');
@@ -583,7 +622,7 @@
   }
   requestAnimationFrame(bucleSol);
 
-  /* ---------- FAVICON DINÀMIC ---------- */
+  /* ---------- FAVICON ---------- */
   const fav = document.createElement('canvas'); fav.width = fav.height = 64;
   const fx = fav.getContext('2d');
   const gf = fx.createRadialGradient(32,32,4,32,32,32);
@@ -593,7 +632,7 @@
   const llink = document.createElement('link'); llink.rel = 'icon'; llink.href = fav.toDataURL();
   document.head.appendChild(llink);
 
-  /* ---------- ESTRELES, COMETES, WARP I RASTRE DEL CURSOR ---------- */
+  /* ---------- ESTRELES, COMETES, WARP, RASTRE ---------- */
   const canvas = document.getElementById('estrelles');
   const ctx = canvas.getContext('2d');
   let cometes = [], pols = [];
@@ -611,7 +650,6 @@
     });
   }
 
-  /* clic al sol = hipervelocitat (només efecte) */
   let warpActiu = false, warpT0 = 0;
   function activaWarp(){
     if (REDUIT || warpActiu) return;
@@ -627,7 +665,6 @@
     if (kIdx === KONAMI.length){ kIdx = 0; activaWarp(); }
   });
 
-  /* rastre d'estrelles del cursor */
   let ultimRastre = 0;
   if (RATOLI_FI && !REDUIT){
     addEventListener('mousemove', e => {
@@ -719,12 +756,15 @@
     }, { passive: true });
   }
 
-  /* ---------- PROGRÉS DE SCROLL I TÍTOL ---------- */
+  /* ---------- PROGRÉS, TÍTOL I BOTÓ AMUNT ---------- */
   const progr = document.getElementById('progres');
+  const btnAmunt = document.getElementById('btn-amunt');
   addEventListener('scroll', () => {
     const d = document.documentElement;
     progr.style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+    btnAmunt.classList.toggle('visible', d.scrollTop > 600);
   }, { passive: true });
+  btnAmunt.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
 
   const TITOL = document.title;
   document.addEventListener('visibilitychange', () => {
@@ -772,8 +812,8 @@
     else confetiAnimat = false;
   }
 
-  /* ---------- GALERIA DE VÍDEOS ---------- */
-  // ✏️ EDITA AQUÍ els vídeos de la galeria (id de YouTube, títol, descripció)
+  /* ---------- GALERIA ---------- */
+  // ✏️ EDITA AQUÍ els vídeos
   const videos = [
     { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 1', desc: 'Descripció del primer vídeo del projecte.', base: 12 },
     { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 2', desc: 'Explica aquí què hi veuran els visitants.', base: 31 },
@@ -825,8 +865,8 @@
     }
   };
 
-  /* ---------- L'EQUIP ---------- */
-  // ✏️ EDITA AQUÍ els membres de l'equip
+  /* ---------- EQUIP ---------- */
+  // ✏️ EDITA AQUÍ els membres
   const equip = [
     { emoji: '🧑‍🚀', nom: 'Nom 1', rol: 'Direcció i guió' },
     { emoji: '🎬',   nom: 'Nom 2', rol: 'Càmera i rodatge' },
@@ -842,7 +882,7 @@
   });
 
   /* ---------- APP TIKTOK ---------- */
-  // ✏️ EDITA AQUÍ el feed vertical (tests de música NCS gratuïta)
+  // ✏️ EDITA AQUÍ el feed vertical
   const feedTikTok = [
     { tipus: 'yt', id: 'K4DyBUG242c',  usuari: '@ncs', desc: 'TEST · On & On 🎵',          so: 'On & On · Cartoon',            base: 128 },
     { tipus: 'yt', id: 'bM7SZ5SBzyY',  usuari: '@ncs', desc: 'TEST · Fade 🎵',             so: 'Fade · Alan Walker',           base: 342 },
@@ -850,7 +890,6 @@
     { tipus: 'yt', id: 'TW9d8vYrVFQ',  usuari: '@ncs', desc: 'TEST · Sky High 🎵',         so: 'Sky High · Elektronomia',      base: 211 },
     { tipus: 'yt', id: 'EP625xQIGzs',  usuari: '@ncs', desc: 'TEST · Hope 🎵',             so: 'Hope · Tobu',                  base: 94 },
     { tipus: 'yt', id: 'J2X5mJ3HDYE',  usuari: '@ncs', desc: 'TEST · Invincible 🎵',       so: 'Invincible · Deaf Kev',        base: 63 },
-    // TikToks reals: còpia la ID de l'URL i descomenta:
     // { tipus: 'tt', id: '7106594312292457990', usuari: '@el_nostre_compte', desc: 'El nostre primer TikTok', so: 'so original', base: 0 },
   ];
 
@@ -1014,7 +1053,6 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && app.classList.contains('obert')) tancaTiktok(); });
   if (location.hash.startsWith('#tiktok-')) obreTiktok(+location.hash.split('-')[1]);
 
-  /* navegació amb fletxes dins del feed (↑/↓) */
   document.addEventListener('keydown', e => {
     if (!app.classList.contains('obert')) return;
     if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
@@ -1025,7 +1063,7 @@
     slides[desti].scrollIntoView({ behavior: 'smooth' });
   });
 
-  /* ---------- ADMIN (Ctrl+Alt+A o #admin a l'URL) ---------- */
+  /* ---------- ADMIN ---------- */
   let adminLogat = false;
   const esAdmin = () => adminLogat;
 
@@ -1083,7 +1121,7 @@
     toast('Totes les opinions esborrades');
   };
 
-  /* ---------- OPINIONS (mur públic) ---------- */
+  /* ---------- OPINIONS ---------- */
   let BLOB_RUNTIME = BLOB_URL || '';
   const CLAU_LOCAL = 'opinions_univers';
   const llistaOp = document.getElementById('llista-opinions');
@@ -1209,7 +1247,6 @@
     };
   });
 
-  /* comptador de caràcters */
   const campText = document.getElementById('text');
   campText.addEventListener('input', () => {
     document.getElementById('compta').textContent = campText.value.length;
@@ -1217,7 +1254,7 @@
 
   document.getElementById('form-opinio').onsubmit = async e => {
     e.preventDefault();
-    if (document.getElementById('web').value) return;   // anti-bots
+    if (document.getElementById('web').value) return;
     const text = campText.value.trim();
     if (!text) return;
     const op = {
@@ -1248,7 +1285,7 @@
     }
   };
 
-  /* ---------- SCROLLSPY (marca l'apartat actiu al menú) ---------- */
+  /* ---------- SCROLLSPY ---------- */
   const enllacosNav = [...document.querySelectorAll('nav a.llink')];
   const seccionsNav = enllacosNav
     .map(a => document.querySelector(a.getAttribute('href')))
