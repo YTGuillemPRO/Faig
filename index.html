@@ -27,6 +27,20 @@
     background:linear-gradient(90deg,#fcd34d,#f59e0b,#f9a8d4);border-radius:0 3px 3px 0;
     box-shadow:0 0 10px rgba(252,211,77,.5)}
 
+  /* ---------- INTRO (escena LEGO abans d'entrar) ---------- */
+  #intro{position:fixed;inset:0;z-index:3000;background:#02030a}
+  #intro.marxant{opacity:0;transition:opacity .7s}
+  #intro iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  #intro-entrar{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);z-index:2;
+    padding:15px 36px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;
+    font-weight:700;font-size:1.05rem;color:#0a0c12;background:#fcd34d;
+    box-shadow:0 0 30px rgba(252,211,77,.5);animation:batze 1.6s ease-in-out infinite}
+  @keyframes batze{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}
+  #intro-saltar{position:absolute;top:16px;right:16px;z-index:2;padding:9px 18px;border-radius:999px;
+    cursor:pointer;font-family:inherit;font-size:.85rem;color:#cfd6e0;
+    background:rgba(14,17,26,.7);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(6px)}
+  #intro-saltar:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
+
   /* ---------- NAVEGACIÓ ---------- */
   nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;gap:6px;
     padding:10px 18px;background:rgba(4,6,12,.72);backdrop-filter:blur(12px);
@@ -202,6 +216,8 @@
   .mute{position:absolute;top:14px;right:14px;z-index:2;width:40px;height:40px;border-radius:50%;
     background:rgba(0,0,0,.45);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .mute svg{width:19px;height:19px;fill:#fff}
+  .etq-complet{position:absolute;top:14px;left:14px;z-index:2;padding:5px 12px;border-radius:999px;
+    font-size:.72rem;color:#0a0c12;background:rgba(252,211,77,.9);font-weight:700}
   .pista{position:absolute;bottom:14px;left:50%;z-index:2;color:#aab4c4;font-size:.8rem;
     animation:puja 1.6s ease-in-out infinite;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.8)}
   @keyframes puja{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-7px)}}
@@ -322,6 +338,13 @@
 <div class="vialactia"></div>
 <div id="progres"></div>
 
+<!-- ================== INTRO ESCENA LEGO ================== -->
+<div id="intro">
+  <iframe id="intro-frame" title="Intro" src="about:blank"></iframe>
+  <button id="intro-entrar" hidden>Entrar a la web ✨</button>
+  <button id="intro-saltar">Saltar ▸</button>
+</div>
+
 <!-- ================== MENÚ ================== -->
 <nav id="nav-principal">
   <a class="marca" href="#inici"><i></i>El Nostre Univers</a>
@@ -377,7 +400,7 @@
     <div class="pas">
       <span class="ico">📱</span>
       <h3>3. Mode TikTok</h3>
-      <p>Si prefereixes el format vertical, obre el nostre feed: llisca cap amunt per passar de vídeo i deixa't portar.</p>
+      <p>El nostre feed vertical: llisca per passar de vídeo. Hi ha clips curts i vídeos complets amb la seva barra de progrés.</p>
       <a href="#videos">Provar-ho →</a>
     </div>
     <div class="pas">
@@ -560,12 +583,47 @@
 
 <script>
   /* ================== CONFIGURACIÓ ================== */
-  // ✏️ ENGANXA AQUÍ el teu URL de jsonblob:
+  // ✏️ ENGANXA AQUÍ el teu URL de jsonblob (mur públic que tothom veu):
   const BLOB_URL = '';   // ex: 'https://jsonblob.com/api/jsonBlob/1234567890'
+  // ✏️ Contrasenya d'admin (distingeix majúscules):
   const CONTRA_ADMIN = '2ESOA';
 
   const REDUIT = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const RATOLI_FI = matchMedia('(pointer: fine)').matches;
+
+  /* ---------- INTRO (escena LEGO abans d'entrar) ---------- */
+  const introEl = document.getElementById('intro');
+  const introFrame = document.getElementById('intro-frame');
+  const btnIntroEntrar = document.getElementById('intro-entrar');
+  const btnIntroSaltar = document.getElementById('intro-saltar');
+  let introAcabada = false;
+
+  function tancaIntro(){
+    if (introAcabada) return;
+    introAcabada = true;
+    sessionStorage.setItem('intro_vista','1');   // només es veu un cop per sessió
+    introEl.classList.add('marxant');
+    setTimeout(()=> introEl.remove(), 750);
+    document.body.style.overflow = '';
+  }
+  btnIntroEntrar.onclick = tancaIntro;
+  btnIntroSaltar.onclick = tancaIntro;
+
+  window.addEventListener('message', e => {
+    if (e.data && e.data.tipus === 'animacio-llest') btnIntroEntrar.hidden = false;
+  });
+
+  const calIntro = !REDUIT
+    && !sessionStorage.getItem('intro_vista')
+    && !location.hash.startsWith('#admin')
+    && !location.hash.startsWith('#tiktok-');
+  if (calIntro){
+    document.body.style.overflow = 'hidden';
+    introFrame.src = 'animacio.html';
+    setTimeout(()=>{ btnIntroEntrar.hidden = false; }, 9000);  // per si el missatge no arriba
+  } else {
+    introEl.remove();
+  }
 
   /* ---------- MENÚ MÒBIL ---------- */
   const navEl = document.getElementById('nav-principal');
@@ -882,7 +940,10 @@
   });
 
   /* ---------- APP TIKTOK ---------- */
-  // ✏️ EDITA AQUÍ el feed vertical
+  // ✏️ EDITA AQUÍ el feed vertical.
+  //   clips curts (bucle, sense controls):  { tipus:'yt', id:'...', ... }
+  //   vídeos COMPLETS (amb controls):       { tipus:'yt', id:'...', ..., complet: true }
+  //   TikToks reals:                        { tipus:'tt', id:'7106...', ... }
   const feedTikTok = [
     { tipus: 'yt', id: 'K4DyBUG242c',  usuari: '@ncs', desc: 'TEST · On & On 🎵',          so: 'On & On · Cartoon',            base: 128 },
     { tipus: 'yt', id: 'bM7SZ5SBzyY',  usuari: '@ncs', desc: 'TEST · Fade 🎵',             so: 'Fade · Alan Walker',           base: 342 },
@@ -890,6 +951,9 @@
     { tipus: 'yt', id: 'TW9d8vYrVFQ',  usuari: '@ncs', desc: 'TEST · Sky High 🎵',         so: 'Sky High · Elektronomia',      base: 211 },
     { tipus: 'yt', id: 'EP625xQIGzs',  usuari: '@ncs', desc: 'TEST · Hope 🎵',             so: 'Hope · Tobu',                  base: 94 },
     { tipus: 'yt', id: 'J2X5mJ3HDYE',  usuari: '@ncs', desc: 'TEST · Invincible 🎵',       so: 'Invincible · Deaf Kev',        base: 63 },
+    // Exemple de vídeo COMPLET (es veu sencer, amb barra de progrés i pantalla completa):
+    // { tipus: 'yt', id: 'K4DyBUG242c', usuari: '@ncs', desc: 'Vídeo complet de prova 🎬', so: 'On & On · Cartoon', base: 12, complet: true },
+    // TikToks reals:
     // { tipus: 'tt', id: '7106594312292457990', usuari: '@el_nostre_compte', desc: 'El nostre primer TikTok', so: 'so original', base: 0 },
   ];
 
@@ -918,15 +982,16 @@
     const feed = document.getElementById('feed');
     feedTikTok.forEach((v, i) => {
       const esTT = v.tipus === 'tt';
+      const esComplet = !!v.complet && !esTT;
       const slide = document.createElement('div');
       slide.className = 'slide';
       slide.id = 'tiktok-' + i;
       slide.innerHTML = `
         <div class="video-box">
           <div id="player-${i}"></div>
-          ${esTT ? '' : `
+          ${(!esTT && !esComplet) ? `
           <div class="click-cap" data-i="${i}"></div>
-          <div class="icona-pausa" id="pausa-${i}">${svgPlay}</div>`}
+          <div class="icona-pausa" id="pausa-${i}">${svgPlay}</div>` : ''}
           <div class="info">
             <div class="usuari">${v.usuari}</div>
             <div class="descripcio">${v.desc}</div>
@@ -941,7 +1006,8 @@
               <span class="cercle">${svgCompartir}</span><span>comparteix</span>
             </button>
           </div>
-          ${esTT ? '' : `<button class="mute">${svgSilenci}</button>`}
+          ${esComplet ? '<div class="etq-complet">▶ vídeo complet</div>' : ''}
+          ${(!esTT && !esComplet) ? `<button class="mute">${svgSilenci}</button>` : ''}
           ${i === 0 ? '<div class="pista">↓ llisca per veure més</div>' : ''}
         </div>`;
       feed.appendChild(slide);
@@ -957,10 +1023,18 @@
         holder.replaceWith(f);
         players[i] = null;
       } else {
+        const esComplet = !!v.complet;
         players[i] = new YT.Player('player-' + i, {
           videoId: v.id,
-          playerVars: { autoplay:0, mute:1, controls:0, rel:0, loop:1, playlist:v.id,
-                        modestbranding:1, playsinline:1, iv_load_policy:3, fs:0 }
+          playerVars: {
+            autoplay:0, mute:1,
+            controls: esComplet ? 1 : 0,     // els complets tenen barra de progrés i volum
+            rel:0,
+            loop: esComplet ? 0 : 1,         // els complets NO es repeteixen
+            playlist: v.id,
+            modestbranding:1, playsinline:1, iv_load_policy:3,
+            fs: esComplet ? 1 : 0            // els complets poden anar a pantalla completa
+          }
         });
       }
     });
@@ -1063,7 +1137,7 @@
     slides[desti].scrollIntoView({ behavior: 'smooth' });
   });
 
-  /* ---------- ADMIN ---------- */
+  /* ---------- ADMIN (Ctrl+Alt+A o #admin a l'URL) ---------- */
   let adminLogat = false;
   const esAdmin = () => adminLogat;
 
@@ -1121,7 +1195,7 @@
     toast('Totes les opinions esborrades');
   };
 
-  /* ---------- OPINIONS ---------- */
+  /* ---------- OPINIONS (mur públic via jsonblob) ---------- */
   let BLOB_RUNTIME = BLOB_URL || '';
   const CLAU_LOCAL = 'opinions_univers';
   const llistaOp = document.getElementById('llista-opinions');
@@ -1254,7 +1328,7 @@
 
   document.getElementById('form-opinio').onsubmit = async e => {
     e.preventDefault();
-    if (document.getElementById('web').value) return;
+    if (document.getElementById('web').value) return;   // anti-bots
     const text = campText.value.trim();
     if (!text) return;
     const op = {
