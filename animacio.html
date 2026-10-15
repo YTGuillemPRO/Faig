@@ -52,7 +52,7 @@
 <script type="module">
 import * as THREE from 'three';
 
-/* Si estem incrustats dins de la web (iframe), amaguem la barra superior */
+/* Si estem incrustats (iframe: intro o secció), amaguem la barra superior */
 if (window.self !== window.top){
   document.getElementById('barra').remove();
   document.getElementById('moviment').style.top = '18px';
@@ -64,7 +64,7 @@ const CS = 0.5;
 const ORBITA_R = 16;
 const LLUNA_R = 5.6;
 const INCLINACIO = 23.5;
-const VEL_GIR    = Math.PI*2 / 2.5;   // 1 rotació cada 2,5 s
+const VEL_GIR    = Math.PI*2 / 2.5;   // 1 rotació cada 2,5 s → una volta i canvi a translació
 const VEL_ORBITA = Math.PI*2 / 24;    // 1 òrbita cada 24 s
 const VEL_LLUNA  = Math.PI*2 / 3;
 
@@ -279,16 +279,16 @@ fletxa.rotation.x = -Math.PI/2;
 fletxa.position.set(0, 0, -2.6);
 anchorTerra.add(fletxa);
 
-/* ================== ASSEMBLATGE LEGO (automàtic, silenciós) ================== */
+/* ================== ASSEMBLATGE LEGO (automàtic i ràpid) ================== */
 const easeOutCubic = k => 1 - Math.pow(1-k, 3);
 const easeOutBack  = k => { const c=1.7; return 1 + (c+1)*Math.pow(k-1,3) + c*Math.pow(k-1,2); };
 
 const sistemes = [
-  { mesh: solMesh,   vox: voxSol,   inici: 0.15 },
-  { mesh: terraMesh, vox: voxTerra, inici: 0.8  },
-  { mesh: llunaMesh, vox: voxLluna, inici: 3.0  },
+  { mesh: solMesh,   vox: voxSol,   inici: 0.1  },
+  { mesh: terraMesh, vox: voxTerra, inici: 0.5  },
+  { mesh: llunaMesh, vox: voxLluna, inici: 1.8  },
 ];
-const DUR = 1.25, TOTAL_ASM = 6.0;   // 6 s: suficient perquè TOTES les peces arribin
+const DUR = 0.75, TOTAL_ASM = 3.6;
 const dades = [];
 sistemes.forEach(s=>{
   let minY=1e9, maxY=-1e9;
@@ -297,7 +297,7 @@ sistemes.forEach(s=>{
     const dir = new THREE.Vector3().randomDirection();
     dades.push({
       s, i,
-      inici: s.inici + ((v.y-minY)/(maxY-minY))*1.15 + Math.random()*0.35,
+      inici: s.inici + ((v.y-minY)/(maxY-minY))*0.7 + Math.random()*0.25,
       objectiu: new THREE.Vector3(v.x*CS, v.y*CS, v.z*CS),
       sortida: dir.multiplyScalar(15 + Math.random()*18),
       eix: new THREE.Vector3().randomDirection(),
@@ -336,7 +336,7 @@ function aplicaAssemblatge(kGlobal){
   sistemes.forEach(s=>{ s.mesh.instanceMatrix.needsUpdate = true; if (flash.length) s.mesh.instanceColor.needsUpdate = true; });
 }
 
-/* ================== CÀMERA (opcional: arrossegar + zoom) ================== */
+/* ================== CÀMERA (arrossegar + zoom) ================== */
 let camTheta = 0.35, camPhi = 1.12, camR = 52;
 let introActiva = !REDUIT, introT = 0;
 const lookAt = new THREE.Vector3(0, 0.4, 0);
@@ -403,7 +403,6 @@ function canviaText(nou){
 let mode = 'construint';   // 'construint' → 'rotacio' → 'translacio'
 let opOrbita = 0;
 
-/* mode moviment reduït: tot ja al lloc, comença directament la rotació */
 if (REDUIT){
   dades.forEach(d=>{ d.s.mesh.setMatrixAt(d.i, _M.identity().setPosition(d.objectiu)); });
   sistemes.forEach(s=>{ s.mesh.instanceMatrix.needsUpdate = true; });
@@ -418,16 +417,14 @@ function anima(){
   requestAnimationFrame(anima);
   const dt = Math.min(rellotge.getDelta(), 0.05);
 
-  /* aproximació de càmera a l'inici */
   if (introActiva){
     introT += dt;
-    const k = Math.min(1, introT/4.5), e = k<0.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
+    const k = Math.min(1, introT/3), e = k<0.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
     camR = 52 + (30-52)*e;
     camTheta = 0.35 + (0.85-0.35)*e;
     if (k >= 1) introActiva = false;
   }
 
-  /* assemblatge automàtic */
   if (assemblant){
     tAsm += dt;
     aplicaAssemblatge(tAsm);
@@ -438,9 +435,6 @@ function anima(){
     }
   }
 
-  /* moviments:
-     rotació: sempre (també durant la translació, com a la realitat)
-     translació: s'activa SOLA quan la Terra ha fet UNA volta completa */
   const dtM = assemblant ? 0 : dt;
   if (mode === 'rotacio' || mode === 'translacio'){
     girTerra.rotation.y += dtM * VEL_GIR;
@@ -450,20 +444,19 @@ function anima(){
     pivLluna.rotation.y  += dtM * VEL_LLUNA;
   }
 
-  /* una volta entera = 2π → canvi automàtic a translació */
+  /* una volta entera = 2π → canvi automàtic a translació + avisem la web */
   if (mode === 'rotacio' && girTerra.rotation.y >= Math.PI*2){
     mode = 'translacio';
     canviaText('Translació');
+    try{ if (window.parent !== window) window.parent.postMessage({tipus:'animacio-llest'}, '*'); }catch{}
   }
 
-  /* aparició suau de l'òrbita */
   const objectiuOp = mode === 'translacio' ? 1 : 0;
   opOrbita += (objectiuOp - opOrbita) * Math.min(1, dt*2.5);
   anellaOrbita.material.opacity = opOrbita * 0.3;
   anellaLluna.material.opacity  = opOrbita * 0.18;
   fletxa.material.opacity       = opOrbita * 0.85;
 
-  /* sol que respira */
   const t = performance.now()*0.001;
   solMesh.rotation.y += dt*0.15;
   const pols = 1 + Math.sin(t*2.2)*0.025;
