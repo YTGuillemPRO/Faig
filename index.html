@@ -4,18 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Menú de Tecnologia</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{font-family:'Space Grotesk',sans-serif;background:#04060c;color:#e8ecf4;overflow-x:hidden}
-  section{scroll-margin-top:76px}
+  body{font-family:'Space Grotesk',sans-serif;background:#04060c;color:#e8ecf4;overflow-x:hidden;min-height:100vh}
   #estrelles{position:fixed;inset:0;z-index:-3}
-  #confeti{position:fixed;inset:0;z-index:999;pointer-events:none}
   .nebulosa{position:fixed;inset:0;z-index:-2;pointer-events:none;
     transform:translate(calc(var(--mx,0)*-10px),calc(var(--my,0)*-8px));background:
     radial-gradient(ellipse 700px 500px at 20% 15%, rgba(70,100,170,.08), transparent),
@@ -25,91 +21,40 @@
     background:linear-gradient(115deg, transparent 32%, rgba(190,205,255,.045) 46%,
       rgba(255,255,255,.03) 50%, rgba(190,205,255,.045) 54%, transparent 68%);
     filter:blur(28px)}
-  #progres{position:fixed;top:0;left:0;height:3px;width:0;z-index:1100;
-    background:linear-gradient(90deg,#fcd34d,#f59e0b,#f9a8d4);border-radius:0 3px 3px 0;
-    box-shadow:0 0 10px rgba(252,211,77,.5)}
 
-  /* ---------- INTRO ---------- */
-  #intro{position:fixed;inset:0;z-index:3000;background:#02030a;transition:opacity .7s}
-  #intro.marxant{opacity:0;pointer-events:none}
-  #intro iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  #intro-entrar{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);z-index:2;
-    padding:15px 36px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;
-    font-weight:700;font-size:1.05rem;color:#0a0c12;background:#fcd34d;
-    box-shadow:0 0 30px rgba(252,211,77,.5);animation:batze 1.6s ease-in-out infinite}
-  #intro-entrar[hidden]{display:none}
-  @keyframes batze{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}
-  #intro-saltar{position:absolute;top:16px;right:16px;z-index:2;padding:9px 18px;border-radius:999px;
-    cursor:pointer;font-family:inherit;font-size:.85rem;color:#cfd6e0;
-    background:rgba(14,17,26,.7);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(6px)}
-  #intro-saltar:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
+  /* ========== VISTES ========== */
+  .view{display:none;min-height:100vh;position:relative;z-index:1}
+  .view.active{display:block}
 
-  /* ---------- NAV ---------- */
-  nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;gap:6px;
-    padding:10px 18px;background:rgba(4,6,12,.72);backdrop-filter:blur(12px);
-    border-bottom:1px solid rgba(255,255,255,.07);overflow-x:auto;scrollbar-width:none}
-  nav::-webkit-scrollbar{display:none}
-  .marca{display:flex;align-items:center;gap:8px;font-weight:700;color:#fde68a;
-    text-decoration:none;white-space:nowrap;margin-right:10px;font-size:.95rem}
-  .marca i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff7d6,#f59e0b);
-    box-shadow:0 0 8px rgba(252,211,77,.8);display:inline-block}
-  nav a.llink{color:#9aa5b5;text-decoration:none;font-size:.88rem;padding:7px 13px;border-radius:999px;
-    white-space:nowrap;transition:color .3s,background .3s}
-  nav a.llink:hover{color:#e8ecf4;background:rgba(255,255,255,.06)}
-  nav a.llink.actiu{color:#fde68a;background:rgba(252,211,77,.1)}
-  #btn-menu{display:none;margin-left:auto;width:40px;height:40px;border-radius:10px;flex-shrink:0;
-    border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#e8ecf4;
-    cursor:pointer;font-size:1.15rem;align-items:center;justify-content:center}
-  @media(max-width:860px){
-    #btn-menu{display:flex}
-    nav{flex-wrap:wrap}
-    nav .llink{display:none;width:100%;text-align:center;margin:3px 0;padding:10px}
-    nav.obert .llink{display:block}
-  }
-
-  /* ---------- HEADER ---------- */
-  header{text-align:center;padding:120px 20px 60px}
-  .sol-wrap{position:relative;width:150px;height:150px;margin:0 auto 42px;cursor:pointer;transition:transform .2s}
+  /* ========== MENÚ PRINCIPAL ========== */
+  .menu-header{text-align:center;padding:60px 20px 30px}
+  .sol-wrap{position:relative;width:130px;height:130px;margin:0 auto 26px;cursor:pointer;transition:transform .2s}
   .sol-wrap:active{transform:scale(.94)}
   .sol-wrap canvas{width:100%;height:100%;display:block;position:relative;z-index:1;border-radius:50%}
   .corona{position:absolute;inset:-55%;z-index:0;border-radius:50%;
     background:radial-gradient(circle, rgba(255,150,50,.26) 0%, rgba(255,110,20,.09) 42%, transparent 68%);
     animation:pols 9s ease-in-out infinite}
   @keyframes pols{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.05);opacity:1}}
-  h1{font-size:clamp(2rem,5.5vw,3.6rem);color:#f4f6fb;letter-spacing:.02em;margin-bottom:14px;font-weight:700}
-  .subtitol{color:#9aa5b5;font-size:1.05rem;max-width:520px;margin:0 auto;line-height:1.65}
-  .fila-capsalera{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px}
-  .boto{display:inline-block;padding:13px 28px;border-radius:999px;cursor:pointer;
-    color:#fcd34d;text-decoration:none;font-weight:500;font-size:.95rem;font-family:inherit;
-    border:1px solid rgba(252,211,77,.35);background:rgba(252,211,77,.05);
-    transition:background .3s,border-color .3s}
-  .boto:hover{background:rgba(252,211,77,.12);border-color:rgba(252,211,77,.55)}
-  .pill{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border-radius:999px;cursor:pointer;
-    text-decoration:none;font-weight:500;font-size:.95rem;color:#e8ecf4;font-family:inherit;
-    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.04);
-    transition:border-color .3s,background .3s,box-shadow .3s}
-  .pill svg{width:16px;height:16px;fill:#e8ecf4;transition:fill .3s}
-  .pill:hover{background:rgba(255,255,255,.08)}
-  .pill.tiktok:hover{border-color:rgba(254,44,85,.65);background:rgba(254,44,85,.07);box-shadow:0 0 24px rgba(254,44,85,.18)}
-  .pill.tiktok:hover svg{fill:#fe2c55}
-  .pill.animacio:hover{border-color:rgba(96,165,250,.65);background:rgba(96,165,250,.07);box-shadow:0 0 24px rgba(96,165,250,.2)}
+  h1.title{font-size:clamp(1.8rem,5vw,2.8rem);color:#f4f6fb;letter-spacing:.02em;margin-bottom:10px;font-weight:700}
+  .subtitol{color:#9aa5b5;font-size:1rem;max-width:520px;margin:0 auto;line-height:1.6}
 
-  /* ---------- GRAELLA ---------- */
-  .graella{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:40px;max-width:1080px;margin-left:auto;margin-right:auto}
-  .nav-card{position:relative;background:rgba(255,255,255,.04);border-radius:22px;padding:28px 24px 26px;
+  .graella{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;
+    max-width:1000px;margin:40px auto 80px;padding:0 20px}
+
+  .nav-card{position:relative;background:rgba(255,255,255,.04);border-radius:22px;padding:24px 22px 22px;
     cursor:pointer;transition:all .5s cubic-bezier(.16,1,.3,1);text-align:left;overflow:hidden;
     backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07)}
   .nav-card .card-glow{position:absolute;inset:0;border-radius:22px;opacity:0;transition:opacity .5s;pointer-events:none;
     background:radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%),
       var(--glow-color,rgba(37,99,235,.15)), transparent 50%)}
   .nav-card:hover .card-glow{opacity:1}
-  .nav-card:hover{transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-10px) scale(1.03);
-    opacity:1;border-color:rgba(252,211,77,.35);box-shadow:0 18px 50px -8px rgba(0,0,0,.5)}
-  .nav-card:active{transform:perspective(800px) scale(.97)!important;transition-duration:.1s}
+  .nav-card:hover{transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-8px) scale(1.03);
+    border-color:rgba(252,211,77,.35);box-shadow:0 18px 50px -8px rgba(0,0,0,.5)}
+  .nav-card:active{transform:perspective(800px) scale(.97)!important}
   .nav-card .card-inner{position:relative;z-index:3}
-  .icon-circle{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;
-    margin-bottom:16px;font-size:24px;transition:all .5s cubic-bezier(.34,1.56,.64,1)}
-  .nav-card:hover .icon-circle{transform:scale(1.2) rotate(-10deg)}
+  .icon-circle{width:50px;height:50px;border-radius:15px;display:flex;align-items:center;justify-content:center;
+    margin-bottom:14px;font-size:23px;transition:all .5s cubic-bezier(.34,1.56,.64,1)}
+  .nav-card:hover .icon-circle{transform:scale(1.18) rotate(-8deg)}
   .icon-circle.blue{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);color:#3b82f6}
   .icon-circle.orange{background:rgba(234,88,12,.1);border:1px solid rgba(234,88,12,.25);color:#f97316}
   .icon-circle.green{background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.25);color:#10b981}
@@ -117,122 +62,33 @@
   .icon-circle.cyan{background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);color:#22d3ee}
   .icon-circle.amber{background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.25);color:#f59e0b}
   .icon-circle.rose{background:rgba(225,29,72,.1);border:1px solid rgba(225,29,72,.25);color:#f43f5e}
-  .nav-card h2{font-size:17px;font-weight:700;margin-bottom:5px;color:#f4f6fb}
-  .nav-card p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.5;transition:color .3s}
-  .nav-card:hover p{color:rgba(255,255,255,.82)}
-  .nav-card .arrow{position:absolute;bottom:22px;right:20px;color:rgba(255,255,255,.5);
+  .nav-card h2{font-size:16px;font-weight:700;margin-bottom:4px;color:#f4f6fb}
+  .nav-card p{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5}
+  .nav-card .arrow{position:absolute;bottom:18px;right:18px;color:rgba(255,255,255,.5);
     transition:all .5s cubic-bezier(.34,1.56,.64,1);opacity:0;transform:translateX(-12px);z-index:4}
   .nav-card:hover .arrow{opacity:1;transform:translateX(0)}
 
-  /* ---------- MODAL ---------- */
-  #modalOverlay{position:fixed;inset:0;z-index:99999;background:rgba(2,3,10,.8);backdrop-filter:blur(10px);
-    display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s}
-  #modalOverlay.active{display:flex;opacity:1}
-  .modal-content{background:#0d1119;border:1px solid rgba(255,255,255,.12);border-radius:20px;
-    padding:30px;max-width:480px;width:100%;text-align:center;position:relative;
-    transform:scale(.9);transition:transform .3s}
-  #modalOverlay.active .modal-content{transform:scale(1)}
-  .modal-content h3{color:#fde68a;font-size:1.5rem;margin-bottom:10px}
-  .modal-content p{color:#c3ccd9;font-size:.95rem;line-height:1.6;margin-bottom:22px}
-  .modal-content .btn{display:inline-block;padding:12px 28px;border-radius:999px;
-    background:#fcd34d;color:#0a0c12;font-weight:700;text-decoration:none;transition:filter .2s, transform .2s}
-  .modal-content .btn:hover{filter:brightness(1.1);transform:translateY(-2px)}
-  .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;
-    color:#9aa5b5;font-size:1.3rem;cursor:pointer;padding:4px 8px;border-radius:8px;transition:color .2s}
-  .modal-close:hover{color:#f87171}
+  /* ========== VISTES INTERNES ========== */
+  .view-header{display:flex;align-items:center;gap:14px;padding:20px 24px;
+    background:rgba(4,6,12,.72);backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;z-index:100}
+  .btn-back{padding:9px 16px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:.85rem;
+    font-weight:600;color:#e8ecf4;border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.05);transition:all .3s;display:flex;align-items:center;gap:6px}
+  .btn-back:hover{color:#fde68a;border-color:rgba(252,211,77,.5);background:rgba(252,211,77,.08)}
+  .view-header h2{font-size:1.15rem;color:#f4f6fb;font-weight:700}
 
-  /* ---------- SECCIONS ---------- */
-  .seccio{max-width:1080px;margin:0 auto;padding:70px 20px;text-align:center;
-    opacity:0;transform:translateY(20px);transition:opacity .8s,transform .8s}
-  .seccio.visible{opacity:1;transform:none}
-  h2{font-size:clamp(1.5rem,3.5vw,2rem);margin-bottom:10px;color:#f4f6fb}
-  .subtext{color:#9aa5b5;max-width:560px;margin:0 auto 40px;line-height:1.6}
+  .view-body{max-width:1080px;margin:0 auto;padding:40px 24px 80px}
 
-  .pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;text-align:left}
-  .pas{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:16px;
-    padding:22px 20px;transition:transform .3s,border-color .3s}
-  .pas:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.18)}
-  .pas .ico{font-size:1.7rem;margin-bottom:12px;display:block}
-  .pas h3{font-size:1rem;color:#f4f6fb;margin-bottom:8px}
-  .pas p{color:#8b95a7;font-size:.88rem;line-height:1.55}
-  .pas a{color:#fcd34d;text-decoration:none;font-size:.85rem;display:inline-block;margin-top:10px}
-  .pas a:hover{text-decoration:underline;text-underline-offset:3px}
-
-  .reixeta{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-  .targeta{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;overflow:hidden;transition:transform .3s,border-color .3s,box-shadow .3s;text-align:left}
-  .targeta:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.18)}
-  .targeta.destacada{border-color:#fcd34d!important;box-shadow:0 0 0 1px #fcd34d,0 0 40px rgba(252,211,77,.3)!important}
-  .targeta iframe{width:100%;aspect-ratio:16/9;border:0;display:block;background:#000}
-  .cos{padding:16px 18px}
-  .cap-cos{display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .cos h3{margin-bottom:6px;font-size:1.05rem;color:#e8ecf4}
-  .cos p{color:#8b95a7;font-size:.92rem;line-height:1.55}
-  .like-mini{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;
-    font-family:inherit;font-size:.82rem;color:#8b95a7;padding:4px 8px;border-radius:999px;
-    transition:background .2s;flex-shrink:0}
-  .like-mini svg{width:15px;height:15px;fill:#5c6678;transition:fill .2s,transform .2s}
-  .like-mini:hover{background:rgba(254,44,85,.1)}
-  .like-mini:hover svg{fill:#fe2c55}
-  .like-mini.actiu svg{fill:#fe2c55;transform:scale(1.2)}
-  .like-mini.actiu{color:#fe2c55}
-  .fila-extra{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-  .enllac-suau{background:none;border:none;cursor:pointer;font-family:inherit;color:#9aa5b5;
-    font-size:.9rem;text-decoration:underline;text-underline-offset:4px;transition:color .3s;padding:8px}
-  .enllac-suau:hover{color:#fde68a}
-
-  .marc-animacio{max-width:880px;margin:0 auto;border:1px solid rgba(255,255,255,.1);
-    border-radius:18px;overflow:hidden;aspect-ratio:16/9;background:#02030a;
-    box-shadow:0 20px 60px rgba(0,0,0,.5)}
-  .marc-animacio iframe{width:100%;height:100%;border:0;display:block}
-
-  .projecte-text{max-width:680px;margin:0 auto;text-align:left;color:#c3ccd9;line-height:1.75;font-size:.98rem}
-  .projecte-text p+p{margin-top:14px}
-  .linia-temps{max-width:680px;margin:44px auto 0;text-align:left;position:relative;padding-left:26px}
-  .linia-temps::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;
-    background:linear-gradient(#fcd34d,rgba(252,211,77,.1));border-radius:2px}
-  .fase{position:relative;padding:0 0 26px}
-  .fase:last-child{padding-bottom:0}
-  .fase::before{content:'';position:absolute;left:-25px;top:4px;width:12px;height:12px;border-radius:50%;
-    background:#fcd34d;box-shadow:0 0 10px rgba(252,211,77,.6)}
-  .fase h3{font-size:1rem;color:#f4f6fb;margin-bottom:4px}
-  .fase p{color:#8b95a7;font-size:.9rem;line-height:1.6}
-
-  .membres{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;max-width:820px;margin:0 auto}
-  .membre{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:16px;
-    padding:24px 16px;transition:transform .3s,border-color .3s}
-  .membre:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.18)}
-  .membre .emoji{font-size:2.1rem;display:block;margin-bottom:10px}
-  .membre strong{display:block;color:#f4f6fb;font-size:.98rem;margin-bottom:4px}
-  .membre span{color:#8b95a7;font-size:.85rem}
-
-  .faq{max-width:640px;margin:0 auto;text-align:left;display:flex;flex-direction:column;gap:10px}
-  .faq details{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
-    border-radius:12px;overflow:hidden}
-  .faq details[open]{border-color:rgba(252,211,77,.3)}
-  .faq summary{cursor:pointer;padding:15px 18px;font-weight:500;color:#e8ecf4;font-size:.95rem;
-    list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .faq summary::-webkit-details-marker{display:none}
-  .faq summary::after{content:'+';color:#fcd34d;font-size:1.2rem;font-weight:700;transition:transform .3s}
-  .faq details[open] summary::after{transform:rotate(45deg)}
-  .faq .resposta{padding:0 18px 16px;color:#9aa5b5;font-size:.9rem;line-height:1.65}
-
-  /* ---------- TIKTOK APP ---------- */
-  #tiktok-app{position:fixed;inset:0;z-index:1200;background:#02030a;display:none;height:100vh;height:100svh}
-  #tiktok-app.obert{display:block}
-  .titol-feed{position:absolute;top:16px;left:0;right:0;text-align:center;z-index:3;pointer-events:none;
-    font-weight:700;letter-spacing:.05em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.85)}
-  #tanca{position:absolute;top:14px;left:14px;z-index:4;width:40px;height:40px;border-radius:50%;
-    background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:1.05rem;
-    cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:background .3s}
-  #tanca:hover{background:rgba(255,255,255,.15)}
-  .feed{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
+  /* ========== TIKTOK ========== */
+  #view-tiktok .view-body{padding:0;max-width:none}
+  .feed{height:calc(100vh - 60px);overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
   .feed::-webkit-scrollbar{display:none}
   .slide{height:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;
     display:flex;align-items:center;justify-content:center}
   .video-box{position:relative;width:100%;height:100%;background:#000}
   @media(min-width:760px){
-    .video-box{height:min(92%,860px);width:auto;aspect-ratio:9/16;border-radius:18px;overflow:hidden;
+    .video-box{height:min(92%,calc(100vh - 100px));width:auto;aspect-ratio:9/16;border-radius:18px;overflow:hidden;
       box-shadow:0 0 80px rgba(0,0,0,.7)}
   }
   .video-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -260,20 +116,18 @@
   .mute{position:absolute;top:14px;right:14px;z-index:2;width:40px;height:40px;border-radius:50%;
     background:rgba(0,0,0,.45);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .mute svg{width:19px;height:19px;fill:#fff}
-  .etq-complet{position:absolute;top:14px;left:14px;z-index:2;padding:5px 12px;border-radius:999px;
-    font-size:.72rem;color:#0a0c12;background:rgba(252,211,77,.9);font-weight:700}
   .pista{position:absolute;bottom:14px;left:50%;z-index:2;color:#aab4c4;font-size:.8rem;
     animation:puja 1.6s ease-in-out infinite;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.8)}
   @keyframes puja{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-7px)}}
   .yt-error{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:30px;text-align:center;color:#9aa5b5;gap:12px}
+    padding:30px;text-align:center;color:#9aa5b5;gap:12px;z-index:5;background:rgba(0,0,0,.85)}
   .yt-error a{color:#fcd34d;text-decoration:underline;font-weight:600}
 
-  /* ---------- OPINIONS ---------- */
-  .nota-local{max-width:640px;margin:0 auto 18px;color:#7c8698;font-size:.82rem;
-    background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.12);border-radius:10px;padding:10px 14px}
-  .opinio-caixa{max-width:640px;margin:0 auto;background:rgba(255,255,255,.035);
-    border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:26px;text-align:left}
+  /* ========== OPINIONS ========== */
+  .nota-local{color:#7c8698;font-size:.82rem;background:rgba(255,255,255,.03);
+    border:1px dashed rgba(255,255,255,.12);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .opinio-caixa{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;padding:26px;text-align:left;margin-bottom:30px}
   .camp{margin-bottom:18px}
   .camp label{display:block;font-size:.85rem;color:#9aa5b5;margin-bottom:8px}
   .camp input,.camp textarea{width:100%;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12);
@@ -285,20 +139,19 @@
   .estrelles button{background:none;border:none;cursor:pointer;padding:2px}
   .estrelles svg{width:26px;height:26px;fill:#3a4356;transition:fill .15s,transform .15s}
   .estrelles button.encesa svg{fill:#fcd34d}
-  .estrelles button:hover svg{transform:scale(1.15)}
   .enviar{width:100%;padding:13px;border:none;border-radius:10px;cursor:pointer;
     font-family:inherit;font-weight:700;font-size:.95rem;color:#0a0c12;background:#fcd34d}
   .enviar:disabled{opacity:.55;cursor:wait}
-  .stats{color:#9aa5b5;font-size:.92rem;margin:26px 0 4px;display:flex;align-items:center;
+  .stats{color:#9aa5b5;font-size:.92rem;margin:20px 0 10px;display:flex;align-items:center;
     justify-content:center;gap:8px;flex-wrap:wrap}
   .stats svg{width:16px;height:16px;fill:#fcd34d}
   .ordre{display:flex;gap:8px;justify-content:center;margin:14px 0 20px}
   .ordre button{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#9aa5b5;
     border-radius:999px;padding:7px 18px;cursor:pointer;font-family:inherit;font-size:.82rem}
   .ordre button.actiu{background:rgba(252,211,77,.12);border-color:rgba(252,211,77,.5);color:#fde68a}
-  .llista-opinions{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+  .llista-opinions{display:flex;flex-direction:column;gap:14px}
   .opinio-card{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;padding:16px 18px;text-align:left;display:flex;gap:14px;position:relative;animation:apareix .4s}
+    border-radius:14px;padding:16px 18px;display:flex;gap:14px;position:relative;animation:apareix .4s}
   @keyframes apareix{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
   .avatar{flex-shrink:0;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;
     justify-content:center;font-weight:700;color:#fff}
@@ -310,290 +163,237 @@
   .mini-estrelles svg{width:13px;height:13px;fill:#fcd34d}
   .mini-estrelles svg.buida{fill:#3a4356}
   .opinio-contingut p{color:#c3ccd9;font-size:.92rem;line-height:1.55;margin-top:5px;word-wrap:break-word}
-  .esborra{position:absolute;top:8px;right:10px;background:none;border:none;color:#5c6678;cursor:pointer;font-size:.85rem}
-  .esborra:hover{color:#f87171}
   .buit{color:#7c8698;font-size:.92rem;padding:18px;text-align:center;
     border:1px dashed rgba(255,255,255,.12);border-radius:14px}
 
-  .admin-bar{max-width:640px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;
-    gap:10px;flex-wrap:wrap;background:rgba(252,211,77,.07);border:1px solid rgba(252,211,77,.35);
-    border-radius:12px;padding:12px 16px;text-align:left}
-  .admin-bar span{color:#fde68a;font-weight:700;font-size:.9rem}
-  .admin-accions{display:flex;gap:8px}
-  .btn-admin{padding:8px 14px;border-radius:999px;cursor:pointer;font-family:inherit;font-size:.82rem;
-    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#e8ecf4}
-  .btn-admin.pelic{border-color:rgba(248,113,113,.5);color:#fca5a5}
-  .modal-fons{position:fixed;inset:0;z-index:2000;background:rgba(2,3,10,.75);backdrop-filter:blur(6px);
-    display:none;align-items:center;justify-content:center;padding:20px}
-  .modal-fons.obert{display:flex}
-  .modal{width:100%;max-width:380px;background:#0d1119;border:1px solid rgba(255,255,255,.12);
-    border-radius:18px;padding:28px;text-align:center;animation:apareix .3s}
-  .modal h3{color:#f4f6fb;margin-bottom:6px}
-  .modal p{color:#9aa5b5;font-size:.88rem;margin-bottom:18px;line-height:1.5}
-  .modal input{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.15);border-radius:10px;
-    padding:12px 14px;color:#e8ecf4;font-family:inherit;font-size:.95rem;outline:none;text-align:center}
-  .modal .error{color:#f87171;font-size:.85rem;margin-top:10px;min-height:1.2em}
-  .modal-botons{display:flex;gap:10px;margin-top:16px}
-  .btn-modal{flex:1;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;
-    font-weight:700;font-size:.92rem}
-  .btn-modal.primari{background:#fcd34d;color:#0a0c12}
-  .btn-modal.secundari{background:transparent;color:#9aa5b5;border:1px solid rgba(255,255,255,.15)}
-  .modal.shake{animation:shake .4s}
-  @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+  /* ========== ANIMACIÓ / IFRAME ========== */
+  #view-animacio .view-body{padding:0;max-width:none}
+  #view-animacio iframe{width:100%;height:calc(100vh - 60px);border:0;display:block;background:#02030a}
 
-  #btn-opinio{position:fixed;bottom:22px;right:22px;z-index:950;padding:12px 20px;border-radius:999px;
-    cursor:pointer;font-family:inherit;font-size:.92rem;font-weight:500;color:#dfe5ee;
-    background:rgba(14,17,26,.78);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px)}
-  #btn-opinio:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
-  #btn-amunt{position:fixed;bottom:22px;left:22px;z-index:950;width:44px;height:44px;
-    border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(14,17,26,.78);
-    color:#dfe5ee;cursor:pointer;font-size:1.05rem;backdrop-filter:blur(8px);
-    opacity:0;pointer-events:none;transition:opacity .3s}
-  #btn-amunt.visible{opacity:1;pointer-events:auto}
-  #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(15px);z-index:2500;
+  /* ========== PROJECTE / EQUIP / PREGUNTES ========== */
+  .contingut-text{max-width:680px;margin:0 auto;color:#c3ccd9;line-height:1.75;font-size:.98rem}
+  .contingut-text p+p{margin-top:14px}
+  .membres{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;max-width:820px;margin:0 auto}
+  .membre{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:16px;
+    padding:24px 16px;text-align:center}
+  .membre .emoji{font-size:2.1rem;display:block;margin-bottom:10px}
+  .membre strong{display:block;color:#f4f6fb;font-size:.98rem;margin-bottom:4px}
+  .membre span{color:#8b95a7;font-size:.85rem}
+  .faq{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+  .faq details{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);
+    border-radius:12px;overflow:hidden}
+  .faq details[open]{border-color:rgba(252,211,77,.3)}
+  .faq summary{cursor:pointer;padding:15px 18px;font-weight:500;color:#e8ecf4;font-size:.95rem;
+    list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:'+';color:#fcd34d;font-size:1.2rem;font-weight:700}
+  .faq details[open] summary::after{content:'−'}
+  .faq .resposta{padding:0 18px 16px;color:#9aa5b5;font-size:.9rem;line-height:1.65}
+
+  /* ========== MODAL ========== */
+  #modalOverlay{position:fixed;inset:0;z-index:99999;background:rgba(2,3,10,.8);backdrop-filter:blur(10px);
+    display:none;align-items:center;justify-content:center;padding:20px}
+  #modalOverlay.active{display:flex}
+  .modal-content{background:#0d1119;border:1px solid rgba(255,255,255,.12);border-radius:20px;
+    padding:30px;max-width:480px;width:100%;text-align:center;position:relative}
+  .modal-content h3{color:#fde68a;font-size:1.4rem;margin-bottom:10px}
+  .modal-content p{color:#c3ccd9;font-size:.95rem;line-height:1.6;margin-bottom:22px}
+  .modal-content .btn{display:inline-block;padding:12px 28px;border-radius:999px;
+    background:#fcd34d;color:#0a0c12;font-weight:700;text-decoration:none}
+  .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;
+    color:#9aa5b5;font-size:1.3rem;cursor:pointer;padding:4px 8px;border-radius:8px}
+  .modal-close:hover{color:#f87171}
+
+  /* ========== SPARKLE ========== */
+  .sparkle-trail{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;animation:sparkleFade 1s ease-out forwards}
+  @keyframes sparkleFade{0%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
+
+  /* ========== TOAST ========== */
+  #toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(15px);z-index:2500;
     background:rgba(14,17,26,.92);border:1px solid rgba(255,255,255,.15);color:#e8ecf4;
     padding:11px 20px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;
     transition:opacity .3s,transform .3s;backdrop-filter:blur(8px);max-width:90vw;text-align:center}
   #toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  .sparkle-trail{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;animation:sparkleFade 1s ease-out forwards}
-  @keyframes sparkleFade{0%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
-
   @media(max-width:640px){
-    header{padding:80px 16px 30px}
-    .sol-wrap{width:110px;height:110px;margin-bottom:20px}
-    .graella{grid-template-columns:1fr 1fr;gap:10px}
-    .nav-card{padding:18px 14px 18px;border-radius:18px}
+    .menu-header{padding:40px 16px 20px}
+    .sol-wrap{width:100px;height:100px;margin-bottom:18px}
+    .graella{grid-template-columns:1fr 1fr;gap:10px;margin:20px auto 40px;padding:0 14px}
+    .nav-card{padding:16px 14px;border-radius:18px}
     .icon-circle{width:42px;height:42px;font-size:20px;border-radius:12px;margin-bottom:12px}
     .nav-card h2{font-size:14px}
     .nav-card p{font-size:11px}
     .nav-card .arrow{display:none}
-    #intro-entrar{padding:13px 28px;font-size:.95rem;bottom:7%}
-    #btn-opinio{bottom:16px;right:16px;font-size:.85rem;padding:11px 16px}
-    #btn-amunt{left:16px;bottom:16px}
+    .view-body{padding:24px 16px 60px}
+    .view-header{padding:14px 16px}
+    .view-header h2{font-size:1rem}
   }
 </style>
 </head>
 <body>
 
 <canvas id="estrelles"></canvas>
-<canvas id="confeti"></canvas>
 <div class="nebulosa"></div>
 <div class="vialactia"></div>
-<div id="progres"></div>
 
-<!-- INTRO -->
-<div id="intro">
-  <iframe id="intro-frame" title="Intro" src="animacio.html"></iframe>
-  <button id="intro-entrar" hidden>Entrar a la web ✨</button>
-  <button id="intro-saltar">Saltar ▸</button>
+<!-- ============ VISTA 1: MENÚ PRINCIPAL ============ -->
+<div id="view-menu" class="view active">
+  <div class="menu-header">
+    <div class="sol-wrap" id="sol-wrap" title="Clica'm! ☀️">
+      <div class="corona"></div>
+      <canvas id="sol"></canvas>
+    </div>
+    <h1 class="title">Menú de Tecnologia</h1>
+    <p class="subtitol">Tria una activitat. Cada botó obre la seva pàgina.</p>
+  </div>
+  <div class="graella" id="graella"></div>
 </div>
 
-<!-- NAV -->
-<nav id="nav-principal">
-  <a class="marca" href="#inici"><i></i>Menú de Tecnologia</a>
-  <button id="btn-menu" aria-label="Menú">☰</button>
-  <a class="llink" href="#inici">Inici</a>
-  <a class="llink" href="#com-funciona">Com funciona</a>
-  <a class="llink" href="#videos">Vídeos</a>
-  <a class="llink" href="#animacio">Animació</a>
-  <a class="llink" href="#projecte">El projecte</a>
-  <a class="llink" href="#equip">L'equip</a>
-  <a class="llink" href="#preguntes">Preguntes</a>
-  <a class="llink" href="#opinio">Opinions</a>
-</nav>
-
-<!-- HEADER -->
-<header id="inici">
-  <div class="sol-wrap" id="sol-wrap" title="☀️ Clica'm!">
-    <div class="corona"></div><canvas id="sol"></canvas>
-  </div>
-  <h1>Menú de Tecnologia</h1>
-  <p class="subtitol">Tria una activitat de teoria. Clica el sol per una sorpresa 🚀</p>
-
-  <div class="fila-capsalera">
-    <a href="#videos" class="boto">Veure els vídeos ↓</a>
-    <a class="pill animacio" href="#animacio">🌍 Rotació i translació</a>
-    <button class="pill tiktok" id="btn-tiktok">
-      <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-      El nostre TikTok
+<!-- ============ VISTA: TIKTOK ============ -->
+<div id="view-tiktok" class="view">
+  <div class="view-header">
+    <button class="btn-back" onclick="showView('menu')">
+      <iconify-icon icon="solar:arrow-left-linear" width="16"></iconify-icon> Tornar
     </button>
-    <button class="pill" id="btn-compartir">
-      <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
-      Comparteix
-    </button>
+    <h2>TikTok Propi</h2>
   </div>
-
-  <div class="graella" id="graella"></div>
-</header>
-
-<!-- COM FUNCIONA -->
-<section id="com-funciona" class="seccio">
-  <h2>Com funciona aquesta web</h2>
-  <p class="subtext">Guia ràpida perquè sàpigues què pots fer aquí.</p>
-  <div class="pasos">
-    <div class="pas"><span class="ico">🎬</span><h3>1. Mira els vídeos</h3><p>Galeria amb tots els vídeos. Pots donar ❤️ als que més t'agradin.</p><a href="#videos">Anar als vídeos →</a></div>
-    <div class="pas"><span class="ico">🌍</span><h3>2. Animació 3D</h3><p>Escena 3D LEGO: la Terra gira i orbita el Sol.</p><a href="#animacio">Veure l'animació →</a></div>
-    <div class="pas"><span class="ico">📱</span><h3>3. Mode TikTok</h3><p>Feed vertical: llisca per passar de vídeo.</p><a href="#videos">Provar-ho →</a></div>
-    <div class="pas"><span class="ico">⭐</span><h3>4. Valora el projecte</h3><p>De 0 a 5 estrelles. La mitjana es mostra al mur.</p><a href="#opinio">Valorar →</a></div>
-  </div>
-</section>
-
-<!-- VÍDEOS -->
-<section id="videos" class="seccio">
-  <h2>Els nostres vídeos</h2>
-  <p class="subtext">Fes clic a qualsevol vídeo per veure'l.</p>
-  <div class="reixeta" id="galeria"></div>
-  <div class="fila-extra">
-    <button class="enllac-suau" id="btn-sorpresa">🎲 Sorpresa: un vídeo a l'atzar</button>
-    <button class="enllac-suau" id="btn-vertical">o mira'ls en format vertical, estil TikTok →</button>
-  </div>
-</section>
-
-<!-- ANIMACIÓ -->
-<section id="animacio" class="seccio">
-  <h2>Rotació i translació</h2>
-  <p class="subtext">L'escena es construeix sola amb peces tipus LEGO.</p>
-  <div class="marc-animacio">
-    <iframe src="animacio.html" title="Animació 3D" loading="lazy"></iframe>
-  </div>
-  <div class="fila-extra"><a class="enllac-suau" href="animacio.html" target="_blank" rel="noopener">obre-la a pantalla completa ↗</a></div>
-</section>
-
-<!-- PROJECTE -->
-<section id="projecte" class="seccio">
-  <h2>Sobre el projecte</h2>
-  <p class="subtext">Què és tot això? Aquí t'ho expliquem.</p>
-  <div class="projecte-text">
-    <p>Aquest projecte ha nascut a l'aula de <strong>2n d'ESO</strong> amb una idea senzilla: explicar alguna cosa que ens importa a través de vídeos curts, fets per nosaltres de principi a fi.</p>
-    <p>Hem treballat la idea, el guió, el rodatge i l'edició. I perquè tothom ho pugui veure i dir-nos què en pensa, hem construït aquesta pàgina web: els vídeos, un canal estil TikTok, una animació 3D de la Terra i un mur d'opinions obert a tothom.</p>
-  </div>
-  <div class="linia-temps">
-    <div class="fase"><h3>💡 La idea</h3><p>Vam fer pluja d'idees a classe i vam triar el tema del projecte.</p></div>
-    <div class="fase"><h3>🎥 El rodatge</h3><p>Vam escriure els guions i vam gravar els vídeos entre tots.</p></div>
-    <div class="fase"><h3>✂️ L'edició</h3><p>Vam muntar els clips, posar-hi música i retallar el que sobrava.</p></div>
-    <div class="fase"><h3>🌐 La web</h3><p>Vam crear aquesta pàgina per compartir-ho tot i recollir les vostres opinions.</p></div>
-  </div>
-</section>
-
-<!-- EQUIP -->
-<section id="equip" class="seccio">
-  <h2>L'equip</h2>
-  <p class="subtext">Les persones que hem fet aquest projecte possible.</p>
-  <div class="membres" id="membres"></div>
-</section>
-
-<!-- PREGUNTES -->
-<section id="preguntes" class="seccio">
-  <h2>Preguntes freqüents</h2>
-  <p class="subtext">El que la gent sol preguntar-nos.</p>
-  <div class="faq">
-    <details><summary>He de crear un compte per opinar?</summary><div class="resposta">No! Només cal escriure el teu comentari i enviar-lo. El nom és opcional.</div></details>
-    <details><summary>On es guarden les opinions?</summary><div class="resposta">En un magatzem en línia gratuït. Cada opinió queda publicada al mur.</div></details>
-    <details><summary>Com comparteixo la web?</summary><div class="resposta">Amb el botó "Comparteix" de dalt.</div></details>
-    <details><summary>Funciona bé al mòbil?</summary><div class="resposta">Sí! La web està adaptada a mòbils i tauletes.</div></details>
-    <details><summary>Què passa si clico el sol?</summary><div class="resposta">Prova-ho i descobreix-ho... ☀️🚀</div></details>
-  </div>
-</section>
-
-<!-- TIKTOK APP -->
-<div id="tiktok-app">
-  <button id="tanca" aria-label="Tancar">✕</button>
-  <div class="titol-feed">Per a tu</div>
   <div class="feed" id="feed"></div>
 </div>
 
-<!-- OPINIONS -->
-<section id="opinio" class="seccio">
-  <h2>Dóna'ns la teva opinió</h2>
-  <p class="subtext">Valora el projecte amb les estrelles i deixa un comentari.</p>
-  <div class="nota-local" id="nota-local" hidden>ℹ️ Mode local: el mur públic encara no té l'URL configurat al codi.</div>
-  <div class="opinio-caixa">
-    <form id="form-opinio">
-      <input type="text" id="web" name="web" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-      <div class="camp"><label for="nom">Nom <span style="color:#5c6678">(opcional)</span></label><input id="nom" type="text" maxlength="40" placeholder="Com et dius?"></div>
-      <div class="camp"><label>Puntuació</label><div class="estrelles" id="selector-estrelles"></div></div>
-      <div class="camp"><label for="text">La teva opinió</label><textarea id="text" maxlength="500" placeholder="Què t'ha semblat el projecte?" required></textarea><div class="comptador"><span id="compta">0</span> / 500</div></div>
-      <button type="submit" class="enviar" id="btn-enviar">Enviar opinió</button>
-    </form>
+<!-- ============ VISTA: OPINIONS ============ -->
+<div id="view-opinions" class="view">
+  <div class="view-header">
+    <button class="btn-back" onclick="showView('menu')">
+      <iconify-icon icon="solar:arrow-left-linear" width="16"></iconify-icon> Tornar
+    </button>
+    <h2>Opinions</h2>
   </div>
-  <div class="stats" id="stats" hidden></div>
-  <div class="ordre" id="ordre" hidden><button class="actiu" data-o="recents">Recents</button><button data-o="millors">Millor valorades</button></div>
-  <div class="admin-bar" id="admin-bar" hidden><span>👑 Mode admin actiu</span><div class="admin-accions"><button class="btn-admin pelic" id="btn-buidar">Buidar-ho tot</button><button class="btn-admin" id="btn-sortir">Tancar sessió</button></div></div>
-  <div class="llista-opinions" id="llista-opinions"></div>
-</section>
-
-<!-- ADMIN MODAL -->
-<div class="modal-fons" id="admin-modal">
-  <div class="modal" id="admin-card">
-    <h3>👑 Accés d'administració</h3>
-    <p>Introdueix la contrasenya per gestionar les opinions.</p>
-    <input type="password" id="admin-contra" placeholder="Contrasenya" autocomplete="off">
-    <div class="error" id="admin-error"></div>
-    <div class="modal-botons"><button class="btn-modal secundari" id="admin-cancel">Cancel·la</button><button class="btn-modal primari" id="admin-entra">Entrar</button></div>
+  <div class="view-body">
+    <div class="nota-local" id="nota-local" hidden>ℹ️ Mode local: les opinions només es veuran en aquest navegador.</div>
+    <div class="opinio-caixa">
+      <form id="form-opinio">
+        <input type="text" id="web" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+        <div class="camp">
+          <label for="nom">Nom <span style="color:#5c6678">(opcional)</span></label>
+          <input id="nom" type="text" maxlength="40" placeholder="Com et dius?">
+        </div>
+        <div class="camp">
+          <label>Puntuació</label>
+          <div class="estrelles" id="selector-estrelles"></div>
+        </div>
+        <div class="camp">
+          <label for="text">La teva opinió</label>
+          <textarea id="text" maxlength="500" placeholder="Què t'ha semblat?" required></textarea>
+          <div class="comptador"><span id="compta">0</span> / 500</div>
+        </div>
+        <button type="submit" class="enviar" id="btn-enviar">Enviar opinió</button>
+      </form>
+    </div>
+    <div class="stats" id="stats" hidden></div>
+    <div class="ordre" id="ordre" hidden>
+      <button class="actiu" data-o="recents">Recents</button>
+      <button data-o="millors">Millor valorades</button>
+    </div>
+    <div class="llista-opinions" id="llista-opinions"></div>
   </div>
 </div>
 
-<!-- TARGETA MODAL -->
+<!-- ============ VISTA: ANIMACIÓ ============ -->
+<div id="view-animacio" class="view">
+  <div class="view-header">
+    <button class="btn-back" onclick="showView('menu')">
+      <iconify-icon icon="solar:arrow-left-linear" width="16"></iconify-icon> Tornar
+    </button>
+    <h2>Rotació i translació</h2>
+  </div>
+  <iframe id="animacioFrame" src="about:blank" title="Animació 3D"></iframe>
+</div>
+
+<!-- ============ VISTA: PROJECTE ============ -->
+<div id="view-projecte" class="view">
+  <div class="view-header">
+    <button class="btn-back" onclick="showView('menu')">
+      <iconify-icon icon="solar:arrow-left-linear" width="16"></iconify-icon> Tornar
+    </button>
+    <h2>Sobre el projecte</h2>
+  </div>
+  <div class="view-body">
+    <div class="contingut-text">
+      <p>Aquest projecte ha nascut a l'aula de <strong>2n d'ESO</strong> amb una idea senzilla: explicar alguna cosa que ens importa a través de vídeos curts, fets per nosaltres de principi a fi.</p>
+      <p>Hem treballat la idea, el guió, el rodatge i l'edició. I perquè tothom ho pugui veure, hem construït aquesta pàgina web.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ VISTA: EQUIP ============ -->
+<div id="view-equip" class="view">
+  <div class="view-header">
+    <button class="btn-back" onclick="showView('menu')">
+      <iconify-icon icon="solar:arrow-left-linear" width="16"></iconify-icon> Tornar
+    </button>
+    <h2>L'equip</h2>
+  </div>
+  <div class="view-body">
+    <div class="membres" id="membres"></div>
+  </div>
+</div>
+
+<!-- ============ VISTA: PREGUNTES ============ -->
+<div id="view-preguntes" class="view">
+  <div class="view-header">
+    <button class="btn-back" onclick="showView('menu')">
+      <iconify-icon icon="solar:arrow-left-linear" width="16"></iconify-icon> Tornar
+    </button>
+    <h2>Preguntes freqüents</h2>
+  </div>
+  <div class="view-body">
+    <div class="faq">
+      <details><summary>He de crear un compte per opinar?</summary><div class="resposta">No! Només cal escriure el comentari i enviar-lo.</div></details>
+      <details><summary>On es guarden les opinions?</summary><div class="resposta">En un magatzem en línia o al teu navegador.</div></details>
+      <details><summary>Funciona al mòbil?</summary><div class="resposta">Sí, està adaptat a mòbils i tauletes.</div></details>
+      <details><summary>Què passa si clico el sol?</summary><div class="resposta">Prova-ho i descobreix-ho... ☀️🚀</div></details>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL ============ -->
 <div id="modalOverlay">
   <div class="modal-content">
     <button class="modal-close" id="modalClose">✕</button>
     <h3 id="modalTitle"></h3>
     <p id="modalDesc"></p>
-    <a class="btn" id="modalLink" href="#">Anar a la pàgina →</a>
+    <a class="btn" id="modalLink" href="#" style="display:none">Anar →</a>
   </div>
 </div>
 
-<button id="btn-opinio">Dóna'ns la teva opinió</button>
-<button id="btn-amunt" aria-label="Tornar a dalt">↑</button>
 <div id="toast"></div>
 
 <script>
-/* ================== CONFIG ================== */
-const BLOB_URL = '';
-const CONTRA_ADMIN = '2ESOA';
-const REDUIT = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const RATOLI_FI = matchMedia('(pointer: fine)').matches;
-
-/* ================== YOUTUBE API READY ================== */
+/* ================== YOUTUBE API ================== */
 let ytReady = false;
-window.onYouTubeIframeAPIReady = () => { ytReady = true; console.log('YouTube API llesta'); };
+window.onYouTubeIframeAPIReady = () => { ytReady = true; };
 
-/* ================== INTRO ================== */
-const introEl = document.getElementById('intro');
-const introFrame = document.getElementById('intro-frame');
-const btnIntroEntrar = document.getElementById('intro-entrar');
-const btnIntroSaltar = document.getElementById('intro-saltar');
-let introAcabada = false;
-
-function tancaIntro(){
-  if (introAcabada) return;
-  introAcabada = true;
-  sessionStorage.setItem('intro_vista','1');
-  introEl.classList.add('marxant');
-  setTimeout(()=> introEl.style.display = 'none', 750);
-  document.body.style.overflow = '';
+/* ================== VISTES ================== */
+function showView(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const el = document.getElementById('view-' + id);
+  if (!el) return;
+  el.classList.add('active');
+  location.hash = id;
+  window.scrollTo(0, 0);
+  // Lazy-load contingut
+  if (id === 'tiktok') buildTikTok();
+  if (id === 'animacio'){
+    const frame = document.getElementById('animacioFrame');
+    if (frame.src === 'about:blank' || !frame.src.includes('animacio.html')){
+      frame.src = 'animacio.html';
+    }
+  }
 }
-btnIntroEntrar.onclick = tancaIntro;
-btnIntroSaltar.onclick = tancaIntro;
-
-window.addEventListener('message', e => {
-  if (e.data && e.data.tipus === 'animacio-llest') btnIntroEntrar.hidden = false;
+window.addEventListener('hashchange', () => {
+  const id = location.hash.slice(1) || 'menu';
+  if (document.getElementById('view-' + id)) showView(id);
 });
-
-const calIntro = !REDUIT && !sessionStorage.getItem('intro_vista') && !location.hash.startsWith('#admin') && !location.hash.startsWith('#tiktok-');
-if (calIntro){
-  document.body.style.overflow = 'hidden';
-  introFrame.src = 'animacio.html';
-  setTimeout(()=>{ btnIntroEntrar.hidden = false; }, 5000);
-} else {
-  introEl.style.display = 'none';
-}
-
-/* ================== NAV MÒBIL ================== */
-const navEl = document.getElementById('nav-principal');
-document.getElementById('btn-menu').onclick = () => navEl.classList.toggle('obert');
-document.querySelectorAll('nav a.llink').forEach(a => a.addEventListener('click', () => navEl.classList.remove('obert')));
 
 /* ================== SOL ================== */
 const sol = document.getElementById('sol');
@@ -614,7 +414,7 @@ function val(x, y){
   return a + (b-a)*u + (c-a)*v + (a-b-c+d)*u*v;
 }
 function fbm(x, y){ return 0.5*val(x,y) + 0.25*val(x*2,y*2) + 0.125*val(x*4,y*4) + 0.0625*val(x*8,y*8); }
-let ultim = 0;
+let ultimSol = 0;
 function pintaSol(t){
   const img = sctx.createImageData(S, S);
   const d = img.data;
@@ -633,7 +433,7 @@ function pintaSol(t){
   }
   sctx.putImageData(img, 0, 0);
 }
-function bucleSol(ts){ if (ts - ultim > 80){ ultim = ts; pintaSol(ts * 0.00006); } requestAnimationFrame(bucleSol); }
+function bucleSol(ts){ if (ts - ultimSol > 80){ ultimSol = ts; pintaSol(ts * 0.00006); } requestAnimationFrame(bucleSol); }
 requestAnimationFrame(bucleSol);
 
 /* ================== FAVICON ================== */
@@ -646,104 +446,58 @@ fx.fillStyle = '#fbbf24'; fx.beginPath(); fx.arc(32,32,14,0,7); fx.fill();
 const llink = document.createElement('link'); llink.rel = 'icon'; llink.href = fav.toDataURL();
 document.head.appendChild(llink);
 
-/* ================== ESTRELLES ================== */
+/* ================== ESTRELLES DE FONS ================== */
 const canvas = document.getElementById('estrelles');
 const ctx = canvas.getContext('2d');
-let cometes = [], pols = [];
+let cometes = [];
 function mida(){ canvas.width = innerWidth; canvas.height = innerHeight; }
 mida(); addEventListener('resize', mida);
-const tonalitats = ['255,255,255','255,255,255','255,255,255','205,218,255','255,228,196'];
 const estrelles = [];
-for (let i = 0; i < 260; i++) {
-  estrelles.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.2 + 0.25, fase: Math.random() * Math.PI * 2, vel: 0.004 + Math.random() * 0.012, color: tonalitats[Math.floor(Math.random() * tonalitats.length)] });
+for (let i = 0; i < 260; i++){
+  estrelles.push({ x: Math.random(), y: Math.random(), r: Math.random()*1.2+0.25,
+    fase: Math.random()*Math.PI*2, vel: 0.004+Math.random()*0.012,
+    color: ['255,255,255','255,255,255','255,255,255','205,218,255','255,228,196'][Math.floor(Math.random()*5)] });
 }
-
-let warpActiu = false, warpT0 = 0;
-function activaWarp(){ if (REDUIT || warpActiu) return; warpActiu = true; warpT0 = performance.now(); toast('🚀 Hipervelocitat!'); }
-document.getElementById('sol-wrap').onclick = activaWarp;
-
-const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let kIdx = 0;
-addEventListener('keydown', e => {
-  kIdx = (e.key === KONAMI[kIdx]) ? kIdx + 1 : (e.key === KONAMI[0] ? 1 : 0);
-  if (kIdx === KONAMI.length){ kIdx = 0; activaWarp(); }
-});
-
-let ultimRastre = 0;
-if (RATOLI_FI && !REDUIT){
-  addEventListener('mousemove', e => {
-    const ara = performance.now();
-    if (ara - ultimRastre < 28) return;
-    ultimRastre = ara;
-    pols.push({ x: e.clientX + (Math.random()-.5)*6, y: e.clientY + (Math.random()-.5)*6, vx: (Math.random()-.5)*.6, vy: -.3 - Math.random()*.5, vida: 1, r: .8 + Math.random()*1.4, color: Math.random() < .3 ? '252,211,77' : '255,255,255' });
-    if (pols.length > 90) pols.shift();
-  }, { passive: true });
-}
-
 function anima(){
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const w = canvas.width, h = canvas.height;
-  let wp = 0;
-  if (warpActiu){
-    const t = performance.now() - warpT0;
-    if (t < 500) wp = t / 500;
-    else if (t < 2300) wp = 1;
-    else if (t < 3300) wp = 1 - (t - 2300) / 1000;
-    else { warpActiu = false; wp = 0; }
-  }
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   for (const e of estrelles){
-    e.fase += e.vel * (1 + wp * 6);
-    const px = e.x * w, py = e.y * h;
-    const a = 0.2 + Math.abs(Math.sin(e.fase)) * 0.7;
-    if (wp > 0.02){
-      const dx = px - w/2, dy = py - h/2;
-      const dist = Math.hypot(dx, dy) || 1;
-      const len = wp * wp * (dist * 0.4 + 50);
-      const g2 = ctx.createLinearGradient(px, py, px + dx/dist*len, py + dy/dist*len);
-      g2.addColorStop(0, `rgba(${e.color},${a})`); g2.addColorStop(1, `rgba(${e.color},0)`);
-      ctx.strokeStyle = g2; ctx.lineWidth = e.r;
-      ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + dx/dist*len, py + dy/dist*len); ctx.stroke();
-    } else {
-      ctx.beginPath(); ctx.arc(px, py, e.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(${e.color},${a})`; ctx.fill();
-    }
+    e.fase += e.vel;
+    const a = 0.2 + Math.abs(Math.sin(e.fase))*0.7;
+    ctx.beginPath(); ctx.arc(e.x*canvas.width, e.y*canvas.height, e.r, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(${e.color},${a})`; ctx.fill();
   }
-  for (let i = pols.length - 1; i >= 0; i--){
-    const p = pols[i];
-    p.x += p.vx; p.y += p.vy; p.vida -= 0.025;
-    if (p.vida <= 0){ pols.splice(i, 1); continue; }
-    ctx.beginPath(); ctx.arc(p.x, p.y, p.r * p.vida, 0, Math.PI * 2); ctx.fillStyle = `rgba(${p.color},${p.vida * .8})`; ctx.fill();
-  }
-  for (let i = cometes.length - 1; i >= 0; i--){
+  for (let i = cometes.length-1; i >= 0; i--){
     const c = cometes[i];
     c.x += c.vx; c.y += c.vy; c.vida -= 0.01;
-    if (c.vida <= 0){ cometes.splice(i, 1); continue; }
-    const g = ctx.createLinearGradient(c.x, c.y, c.x - c.vx*12, c.y - c.vy*12);
-    g.addColorStop(0, `rgba(255,255,255,${c.vida * 0.85})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+    if (c.vida <= 0){ cometes.splice(i,1); continue; }
+    const g = ctx.createLinearGradient(c.x, c.y, c.x-c.vx*12, c.y-c.vy*12);
+    g.addColorStop(0, `rgba(255,255,255,${c.vida*0.85})`);
+    g.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.strokeStyle = g; ctx.lineWidth = 1.3;
-    ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(c.x - c.vx*12, c.y - c.vy*12); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(c.x-c.vx*12, c.y-c.vy*12); ctx.stroke();
   }
   requestAnimationFrame(anima);
 }
 anima();
 setInterval(() => {
   if (cometes.length < 2){
-    cometes.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height * 0.5, vx: 5 + Math.random() * 5, vy: 2 + Math.random() * 3, vida: 0.9 });
+    cometes.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height*0.5,
+      vx: 5+Math.random()*5, vy: 2+Math.random()*3, vida: 0.9 });
   }
 }, 6500);
 
-if (RATOLI_FI && !REDUIT){
-  addEventListener('mousemove', e => {
-    document.documentElement.style.setProperty('--mx', e.clientX / innerWidth - .5);
-    document.documentElement.style.setProperty('--my', e.clientY / innerHeight - .5);
-  }, { passive: true });
-}
+/* ================== PARALLAX ================== */
+addEventListener('mousemove', e => {
+  document.documentElement.style.setProperty('--mx', e.clientX/innerWidth - .5);
+  document.documentElement.style.setProperty('--my', e.clientY/innerHeight - .5);
+}, { passive: true });
 
 /* ================== SPARKLE ================== */
 const spkColors = ['#60a5fa','#c084fc','#34d399','#f97316','#22d3ee','#fbbf24','#f472b6'];
 let spkTimer = 0;
 addEventListener('mousemove', e => {
   spkTimer++;
-  if (spkTimer % 4) return;
+  if (spkTimer % 5) return;
   const s = document.createElement('div');
   s.className = 'sparkle-trail';
   s.style.left = e.clientX + 'px'; s.style.top = e.clientY + 'px';
@@ -755,70 +509,39 @@ addEventListener('mousemove', e => {
   setTimeout(() => s.remove(), 1000);
 });
 
-/* ================== PROGRÉS ================== */
-const progr = document.getElementById('progres');
-const btnAmunt = document.getElementById('btn-amunt');
-addEventListener('scroll', () => {
-  const d = document.documentElement;
-  progr.style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
-  btnAmunt.classList.toggle('visible', d.scrollTop > 600);
-}, { passive: true });
-btnAmunt.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
-
-const TITOL = document.title;
-document.addEventListener('visibilitychange', () => {
-  document.title = document.hidden ? '🌌 Torna, l\'univers t\'espera!' : TITOL;
-});
-
-/* ================== CONFETI ================== */
-const cCanvas = document.getElementById('confeti');
-const cctx = cCanvas.getContext('2d');
-let confetisArray = [], confetiAnimat = false;
-function confeti(){
-  if (REDUIT) return;
-  cCanvas.width = innerWidth; cCanvas.height = innerHeight;
-  const colors = ['#fcd34d','#f59e0b','#ffffff','#a5b4fc','#f9a8d4'];
-  for (let i = 0; i < 70; i++){
-    const a = Math.random() * Math.PI * 2, v = 4 + Math.random() * 7;
-    confetisArray.push({ x: innerWidth/2, y: innerHeight * .45, vx: Math.cos(a)*v, vy: Math.sin(a)*v - 4, rot: Math.random()*6, vr: (Math.random()-.5)*.3, r: 4 + Math.random()*6, vida: 1, color: colors[Math.floor(Math.random()*colors.length)] });
-  }
-  if (!confetiAnimat){ confetiAnimat = true; animaConfeti(); }
-}
-function animaConfeti(){
-  cctx.clearRect(0, 0, cCanvas.width, cCanvas.height);
-  for (let i = confetisArray.length - 1; i >= 0; i--){
-    const c = confetisArray[i];
-    c.x += c.vx; c.y += c.vy; c.vy += .18; c.rot += c.vr; c.vida -= .012;
-    if (c.vida <= 0 || c.y > cCanvas.height + 30){ confetisArray.splice(i, 1); continue; }
-    cctx.save(); cctx.translate(c.x, c.y); cctx.rotate(c.rot); cctx.globalAlpha = Math.max(0, c.vida);
-    cctx.fillStyle = c.color; cctx.beginPath();
-    for (let k = 0; k < 10; k++){
-      const a = Math.PI/5*k - Math.PI/2, rad = k % 2 ? c.r*.45 : c.r;
-      cctx.lineTo(Math.cos(a)*rad, Math.sin(a)*rad);
-    }
-    cctx.closePath(); cctx.fill(); cctx.restore();
-  }
-  if (confetisArray.length) requestAnimationFrame(animaConfeti);
-  else confetiAnimat = false;
-}
-
-/* ================== TARGETES ================== */
+/* ================== TARGETES DEL MENÚ ================== */
 const topics = [
-  { title: 'TikTok Propi',  desc: 'Feed vertical de vídeos', icon: 'solar:videocamera-bold-duotone',    color: 'blue',   link: '#videos' },
-  { title: 'Pèndol',        desc: 'Moviment oscil·latori',   icon: 'solar:clock-circle-bold-duotone',   color: 'orange', link: '#' },
-  { title: 'Palanca',       desc: 'Màquina simple',          icon: 'solar:scale-bold-duotone',          color: 'green',  link: '#' },
-  { title: 'Politja',       desc: 'Corriola i politges',     icon: 'solar:refresh-circle-bold-duotone', color: 'purple', link: '#' },
-  { title: 'Pla Inclinat',  desc: 'Rampes i tascó',          icon: 'solar:graph-bold-duotone',          color: 'cyan',   link: '#' },
-  { title: 'Cargol',        desc: 'Pla inclinat enrotllat',  icon: 'solar:screwdriver-bold-duotone',    color: 'amber',  link: '#' },
-  { title: 'Roda',          desc: 'Roda i eix',              icon: 'solar:wheel-bold-duotone',          color: 'rose',   link: '#' }
+  { title: 'TikTok Propi', desc: 'Feed vertical de vídeos', icon: 'solar:videocamera-bold-duotone', color: 'blue',
+    action: { type: 'view', id: 'tiktok' } },
+  { title: 'Opinions', desc: 'Deixa la teva opinió', icon: 'solar:chat-round-dots-bold-duotone', color: 'amber',
+    action: { type: 'view', id: 'opinions' } },
+  { title: 'Animació 3D', desc: 'Rotació i translació', icon: 'solar:planet-3-bold-duotone', color: 'purple',
+    action: { type: 'view', id: 'animacio' } },
+  { title: 'Pèndol', desc: 'Moviment oscil·latori', icon: 'solar:clock-circle-bold-duotone', color: 'orange',
+    action: { type: 'modal', title: 'Pèndol', desc: 'Aquesta pàgina estarà disponible aviat. 🚧' } },
+  { title: 'Palanca', desc: 'Màquina simple', icon: 'solar:scale-bold-duotone', color: 'green',
+    action: { type: 'modal', title: 'Palanca', desc: 'Aquesta pàgina estarà disponible aviat. 🚧' } },
+  { title: 'Politja', desc: 'Corriola i politges', icon: 'solar:refresh-circle-bold-duotone', color: 'cyan',
+    action: { type: 'modal', title: 'Politja', desc: 'Aquesta pàgina estarà disponible aviat. 🚧' } },
+  { title: 'Pla Inclinat', desc: 'Rampes i tascó', icon: 'solar:graph-bold-duotone', color: 'rose',
+    action: { type: 'modal', title: 'Pla Inclinat', desc: 'Aquesta pàgina estarà disponible aviat. 🚧' } },
+  { title: 'Projecte', desc: 'Sobre el projecte', icon: 'solar:document-text-bold-duotone', color: 'blue',
+    action: { type: 'view', id: 'projecte' } },
+  { title: 'Equip', desc: 'Qui ho ha fet', icon: 'solar:users-group-rounded-bold-duotone', color: 'purple',
+    action: { type: 'view', id: 'equip' } },
+  { title: 'Preguntes', desc: 'Dubtes freqüents', icon: 'solar:question-circle-bold-duotone', color: 'cyan',
+    action: { type: 'view', id: 'preguntes' } },
 ];
-const glowMap = { blue:'rgba(37,99,235,.18)', orange:'rgba(234,88,12,.18)', green:'rgba(5,150,105,.18)', purple:'rgba(124,58,237,.18)', cyan:'rgba(6,182,212,.18)', amber:'rgba(217,119,6,.18)', rose:'rgba(225,29,72,.18)' };
+
+const glowMap = {
+  blue:'rgba(37,99,235,.18)', orange:'rgba(234,88,12,.18)', green:'rgba(5,150,105,.18)',
+  purple:'rgba(124,58,237,.18)', cyan:'rgba(6,182,212,.18)', amber:'rgba(217,119,6,.18)', rose:'rgba(225,29,72,.18)'
+};
 
 const graella = document.getElementById('graella');
 topics.forEach(t => {
   const card = document.createElement('div');
   card.className = 'nav-card';
-  card.dataset.title = t.title; card.dataset.desc = t.desc; card.dataset.link = t.link;
   card.style.setProperty('--glow-color', glowMap[t.color]);
   card.innerHTML = `
     <div class="card-glow"></div>
@@ -828,9 +551,15 @@ topics.forEach(t => {
       <p>${t.desc}</p>
       <span class="arrow"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
     </div>`;
-  graella.appendChild(card);
-});
-document.querySelectorAll('.nav-card').forEach(card => {
+  card.addEventListener('click', () => {
+    if (t.action.type === 'view'){
+      showView(t.action.id);
+    } else if (t.action.type === 'modal'){
+      openModal(t.action.title, t.action.desc);
+    } else if (t.action.type === 'link'){
+      window.location.href = t.action.href;
+    }
+  });
   card.addEventListener('mousemove', e => {
     const r = card.getBoundingClientRect();
     const x = e.clientX - r.left, y = e.clientY - r.top;
@@ -840,89 +569,24 @@ document.querySelectorAll('.nav-card').forEach(card => {
     card.style.setProperty('--mouse-y', (y / r.height) * 100 + '%');
   });
   card.addEventListener('mouseleave', () => {
-    card.style.setProperty('--rx', '0deg'); card.style.setProperty('--ry', '0deg'); card.style.transform = '';
+    card.style.setProperty('--rx', '0deg');
+    card.style.setProperty('--ry', '0deg');
   });
+  graella.appendChild(card);
 });
 
-/* ================== MODAL TARGETES ================== */
+/* ================== MODAL ================== */
 const modalOverlay = document.getElementById('modalOverlay');
-const modalTitle = document.getElementById('modalTitle');
-const modalDesc = document.getElementById('modalDesc');
-const modalLink = document.getElementById('modalLink');
-const modalClose = document.getElementById('modalClose');
-document.querySelectorAll('.nav-card').forEach(card => {
-  card.addEventListener('click', () => {
-    modalTitle.textContent = card.dataset.title;
-    modalDesc.textContent = card.dataset.desc;
-    modalLink.href = card.dataset.link;
-    modalOverlay.classList.add('active');
-  });
-});
-modalClose.addEventListener('click', () => modalOverlay.classList.remove('active'));
+function openModal(title, desc, link){
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalDesc').textContent = desc;
+  const linkEl = document.getElementById('modalLink');
+  if (link){ linkEl.href = link; linkEl.style.display = 'inline-block'; }
+  else { linkEl.style.display = 'none'; }
+  modalOverlay.classList.add('active');
+}
+document.getElementById('modalClose').onclick = () => modalOverlay.classList.remove('active');
 modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) modalOverlay.classList.remove('active'); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') modalOverlay.classList.remove('active'); });
-
-/* ================== COMPARTIR ================== */
-document.getElementById('btn-compartir').onclick = async () => {
-  const url = location.origin + location.pathname;
-  if (navigator.share){ try { await navigator.share({ title: document.title, url }); } catch {} }
-  else { try { await navigator.clipboard.writeText(url); toast('Enllaç copiat! ✨'); } catch { toast('No s\'ha pogut copiar'); } }
-};
-
-/* ================== GALERIA ================== */
-const videos = [
-  { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 1', desc: 'Descripció del primer vídeo del projecte.', base: 12 },
-  { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 2', desc: 'Explica aquí què hi veuran els visitants.', base: 31 },
-  { id: 'aqz-KE-bpKQ', titol: 'Títol del vídeo 3', desc: 'Pots afegir tants vídeos com vulguis.', base: 8 },
-];
-const svgCor = '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
-const likesGaleria = JSON.parse(localStorage.getItem('likes_galeria') || '{}');
-const galeria = document.getElementById('galeria');
-videos.forEach((v, i) => {
-  const card = document.createElement('article');
-  card.className = 'targeta';
-  card.innerHTML = `
-    <iframe src="https://www.youtube-nocookie.com/embed/${v.id}" title="${v.titol}" loading="lazy" allowfullscreen></iframe>
-    <div class="cos">
-      <div class="cap-cos"><h3>${v.titol}</h3>
-        <button class="like-mini" data-i="${i}">${svgCor}<span>${v.base + (likesGaleria[i] ? 1 : 0)}</span></button>
-      </div>
-      <p>${v.desc}</p>
-    </div>`;
-  galeria.appendChild(card);
-});
-document.querySelectorAll('.like-mini').forEach(b => {
-  const i = +b.dataset.i;
-  if (likesGaleria[i]) b.classList.add('actiu');
-  b.onclick = () => {
-    likesGaleria[i] = !likesGaleria[i];
-    localStorage.setItem('likes_galeria', JSON.stringify(likesGaleria));
-    b.classList.toggle('actiu', likesGaleria[i]);
-    b.querySelector('span').textContent = videos[i].base + (likesGaleria[i] ? 1 : 0);
-  };
-});
-document.getElementById('btn-sorpresa').onclick = () => {
-  const cards = [...document.querySelectorAll('.targeta')];
-  const c = cards[Math.floor(Math.random() * cards.length)];
-  c.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  c.classList.add('destacada');
-  setTimeout(() => c.classList.remove('destacada'), 2400);
-};
-
-/* ================== EQUIP ================== */
-const equip = [
-  { emoji: '🧑‍🚀', nom: 'Nom 1', rol: 'Direcció i guió' },
-  { emoji: '🎬',   nom: 'Nom 2', rol: 'Càmera i rodatge' },
-  { emoji: '✂️',   nom: 'Nom 3', rol: 'Edició i muntatge' },
-  { emoji: '🌐',   nom: 'Nom 4', rol: 'Web i difusió' },
-];
-const membresBox = document.getElementById('membres');
-equip.forEach(m => {
-  const d = document.createElement('div');
-  d.className = 'membre';
-  d.innerHTML = `<span class="emoji">${m.emoji}</span><strong>${m.nom}</strong><span>${m.rol}</span>`;
-  membresBox.appendChild(d);
-});
 
 /* ================== TIKTOK ================== */
 const feedTikTok = [
@@ -939,28 +603,23 @@ const svgNota = '<svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7
 const svgSo = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05A4.47 4.47 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
 const svgSilenci = '<svg viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
 const svgPlay = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+const svgCor = '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
 const fmt = n => n >= 1000 ? (n/1000).toFixed(1).replace('.0','') + 'K' : n;
 let players = [];
 let soActiu = false;
 let tiktokConstruit = false;
-let feedBuildPending = false;
+let buildPending = false;
 const likesFeed = JSON.parse(localStorage.getItem('likes_univers') || '{}');
 
 function aplicaSo(p){ if (soActiu){ p.unMute(); p.setVolume(80); } else { p.mute(); } }
-function pausaTot(){ players.forEach(p => { if (p && p.pauseVideo) p.pauseVideo(); }); }
 
-function buildFeed(){
-  // Si YT encara no està llesta, reintenta
+function buildTikTok(){
+  if (tiktokConstruit) return;
   if (typeof YT === 'undefined' || !YT.Player){
-    if (!feedBuildPending){
-      feedBuildPending = true;
-      setTimeout(() => { feedBuildPending = false; buildFeed(); }, 200);
-    }
+    if (!buildPending){ buildPending = true; setTimeout(() => { buildPending = false; buildTikTok(); }, 200); }
     return;
   }
-  if (tiktokConstruit) return;  // ja construït
   tiktokConstruit = true;
-
   const feed = document.getElementById('feed');
   feed.innerHTML = '';
 
@@ -989,14 +648,13 @@ function buildFeed(){
     feed.appendChild(slide);
   });
 
-  // Crear els players de YouTube
   feedTikTok.forEach((v, i) => {
     try {
       players[i] = new YT.Player('player-' + i, {
         videoId: v.id,
         playerVars: { autoplay:0, mute:1, controls:0, rel:0, loop:1, playlist: v.id, modestbranding:1, playsinline:1, iv_load_policy:3, fs:0 },
         events: {
-          'onError': (e) => {
+          'onError': () => {
             const box = document.querySelector('#tiktok-' + i + ' .video-box');
             if (box){
               const err = document.createElement('div');
@@ -1007,12 +665,9 @@ function buildFeed(){
           }
         }
       });
-    } catch(e){
-      console.error('Error creant player', i, e);
-    }
+    } catch(e){ console.error(e); }
   });
 
-  // IntersectionObserver
   const feedEl = document.getElementById('feed');
   const io = new IntersectionObserver(entrades => {
     entrades.forEach(en => {
@@ -1025,7 +680,6 @@ function buildFeed(){
   }, { root: feedEl, threshold: 0.6 });
   document.querySelectorAll('.slide').forEach(s => io.observe(s));
 
-  // Handlers
   document.querySelectorAll('.click-cap').forEach(cap => {
     cap.onclick = () => {
       const i = +cap.dataset.i, p = players[i];
@@ -1046,7 +700,7 @@ function buildFeed(){
     };
   });
   document.querySelectorAll('.comentar').forEach(b => {
-    b.onclick = () => { tancaTiktok(); document.getElementById('opinio').scrollIntoView({ behavior: 'smooth' }); };
+    b.onclick = () => { showView('opinions'); };
   });
   document.querySelectorAll('.compartir').forEach(b => {
     b.onclick = async () => {
@@ -1067,81 +721,14 @@ function buildFeed(){
   });
 }
 
-const app = document.getElementById('tiktok-app');
-function obreTiktok(slide){
-  app.classList.add('obert');
-  document.body.style.overflow = 'hidden';
-  if (!tiktokConstruit) buildFeed();
-  if (slide != null){
-    const el = document.getElementById('tiktok-' + slide);
-    if (el) setTimeout(() => el.scrollIntoView(), 250);
-  }
-}
-function tancaTiktok(){
-  app.classList.remove('obert');
-  document.body.style.overflow = '';
-  pausaTot();
-}
-document.getElementById('btn-tiktok').onclick = () => obreTiktok();
-document.getElementById('btn-vertical').onclick = () => obreTiktok();
-document.getElementById('tanca').onclick = tancaTiktok;
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && app.classList.contains('obert')) tancaTiktok(); });
-if (location.hash.startsWith('#tiktok-')) obreTiktok(+location.hash.split('-')[1]);
-document.addEventListener('keydown', e => {
-  if (!app.classList.contains('obert')) return;
-  if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
-  const slides = [...document.querySelectorAll('.slide')];
-  const feedEl = app.querySelector('.feed');
-  const actual = Math.round(feedEl.scrollTop / feedEl.clientHeight);
-  const desti = Math.min(slides.length - 1, Math.max(0, actual + (e.key === 'ArrowDown' ? 1 : -1)));
-  slides[desti].scrollIntoView({ behavior: 'smooth' });
-});
-
-/* ================== ADMIN ================== */
-let adminLogat = false;
-const esAdmin = () => adminLogat;
-const adminModal = document.getElementById('admin-modal');
-const adminCard = document.getElementById('admin-card');
-function obreAdminModal(){
-  if (esAdmin()){ toast('👑 Ja ets admin!'); return; }
-  adminModal.classList.add('obert');
-  document.getElementById('admin-error').textContent = '';
-  setTimeout(() => document.getElementById('admin-contra').focus(), 100);
-}
-function tancaAdminModal(){ adminModal.classList.remove('obert'); document.getElementById('admin-contra').value = ''; }
-function activaAdmin(){ adminLogat = true; tancaAdminModal(); pintaLlista(); toast('👑 Mode admin activat'); }
-function tancaSessioAdmin(){ adminLogat = false; pintaLlista(); toast('Sessió d\'admin tancada'); }
-function provaAdmin(){
-  const v = document.getElementById('admin-contra').value;
-  if (v === CONTRA_ADMIN){ activaAdmin(); }
-  else { document.getElementById('admin-error').textContent = 'Contrasenya incorrecte'; adminCard.classList.remove('shake'); void adminCard.offsetWidth; adminCard.classList.add('shake'); }
-}
-document.getElementById('admin-cancel').onclick = tancaAdminModal;
-document.getElementById('admin-entra').onclick = provaAdmin;
-document.getElementById('admin-contra').addEventListener('keydown', e => { if (e.key === 'Enter') provaAdmin(); });
-adminModal.onclick = e => { if (e.target === adminModal) tancaAdminModal(); };
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && adminModal.classList.contains('obert')) tancaAdminModal();
-  if (e.ctrlKey && e.altKey && (e.key === 'a' || e.key === 'A')){ e.preventDefault(); obreAdminModal(); }
-});
-if (location.hash === '#admin') obreAdminModal();
-document.getElementById('btn-sortir').onclick = tancaSessioAdmin;
-document.getElementById('btn-buidar').onclick = async () => {
-  if (!esAdmin()) return;
-  if (!confirm('Segur que vols esborrar TOTES les opinions?')) return;
-  opinionsActuals = [];
-  await desarOps([]);
-  pintaLlista();
-  toast('Totes les opinions esborrades');
-};
-
 /* ================== OPINIONS ================== */
-let BLOB_RUNTIME = BLOB_URL || '';
+const BLOB_URL = '';
 const CLAU_LOCAL = 'opinions_univers';
 const llistaOp = document.getElementById('llista-opinions');
 const btnEnviar = document.getElementById('btn-enviar');
 let opinionsActuals = [];
 let ordreActiu = 'recents';
+let BLOB_RUNTIME = BLOB_URL || '';
 
 if (!BLOB_RUNTIME) document.getElementById('nota-local').hidden = false;
 llistaOp.innerHTML = '<div class="buit">⏳ Carregant opinions...</div>';
@@ -1149,7 +736,7 @@ llistaOp.innerHTML = '<div class="buit">⏳ Carregant opinions...</div>';
 const svgEstrella = '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
 const estrellesBox = document.getElementById('selector-estrelles');
 let puntuacio = 0;
-for (let i = 1; i <= 5; i++) {
+for (let i = 1; i <= 5; i++){
   const b = document.createElement('button');
   b.type = 'button';
   b.innerHTML = svgEstrella;
@@ -1163,7 +750,7 @@ function pinta(fins = puntuacio){ [...estrellesBox.children].forEach((b, idx) =>
 pinta();
 
 function escap(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-function local(){ return JSON.parse(localStorage.getItem(CLAU_LOCAL) || '[]'); }
+function localOps(){ return JSON.parse(localStorage.getItem(CLAU_LOCAL) || '[]'); }
 
 async function llegirOps(){
   if (BLOB_RUNTIME){
@@ -1171,13 +758,13 @@ async function llegirOps(){
       const r = await fetch(BLOB_RUNTIME);
       const d = await r.json();
       return Array.isArray(d) ? d : (Array.isArray(d.opinions) ? d.opinions : []);
-    } catch { return local(); }
+    } catch { return localOps(); }
   }
-  return local();
+  return localOps();
 }
 async function desarOps(arr){
   if (BLOB_RUNTIME){
-    const r = await fetch(BLOB_RUNTIME, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ opinions: arr }) });
+    const r = await fetch(BLOB_RUNTIME, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ opinions: arr }) });
     return r.ok;
   }
   localStorage.setItem(CLAU_LOCAL, JSON.stringify(arr));
@@ -1185,8 +772,6 @@ async function desarOps(arr){
 }
 
 function pintaLlista(){
-  const adminMode = esAdmin();
-  document.getElementById('admin-bar').hidden = !adminMode;
   let ops = [...opinionsActuals];
   if (ordreActiu === 'recents') ops.sort((a, b) => b.data - a.data);
   else ops.sort((a, b) => (b.estrelles||0) - (a.estrelles||0) || b.data - a.data);
@@ -1211,9 +796,8 @@ function pintaLlista(){
     const inicial = (op.nom || 'A').trim().charAt(0).toUpperCase();
     const hue = [...(op.nom || 'A')].reduce((s, c) => s + c.charCodeAt(0), 0) % 360;
     const est = Array.from({length: 5}, (_, k) => `<svg viewBox="0 0 24 24" class="${k < (op.estrelles || 0) ? '' : 'buida'}">${svgEstrella}</svg>`).join('');
-    const data = new Date(op.data).toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
-    const btnEsb = adminMode ? `<button class="esborra" data-id="${op.id || ''}" title="Esborrar">✕</button>` : '';
-    return `<div class="opinio-card">${btnEsb}
+    const data = new Date(op.data).toLocaleDateString('ca-ES', { day:'numeric', month:'short', year:'numeric' });
+    return `<div class="opinio-card">
       <div class="avatar" style="background:hsl(${hue} 45% 42%)">${inicial}</div>
       <div class="opinio-contingut">
         <div class="opinio-cap">
@@ -1224,23 +808,10 @@ function pintaLlista(){
       </div>
     </div>`;
   }).join('');
-
-  if (adminMode){
-    llistaOp.querySelectorAll('.esborra').forEach(b => {
-      b.onclick = async () => {
-        if (!esAdmin()) return;
-        opinionsActuals = opinionsActuals.filter(o => (o.id || '') !== b.dataset.id);
-        await desarOps(opinionsActuals);
-        pintaLlista();
-        toast('Opinió esborrada');
-      };
-    });
-  }
 }
 
 async function carregarOpinions(){ opinionsActuals = await llegirOps(); pintaLlista(); }
 carregarOpinions();
-setInterval(() => { if (BLOB_RUNTIME && !document.hidden) carregarOpinions(); }, 30000);
 
 document.querySelectorAll('.ordre button').forEach(b => {
   b.onclick = () => {
@@ -1258,7 +829,7 @@ document.getElementById('form-opinio').onsubmit = async e => {
   if (document.getElementById('web').value) return;
   const text = campText.value.trim();
   if (!text) return;
-  const op = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), nom: document.getElementById('nom').value.trim(), estrelles: puntuacio, text, data: Date.now() };
+  const op = { id: Date.now().toString(36), nom: document.getElementById('nom').value.trim(), estrelles: puntuacio, text, data: Date.now() };
   btnEnviar.disabled = true; btnEnviar.textContent = 'Enviant...';
   opinionsActuals.push(op);
   let ok = true;
@@ -1268,26 +839,31 @@ document.getElementById('form-opinio').onsubmit = async e => {
     e.target.reset();
     document.getElementById('compta').textContent = '0';
     puntuacio = 0; pinta();
-    confeti();
     toast('Gràcies per la teva opinió! 🌟');
     pintaLlista();
-    if (BLOB_RUNTIME) setTimeout(carregarOpinions, 800);
   } else {
     opinionsActuals.pop();
-    toast('Hi ha hagut un error. Torna-ho a provar.');
+    toast('Error. Torna-ho a provar.');
   }
 };
 
-/* ================== SCROLLSPY ================== */
-const enllacosNav = [...document.querySelectorAll('nav a.llink')];
-const seccionsNav = enllacosNav.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-const spy = new IntersectionObserver(entrades => {
-  entrades.forEach(en => {
-    if (!en.isIntersecting) return;
-    enllacosNav.forEach(a => a.classList.toggle('actiu', a.getAttribute('href') === '#' + en.target.id));
-  });
-}, { rootMargin: '-40% 0px -55% 0px' });
-seccionsNav.forEach(s => spy.observe(s));
+/* ================== EQUIP ================== */
+const equip = [
+  { emoji: '🧑‍🚀', nom: 'Nom 1', rol: 'Direcció i guió' },
+  { emoji: '🎬',   nom: 'Nom 2', rol: 'Càmera i rodatge' },
+  { emoji: '✂️',   nom: 'Nom 3', rol: 'Edició i muntatge' },
+  { emoji: '🌐',   nom: 'Nom 4', rol: 'Web i difusió' },
+];
+const membresBox = document.getElementById('membres');
+equip.forEach(m => {
+  const d = document.createElement('div');
+  d.className = 'membre';
+  d.innerHTML = `<span class="emoji">${m.emoji}</span><strong>${m.nom}</strong><span>${m.rol}</span>`;
+  membresBox.appendChild(d);
+});
+
+/* ================== SOL CLIC ================== */
+document.getElementById('sol-wrap').onclick = () => toast('🚀 Hipervelocitat activada!');
 
 /* ================== TOAST ================== */
 let toastTimer;
@@ -1299,12 +875,12 @@ function toast(msg){
   toastTimer = setTimeout(() => t.classList.remove('visible'), 2600);
 }
 
-document.getElementById('btn-opinio').onclick = () => document.getElementById('opinio').scrollIntoView({ behavior: 'smooth' });
-
-const obs = new IntersectionObserver(entrades => {
-  entrades.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.seccio').forEach(s => obs.observe(s));
+/* ================== INIT ================== */
+// Si hi ha hash a la URL, obrir aquella vista
+const hashInicial = location.hash.slice(1);
+if (hashInicial && document.getElementById('view-' + hashInicial)){
+  showView(hashInicial);
+}
 </script>
 </body>
 </html>
