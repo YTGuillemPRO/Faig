@@ -1,1 +1,1445 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Politges · Menú de Tecnologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Space Grotesk',sans-serif;
+    background:#04060c;color:#e8ecf4;
+    overflow-x:hidden;line-height:1.6;
+  }
+  #estrelles{position:fixed;inset:0;z-index:-3}
+  .nebulosa{
+    position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(ellipse 700px 500px at 20% 15%, rgba(120,80,200,.08), transparent),
+      radial-gradient(ellipse 600px 450px at 80% 85%, rgba(80,130,180,.06), transparent);
+  }
 
+  /* BOTÓ TORNAR */
+  .btn-tornar{
+    position:fixed;top:16px;left:16px;z-index:100;
+    padding:10px 18px;border-radius:999px;cursor:pointer;
+    font-family:inherit;font-size:.88rem;font-weight:600;
+    color:#e8ecf4;background:rgba(14,17,26,.78);
+    border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(10px);
+    display:flex;align-items:center;gap:8px;
+    text-decoration:none;transition:all .25s;
+  }
+  .btn-tornar:hover{
+    color:#c4b5fd;
+    border-color:rgba(139,92,246,.5);
+    background:rgba(139,92,246,.08);
+    transform:translateX(-3px);
+  }
+  .btn-tornar svg{width:14px;height:14px;fill:currentColor}
+
+  /* HERO */
+  .hero{
+    text-align:center;padding:90px 20px 50px;
+    position:relative;max-width:900px;margin:0 auto;
+  }
+  .hero-icon{
+    width:110px;height:110px;margin:0 auto 24px;
+    border-radius:30px;
+    background:linear-gradient(135deg, rgba(139,92,246,.15), rgba(167,139,250,.08));
+    border:1px solid rgba(139,92,246,.3);
+    display:flex;align-items:center;justify-content:center;
+    font-size:48px;color:#a78bfa;
+    box-shadow:0 0 60px rgba(139,92,246,.25), inset 0 1px 0 rgba(255,255,255,.1);
+    animation:flotaIcon 4s ease-in-out infinite;
+  }
+  @keyframes flotaIcon{
+    0%,100%{transform:translateY(0) rotate(-3deg)}
+    50%{transform:translateY(-8px) rotate(3deg)}
+  }
+  .hero h1{
+    font-size:clamp(2rem,6vw,3.4rem);
+    font-weight:900;letter-spacing:-.02em;line-height:1.1;
+    margin-bottom:14px;
+    background:linear-gradient(105deg,#fff 0%,#fff 40%,#a78bfa 50%,#c4b5fd 60%,#fff 70%);
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:shimmer 5s linear infinite;
+  }
+  @keyframes shimmer{to{background-position:200% center}}
+  .hero .subtitol{color:#9aa5b5;font-size:1.05rem;max-width:600px;margin:0 auto}
+  .hero .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    margin-top:20px;padding:8px 18px;border-radius:999px;
+    background:rgba(139,92,246,.1);
+    border:1px solid rgba(139,92,246,.25);
+    color:#c4b5fd;font-size:.82rem;font-weight:600;letter-spacing:.5px;
+  }
+
+  /* CONTENIDOR */
+  .contenidor{max-width:920px;margin:0 auto;padding:20px 20px 100px}
+  .seccio{margin-bottom:70px}
+  .seccio-titol{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:22px;padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .seccio-titol .num{
+    flex-shrink:0;width:38px;height:38px;
+    border-radius:11px;
+    background:linear-gradient(135deg, rgba(139,92,246,.2), rgba(167,139,250,.1));
+    border:1px solid rgba(139,92,246,.3);
+    color:#c4b5fd;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:1rem;
+  }
+  .seccio-titol h2{
+    font-size:clamp(1.3rem,3vw,1.7rem);
+    font-weight:700;color:#f4f6fb;
+  }
+  .seccio p{color:#c3ccd9;margin-bottom:14px;font-size:1rem}
+  .seccio p strong{color:#fff}
+  .seccio p em{color:#c4b5fd;font-style:normal}
+
+  /* CAIXES */
+  .destacat{
+    background:linear-gradient(135deg, rgba(139,92,246,.08), rgba(167,139,250,.04));
+    border:1px solid rgba(139,92,246,.2);
+    border-left:3px solid #8b5cf6;
+    border-radius:12px;padding:20px 24px;margin:20px 0;
+  }
+  .destacat h4{
+    color:#c4b5fd;font-size:.95rem;font-weight:700;
+    margin-bottom:8px;display:flex;align-items:center;gap:8px;
+  }
+  .destacat p{margin-bottom:0;font-size:.95rem}
+  .info{
+    background:rgba(34,211,238,.06);
+    border:1px solid rgba(34,211,238,.2);
+    border-left:3px solid #22d3ee;
+    border-radius:12px;padding:20px 24px;margin:20px 0;
+  }
+  .info h4{
+    color:#67e8f9;font-size:.95rem;font-weight:700;
+    margin-bottom:8px;display:flex;align-items:center;gap:8px;
+  }
+  .info p{margin-bottom:0;font-size:.95rem}
+  .avis{
+    background:rgba(239,68,68,.06);
+    border:1px solid rgba(239,68,68,.2);
+    border-left:3px solid #ef4444;
+    border-radius:12px;padding:20px 24px;margin:20px 0;
+  }
+  .avis h4{
+    color:#f87171;font-size:.95rem;font-weight:700;
+    margin-bottom:8px;display:flex;align-items:center;gap:8px;
+  }
+  .avis p{margin-bottom:0;font-size:.95rem}
+
+  /* PARTS */
+  .parts-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:14px;margin:20px 0;
+  }
+  .part{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;padding:18px;
+    transition:transform .3s, border-color .3s;
+  }
+  .part:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.35)}
+  .part .ico{
+    width:36px;height:36px;border-radius:10px;
+    background:rgba(139,92,246,.12);
+    border:1px solid rgba(139,92,246,.25);
+    color:#c4b5fd;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;margin-bottom:10px;
+  }
+  .part h3{font-size:.95rem;color:#f4f6fb;margin-bottom:4px}
+  .part p{font-size:.85rem;color:#9aa5b5;margin:0}
+
+  /* TIPUS */
+  .tipus-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:16px;margin:22px 0;
+  }
+  .tipus{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;padding:22px;
+    transition:transform .3s, border-color .3s;
+    position:relative;
+  }
+  .tipus:hover{transform:translateY(-4px);border-color:rgba(139,92,246,.35)}
+  .tipus .ico{font-size:2rem;margin-bottom:12px;display:block}
+  .tipus h3{font-size:1rem;color:#f4f6fb;margin-bottom:8px}
+  .tipus p{font-size:.88rem;color:#9aa5b5;margin:0;line-height:1.55}
+  .tipus .am-badge{
+    position:absolute;top:16px;right:16px;
+    padding:5px 12px;border-radius:999px;
+    background:rgba(34,211,238,.12);
+    border:1px solid rgba(34,211,238,.3);
+    color:#67e8f9;font-size:.72rem;font-weight:800;
+    letter-spacing:.5px;
+  }
+
+  /* FÓRMULA */
+  .formula-card{
+    background:linear-gradient(135deg, rgba(34,211,238,.08), rgba(96,165,250,.03));
+    border:1px solid rgba(34,211,238,.25);
+    border-radius:20px;padding:36px 24px;
+    text-align:center;margin:26px 0;
+  }
+  .formula-principal{
+    font-family:'Times New Roman',serif;
+    font-size:clamp(2rem,6vw,3rem);
+    color:#67e8f9;
+    margin:18px 0;letter-spacing:2px;font-style:italic;
+  }
+  .formula-principal .frac{
+    display:inline-block;vertical-align:middle;
+    text-align:center;font-size:.65em;line-height:1.1;
+    margin:0 6px;
+  }
+  .formula-principal .frac span{display:block}
+  .formula-principal .frac .num{
+    border-bottom:2px solid #67e8f9;padding-bottom:2px;
+  }
+  .formula-principal .frac .den{padding-top:2px}
+  .formula-legend{
+    display:flex;flex-wrap:wrap;gap:20px;justify-content:center;
+    margin-top:22px;color:#9aa5b5;font-size:.9rem;
+  }
+  .formula-legend span{display:flex;align-items:center;gap:6px}
+  .formula-legend strong{color:#67e8f9;font-size:1.05rem}
+
+  /* SIMULADOR */
+  .simulador{
+    background:linear-gradient(180deg, rgba(15,20,35,.9), rgba(8,10,20,.9));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;overflow:hidden;margin:26px 0;
+    box-shadow:0 20px 60px -20px rgba(0,0,0,.8);
+  }
+  .sim-tipus-tabs{
+    display:flex;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(0,0,0,.3);
+  }
+  .sim-tab{
+    flex:1;padding:14px 10px;cursor:pointer;
+    font-family:inherit;font-size:.9rem;font-weight:600;
+    background:none;border:none;
+    color:#9aa5b5;
+    border-bottom:2px solid transparent;
+    transition:all .25s;
+  }
+  .sim-tab:hover{color:#c4b5fd;background:rgba(139,92,246,.05)}
+  .sim-tab.actiu{
+    color:#c4b5fd;
+    border-bottom-color:#8b5cf6;
+    background:rgba(139,92,246,.08);
+  }
+  .sim-canvas-wrap{
+    position:relative;height:420px;
+    background:radial-gradient(ellipse at center, #0a0f1f 0%, #02030a 100%);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  #simCanvas{width:100%;height:100%;display:block}
+  .sim-controls{padding:24px}
+  .sim-controls .control{margin-bottom:18px}
+  .control label{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-size:.85rem;color:#9aa5b5;margin-bottom:8px;
+  }
+  .control label .val{
+    color:#a78bfa;font-weight:700;font-size:.95rem;
+    font-variant-numeric:tabular-nums;
+  }
+  .control input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:100%;height:5px;border-radius:5px;
+    background:rgba(255,255,255,.1);
+    outline:none;
+  }
+  .control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:18px;height:18px;border-radius:50%;
+    background:linear-gradient(135deg,#8b5cf6,#a78bfa);
+    cursor:pointer;border:2px solid #0a0c12;
+    box-shadow:0 0 12px rgba(139,92,246,.6);
+  }
+  .control input[type=range]::-moz-range-thumb{
+    width:18px;height:18px;border-radius:50%;
+    background:linear-gradient(135deg,#8b5cf6,#a78bfa);
+    cursor:pointer;border:2px solid #0a0c12;
+    box-shadow:0 0 12px rgba(139,92,246,.6);
+  }
+  .sim-resultat{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:16px;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:18px;text-align:center;margin-top:10px;
+  }
+  .resultat-item .r-label{
+    font-size:.72rem;color:#9aa5b5;
+    text-transform:uppercase;letter-spacing:.5px;
+    margin-bottom:6px;
+  }
+  .resultat-item .r-val{
+    font-size:1.4rem;font-weight:800;color:#a78bfa;
+    font-variant-numeric:tabular-nums;
+  }
+  .resultat-item .r-unit{
+    font-size:.75rem;color:#7c8698;margin-left:2px;font-weight:600;
+  }
+  .sim-botons{
+    display:flex;gap:12px;justify-content:center;
+    flex-wrap:wrap;margin-top:18px;
+  }
+  .sim-btn{
+    padding:11px 22px;border-radius:12px;cursor:pointer;
+    font-family:inherit;font-weight:600;font-size:.9rem;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.05);
+    color:#e8ecf4;transition:all .25s;
+    display:flex;align-items:center;gap:8px;
+  }
+  .sim-btn:hover{
+    background:rgba(139,92,246,.12);
+    border-color:rgba(139,92,246,.4);
+    color:#c4b5fd;
+  }
+  .sim-btn.primari{
+    background:linear-gradient(135deg,#7c3aed,#8b5cf6);
+    border-color:rgba(139,92,246,.5);color:#fff;
+  }
+  .sim-btn.primari:hover{filter:brightness(1.1)}
+  .sim-btn:disabled{opacity:.5;cursor:not-allowed}
+
+  /* TAULA */
+  .taula-wrap{
+    overflow-x:auto;border-radius:16px;
+    border:1px solid rgba(255,255,255,.08);margin:24px 0;
+  }
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  thead{background:rgba(139,92,246,.1)}
+  th{
+    text-align:left;padding:14px 18px;
+    color:#c4b5fd;font-weight:700;font-size:.85rem;
+    letter-spacing:.3px;text-transform:uppercase;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  td{
+    padding:14px 18px;color:#c3ccd9;
+    border-bottom:1px solid rgba(255,255,255,.05);
+  }
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(255,255,255,.02)}
+  .si{color:#34d399;font-weight:700}
+  .no{color:#f87171;font-weight:700}
+
+  /* TIMELINE */
+  .timeline{position:relative;padding-left:36px;margin:26px 0}
+  .timeline::before{
+    content:'';position:absolute;left:11px;top:8px;bottom:8px;
+    width:2px;
+    background:linear-gradient(180deg,#8b5cf6, rgba(139,92,246,.1));
+    border-radius:2px;
+  }
+  .timeline-item{position:relative;padding-bottom:28px}
+  .timeline-item:last-child{padding-bottom:0}
+  .timeline-item::before{
+    content:'';position:absolute;left:-31px;top:6px;
+    width:14px;height:14px;border-radius:50%;
+    background:#8b5cf6;border:3px solid #0a0c12;
+    box-shadow:0 0 12px rgba(139,92,246,.6);
+  }
+  .timeline-item .any{
+    font-size:.8rem;color:#c4b5fd;
+    font-weight:800;letter-spacing:1px;margin-bottom:4px;
+  }
+  .timeline-item h4{font-size:1rem;color:#f4f6fb;margin-bottom:6px;font-weight:700}
+  .timeline-item p{font-size:.9rem;color:#9aa5b5;margin:0;line-height:1.55}
+
+  /* APLICACIONS */
+  .apps-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:14px;margin:20px 0;
+  }
+  .app{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;padding:20px;text-align:center;
+  }
+  .app .emoji{font-size:2.2rem;display:block;margin-bottom:10px}
+  .app h3{font-size:.95rem;color:#f4f6fb;margin-bottom:6px}
+  .app p{font-size:.82rem;color:#9aa5b5;margin:0;line-height:1.5}
+
+  /* CURIOSITATS */
+  .curiositats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px;margin:22px 0;
+  }
+  .curiositat{
+    background:linear-gradient(135deg, rgba(139,92,246,.05), rgba(167,139,250,.02));
+    border:1px solid rgba(139,92,246,.2);
+    border-radius:16px;padding:20px;
+  }
+  .curiositat .ico{font-size:1.6rem;margin-bottom:10px;display:block}
+  .curiositat h3{font-size:.95rem;color:#c4b5fd;margin-bottom:6px}
+  .curiositat p{font-size:.86rem;color:#c3ccd9;margin:0;line-height:1.55}
+
+  /* QUIZ */
+  .quiz{
+    background:linear-gradient(135deg, rgba(15,20,35,.9), rgba(8,10,20,.9));
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:20px;padding:28px;margin:20px 0;
+  }
+  .quiz-progres{
+    height:6px;background:rgba(255,255,255,.08);
+    border-radius:6px;overflow:hidden;margin-bottom:20px;
+  }
+  .quiz-progres-bar{
+    height:100%;width:0;
+    background:linear-gradient(90deg,#8b5cf6,#c4b5fd);
+    transition:width .4s ease;border-radius:6px;
+  }
+  .quiz-pregunta{
+    font-size:1.05rem;color:#f4f6fb;
+    font-weight:600;margin-bottom:18px;line-height:1.5;
+  }
+  .quiz-opcions{display:flex;flex-direction:column;gap:10px}
+  .quiz-opcio{
+    padding:14px 18px;border-radius:12px;
+    background:rgba(255,255,255,.03);
+    border:1.5px solid rgba(255,255,255,.08);
+    cursor:pointer;font-family:inherit;font-size:.95rem;
+    color:#c3ccd9;text-align:left;transition:all .25s;
+    display:flex;align-items:center;gap:12px;
+  }
+  .quiz-opcio:hover:not(:disabled){
+    background:rgba(139,92,246,.06);
+    border-color:rgba(139,92,246,.3);
+    transform:translateX(4px);
+  }
+  .quiz-opcio .lletra{
+    flex-shrink:0;width:28px;height:28px;
+    border-radius:8px;background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+    display:flex;align-items:center;justify-content:center;
+    font-size:.75rem;font-weight:800;color:#9aa5b5;
+  }
+  .quiz-opcio.correcte{
+    background:rgba(5,150,105,.12);
+    border-color:rgba(16,185,129,.5);color:#6ee7b7;
+  }
+  .quiz-opcio.correcte .lletra{
+    background:rgba(16,185,129,.25);
+    color:#6ee7b7;border-color:rgba(16,185,129,.5);
+  }
+  .quiz-opcio.incorrecte{
+    background:rgba(239,68,68,.08);
+    border-color:rgba(239,68,68,.4);color:#fca5a5;
+  }
+  .quiz-opcio.incorrecte .lletra{
+    background:rgba(239,68,68,.2);
+    color:#fca5a5;border-color:rgba(239,68,68,.5);
+  }
+  .quiz-opcio:disabled{cursor:default}
+  .quiz-feedback{
+    margin-top:16px;padding:14px 18px;
+    border-radius:12px;font-size:.9rem;display:none;
+  }
+  .quiz-feedback.show{display:block}
+  .quiz-feedback.ok{
+    background:rgba(5,150,105,.08);
+    border:1px solid rgba(16,185,129,.25);color:#6ee7b7;
+  }
+  .quiz-feedback.ko{
+    background:rgba(239,68,68,.06);
+    border:1px solid rgba(239,68,68,.2);color:#fca5a5;
+  }
+  .quiz-final{text-align:center;display:none}
+  .quiz-final.show{display:block}
+  .quiz-final .puntuacio{
+    font-size:3.5rem;font-weight:900;
+    background:linear-gradient(135deg,#a78bfa,#c4b5fd);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;line-height:1;margin-bottom:10px;
+  }
+  .quiz-final p{color:#9aa5b5;margin-bottom:20px}
+
+  /* SPARKLE */
+  .sparkle-trail{
+    position:fixed;border-radius:50%;pointer-events:none;z-index:9998;
+    animation:sparkleFade 1s ease-out forwards;
+  }
+  @keyframes sparkleFade{0%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
+
+  @media(max-width:640px){
+    .hero{padding:70px 16px 40px}
+    .hero-icon{width:88px;height:88px;font-size:38px}
+    .contenidor{padding:10px 16px 70px}
+    .sim-canvas-wrap{height:340px}
+    .seccio{margin-bottom:50px}
+    .parts-grid,.apps-grid{grid-template-columns:1fr}
+    .sim-tab{font-size:.8rem;padding:12px 6px}
+    .quiz{padding:20px}
+    .btn-tornar{padding:8px 14px;font-size:.8rem}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="estrelles"></canvas>
+<div class="nebulosa"></div>
+
+<a class="btn-tornar" href="index.html">
+  <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  Tornar
+</a>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-icon">🔄</div>
+  <h1>Les Politges</h1>
+  <p class="subtitol">Descobreix com una simple roda amb una corda pot fer que una sola persona pugui aixecar un cotxe. La màquina simple que mou el món!</p>
+  <div class="badge">
+    <iconify-icon icon="solar:book-bold-duotone"></iconify-icon>
+    Teoria · Màquines simples · Física
+  </div>
+</div>
+
+<div class="contenidor">
+
+  <!-- 1. QUÈ ÉS -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">1</div>
+      <h2>Què és una politja?</h2>
+    </div>
+    <p>Una <strong>politja</strong> (o <strong>corriola</strong>) és una roda amb un <strong>canal</strong> a la vora per on passa una corda, un cable o una cadena. La roda gira lliurement al voltant d'un eix, i està subjectada per una <strong>armadura</strong> o <strong>suport</strong>.</p>
+    <p>És una de les <strong>sis màquines simples</strong> clàssiques (juntament amb la palanca, el pla inclinat, el cargol, el tascó i la roda). La seva funció és <strong>transmetre una força</strong> i, en alguns casos, <strong>reduir l'esforç</strong> necessari per aixecar o moure un objecte pesat.</p>
+
+    <div class="destacat">
+      <h4>🎯 Idea clau</h4>
+      <p>Una politja no <em>crea</em> energia: només <strong>redistribueix</strong> l'esforç. Si redueixes la força necessària, has de tibar més corda. És la famosa <em>"llei d'or de la mecànica"</em>: el que estalvies en força ho pagues en distància.</p>
+    </div>
+  </section>
+
+  <!-- 2. PARTS -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">2</div>
+      <h2>Les parts d'una politja</h2>
+    </div>
+    <p>Una politja bàsica té aquests elements:</p>
+
+    <div class="parts-grid">
+      <div class="part">
+        <div class="ico">⭕</div>
+        <h3>Roda (o corriola)</h3>
+        <p>El disc circular amb un canal a la vora. És la part que gira quan es tiba la corda.</p>
+      </div>
+      <div class="part">
+        <div class="ico">🔘</div>
+        <h3>Eix</h3>
+        <p>El cilindre central sobre el qual gira la roda. Ha de tenir poc fregament per funcionar bé.</p>
+      </div>
+      <div class="part">
+        <div class="ico">🏗️</div>
+        <h3>Suport o armadura</h3>
+        <p>La peça que subjecta l'eix de la roda al sostre, a la paret o a una estructura mòbil.</p>
+      </div>
+      <div class="part">
+        <div class="ico">🧵</div>
+        <h3>Corda o cable</h3>
+        <p>Passa pel canal de la roda. Ha de ser resistent i tenir poc fregament amb la roda.</p>
+      </div>
+      <div class="part">
+        <div class="ico">⚫</div>
+        <h3>Càrrega (R)</h3>
+        <p>El pes que volem aixecar o moure. Es mesura en newtons (N) o en kgf (1 kgf ≈ 9,8 N).</p>
+      </div>
+      <div class="part">
+        <div class="ico">💪</div>
+        <h3>Força (F)</h3>
+        <p>L'esforç que fem nosaltres (o un motor) per tibar la corda. També es mesura en N.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. TIPUS -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">3</div>
+      <h2>Els tipus de politges</h2>
+    </div>
+    <p>No totes les politges funcionen igual. N'hi ha de tres tipus principals:</p>
+
+    <div class="tipus-grid">
+      <div class="tipus">
+        <span class="am-badge">AM = 1</span>
+        <span class="ico">🎯</span>
+        <h3>Politja fixa</h3>
+        <p>La roda està subjecta a un punt fix (sostre, paret). <strong>Canvia la direcció de la força</strong> però NO la seva magnitud. Has de fer la mateixa força que el pes de la càrrega.</p>
+      </div>
+      <div class="tipus">
+        <span class="am-badge">AM = 2</span>
+        <span class="ico">🔀</span>
+        <h3>Politja mòbil</h3>
+        <p>La roda es mou juntament amb la càrrega. <strong>Divideix la força per 2</strong>: necessites la meitat de força per aixecar el mateix pes. Però has de tibar el doble de corda.</p>
+      </div>
+      <div class="tipus">
+        <span class="am-badge">AM = n</span>
+        <span class="ico">⚙️</span>
+        <h3>Politja composta</h3>
+        <p>Combinació de politges fixes i mòbils (anomenada <em>polispast</em>). Divideix la força pel <strong>nombre de segments de corda</strong> que sostenen la càrrega.</p>
+      </div>
+    </div>
+
+    <div class="info">
+      <h4>💡 Exemple pràctic</h4>
+      <p>Si vols aixecar un pes de <strong>100 kg</strong> (uns 980 N), amb una politja fixa necessitaràs fer una força de 980 N. Amb una politja mòbil, només 490 N (la meitat). Amb una composta de 4 segments, només 245 N (una quarta part). Però hauràs de tibar 4 vegades més corda!</p>
+    </div>
+  </section>
+
+  <!-- 4. FÓRMULA -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">4</div>
+      <h2>La fórmula de la politja composta</h2>
+    </div>
+    <p>Per a una politja composta (o per calcular l'avantatge de qualsevol politja), la fórmula és ben senzilla:</p>
+
+    <div class="formula-card">
+      <p style="color:#9aa5b5;font-size:.9rem;margin-bottom:8px">Força que has de fer</p>
+      <div class="formula-principal">
+        F = <span class="frac"><span class="num">R</span><span class="den">n</span></span>
+      </div>
+      <div class="formula-legend">
+        <span><strong>F</strong> = força aplicada (N)</span>
+        <span><strong>R</strong> = resistència o càrrega (N)</span>
+        <span><strong>n</strong> = nombre de segments de corda</span>
+      </div>
+    </div>
+
+    <p>I l'<strong>avantatge mecànic (AM)</strong> és el factor pel qual es redueix la força:</p>
+
+    <div class="formula-card">
+      <p style="color:#9aa5b5;font-size:.9rem;margin-bottom:8px">Avantatge mecànic</p>
+      <div class="formula-principal">
+        AM = <span class="frac"><span class="num">R</span><span class="den">F</span></span> = n
+      </div>
+      <div class="formula-legend">
+        <span><strong>AM = 1</strong> → politja fixa</span>
+        <span><strong>AM = 2</strong> → politja mòbil</span>
+        <span><strong>AM = n</strong> → politja composta amb n segments</span>
+      </div>
+    </div>
+
+    <div class="avis">
+      <h4>⚠️ Atenció a la corda</h4>
+      <p>Com més gran és l'avantatge mecànic, <strong>més corda has de tibar</strong> per aixecar la mateixa alçada. La relació és:</p>
+      <p style="margin-top:8px;text-align:center;font-family:Times New Roman,serif;font-size:1.15rem;color:#c4b5fd"><em>Longitud de corda = AM × altura pujada</em></p>
+      <p style="margin-top:8px">Si AM = 4 i vols aixecar el pes 1 metre, hauràs de tibar 4 metres de corda!</p>
+    </div>
+  </section>
+
+  <!-- 5. SIMULADOR -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">5</div>
+      <h2>Prova-ho tu mateix!</h2>
+    </div>
+    <p>Tria el tipus de politja, ajusta la càrrega i observa com canvia la força necessària. Clica <strong>"Aixecar 1 metre"</strong> per veure l'animació.</p>
+
+    <div class="simulador">
+      <div class="sim-tipus-tabs">
+        <button class="sim-tab actiu" data-mode="fixa">Politja fixa</button>
+        <button class="sim-tab" data-mode="mobil">Politja mòbil</button>
+        <button class="sim-tab" data-mode="composta">Politja composta</button>
+      </div>
+      <div class="sim-canvas-wrap">
+        <canvas id="simCanvas"></canvas>
+      </div>
+      <div class="sim-controls">
+        <div class="control">
+          <label>Càrrega (R) <span class="val" id="valR">50 kg</span></label>
+          <input type="range" id="ctrlR" min="10" max="200" step="5" value="50">
+        </div>
+        <div class="control" id="ctrlN-wrap" style="display:none">
+          <label>Nombre de segments de corda (n) <span class="val" id="valN">3</span></label>
+          <input type="range" id="ctrlN" min="2" max="6" step="1" value="3">
+        </div>
+        <div class="sim-resultat">
+          <div class="resultat-item">
+            <div class="r-label">Càrrega (R)</div>
+            <div class="r-val"><span id="resR">490</span><span class="r-unit">N</span></div>
+          </div>
+          <div class="resultat-item">
+            <div class="r-label">Força (F)</div>
+            <div class="r-val"><span id="resF">490</span><span class="r-unit">N</span></div>
+          </div>
+          <div class="resultat-item">
+            <div class="r-label">Avantatge (AM)</div>
+            <div class="r-val"><span id="resAM">1</span><span class="r-unit">×</span></div>
+          </div>
+          <div class="resultat-item">
+            <div class="r-label">Corda a tibar</div>
+            <div class="r-val"><span id="resCorda">1,0</span><span class="r-unit">m</span></div>
+          </div>
+        </div>
+        <div class="sim-botons">
+          <button class="sim-btn primari" id="btnAixecar">
+            <iconify-icon icon="solar:arrow-up-bold"></iconify-icon>
+            Aixecar 1 metre
+          </button>
+          <button class="sim-btn" id="btnReset">
+            <iconify-icon icon="solar:refresh-bold"></iconify-icon>
+            Reiniciar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="destacat">
+      <h4>💡 Experimenta això</h4>
+      <p>1. Compara la força (F) entre els tres tipus amb la mateixa càrrega. Veuràs com la composta redueix molt més l'esforç.</p>
+      <p style="margin-top:6px">2. Canvia el nombre de segments (n) en la composta. Com més segments, menys força... però més corda!</p>
+      <p style="margin-top:6px">3. Fixa't en el paràmetre "Corda a tibar": és l'altre costat de la moneda.</p>
+    </div>
+  </section>
+
+  <!-- 6. TAULA COMPARATIVA -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">6</div>
+      <h2>Taula comparativa</h2>
+    </div>
+    <p>Resum de les diferències entre els tres tipus de politges:</p>
+
+    <div class="taula-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipus</th>
+            <th>Força (F)</th>
+            <th>Avantatge</th>
+            <th>Corda a tibar</th>
+            <th>Direcció</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Fixa</strong></td>
+            <td>F = R</td>
+            <td class="no">1</td>
+            <td>1× l'altura</td>
+            <td class="si">La canvia</td>
+          </tr>
+          <tr>
+            <td><strong>Mòbil</strong></td>
+            <td>F = R/2</td>
+            <td class="si">2</td>
+            <td>2× l'altura</td>
+            <td class="no">No la canvia</td>
+          </tr>
+          <tr>
+            <td><strong>Composta (n)</strong></td>
+            <td>F = R/n</td>
+            <td class="si">n</td>
+            <td>n × l'altura</td>
+            <td class="si">Depèn</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info">
+      <h4>🔑 Conclusió</h4>
+      <p>L'avantatge mecànic <strong>no surt de franc</strong>. Cada vegada que redueixes la força necessària, has de tibar proporcionalment més corda. En física, aquest principi es coneix com la <em>conservació de l'energia</em>: no pots obtenir més treball del que hi poses.</p>
+    </div>
+  </section>
+
+  <!-- 7. HISTÒRIA -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">7</div>
+      <h2>Una mica d'història</h2>
+    </div>
+    <p>Les politges són tan antigues com la civilització. Aquests són els moments clau:</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="any">S. III aC · ARQUIMEDES</div>
+        <h4>El pare de la politja composta</h4>
+        <p>Arquimedes va dissenyar els primers sistemes de politges compostes. Deia: <em>"Dona'm un punt de suport i mouré el món"</em>, referint-se al poder de les palanques i les politges. Va utilitzar el polispast per defensar Siracusa dels romans!</p>
+      </div>
+      <div class="timeline-item">
+        <div class="any">ÈPOCA ROMANA</div>
+        <h4>Grues i construccions</h4>
+        <p>Els romans van perfeccionar l'ús de les politges per construir edificis monumentals. Amb politges compostes van poder aixecar blocs de pedra de tones de pes per fer els aqueductes i els coliseus.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="any">EDAT MITJANA</div>
+        <h4>Les grues de les catedrals</h4>
+        <p>Durant la construcció de les grans catedrals gòtiques, els picapedrers van desenvolupar grues amb politges compostes capaces d'aixecar pedres enormes a desenes de metres d'alçada.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="any">REVOLUCIÓ INDUSTRIAL</div>
+        <h4>Màquines i motors</h4>
+        <p>Amb l'arribada de les màquines de vapor, les politges es van combinar amb motors per moure càrregues enormes a les fàbriques, als ports i a les mines.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="any">SEGLE XX · AVUI</div>
+        <h4>Ascensors i grues modernes</h4>
+        <p>Els ascensors d'alta velocitat, les grues torre, els telecadires de les estacions d'esquí i les màquines de gimnàs fan servir politges d'alta eficiència. Són una tecnologia que no ha parat d'evolucionar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. APLICACIONS -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">8</div>
+      <h2>Aplicacions al món real</h2>
+    </div>
+    <p>Les politges són a pertot arreu. Aquí tens alguns exemples que segur que coneixes:</p>
+
+    <div class="apps-grid">
+      <div class="app">
+        <span class="emoji">🏗️</span>
+        <h3>Grues</h3>
+        <p>Les grues dels ports i les obres fan servir politges compostes per aixecar contenidors i materials pesants.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🛗</span>
+        <h3>Ascensors</h3>
+        <p>Els ascensors moderns funcionen amb politges i contrapesos per moure's amunt i avall amb poc esforç.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🧗</span>
+        <h3>Escalada</h3>
+        <p>Els escaladors fan servir politges per assegurar-se i per pujar equips. També en rescat vertical.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🏋️</span>
+        <h3>Gimnasos</h3>
+        <p>Les màquines de musculació (politges, jaus, rems) utilitzen politges per ajustar la resistència.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">⛷️</span>
+        <h3>Telecadires</h3>
+        <p>Els telecadires i les telecabines funcionen amb un sistema de politges i cables per transportar persones.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🚪</span>
+        <h3>Persianes i portes</h3>
+        <p>Les persianes de corda i algunes portes corredisses automàtiques utilitzen politges amagades.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">⛵</span>
+        <h3>Vaixells de vela</h3>
+        <p>Els vaixells de vela tradicionals utilitzen politges (motons) per hissar les veles i maniobrar.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🧵</span>
+        <h3>Màquines de cosir</h3>
+        <p>Les màquines de cosir tenen politges internes per sincronitzar el moviment de l'agulla i el fil.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. CURIOSITATS -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">9</div>
+      <h2>Curiositats</h2>
+    </div>
+
+    <div class="curiositats">
+      <div class="curiositat">
+        <span class="ico">💪</span>
+        <h3>Una persona pot aixecar un cotxe</h3>
+        <p>Amb una politja composta amb prou segments (n alt), una persona podria aixecar un cotxe. Amb n=20, per exemple, només necessitaria fer un esforç de 75 kg per aixecar 1500 kg. Però hauria de tibar 20 metres per cada metre que pugés el cotxe.</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🏛️</span>
+        <h3>Arquimedes i Siracusa</h3>
+        <p>Segons la llegenda, quan els romans van atacar Siracusa, Arquimedes va fer servir politges gegants per aixecar els vaixells enemics fora de l'aigua i deixar-los caure. Els romans es van espantar!</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🏔️</span>
+        <h3>El funicular de Montserrat</h3>
+        <p>Els funiculars com el de Montserrat o el de Gelida funcionen amb politges i cables d'acer d'alta resistència per pujar per pendents molt pronunciats.</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🛰️</span>
+        <h3>Politges a l'espai</h3>
+        <p>Els astronautes de l'Estació Espacial Internacional fan servir politges per moure's per dins i per manipular equips en microgravetat.</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🎪</span>
+        <h3>Els trapezis del circ</h3>
+        <p>Els artistes de circ del trapezi fan servir politges per controlar-se i balancejar-se amb seguretat, i per ser hissats al sostre del circ.</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🚁</span>
+        <h3>Rescat amb helicòpter</h3>
+        <p>En rescats en muntanya o al mar, els helicòpters utilitzen politges i cables per hissar persones. És un dels usos més crítics de la politja.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. QUIZ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">10</div>
+      <h2>Posa't a prova!</h2>
+    </div>
+    <p>5 preguntes per comprovar si ho has entès. Som-hi!</p>
+
+    <div class="quiz" id="quiz">
+      <div class="quiz-progres">
+        <div class="quiz-progres-bar" id="quizBar"></div>
+      </div>
+      <div id="quizContingut"></div>
+      <div class="quiz-final" id="quizFinal">
+        <div class="puntuacio" id="quizPuntuacio">0/5</div>
+        <p id="quizMissatge">Continua aprenent!</p>
+        <button class="sim-btn primari" onclick="reiniciarQuiz()">
+          <iconify-icon icon="solar:refresh-bold"></iconify-icon>
+          Tornar-ho a provar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div style="text-align:center;padding:20px;color:#5c6678;font-size:.85rem">
+    <p>Fet amb 💜 per a l'aula de Tecnologia · 2n d'ESO</p>
+    <p style="margin-top:6px"><a href="index.html" style="color:#a78bfa;text-decoration:none">← Tornar al menú principal</a></p>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   ESTRELLES
+   ============================================================ */
+const canvasEst = document.getElementById('estrelles');
+const ctxEst = canvasEst.getContext('2d');
+function midaEst(){ canvasEst.width = innerWidth; canvasEst.height = innerHeight; }
+midaEst(); addEventListener('resize', midaEst);
+const estrelles = [];
+for (let i = 0; i < 220; i++){
+  estrelles.push({
+    x: Math.random(), y: Math.random(),
+    r: Math.random()*1.2+0.25,
+    fase: Math.random()*Math.PI*2,
+    vel: 0.004+Math.random()*0.012,
+    color: ['255,255,255','255,255,255','205,218,255','255,228,196'][Math.floor(Math.random()*4)]
+  });
+}
+function animaEst(){
+  ctxEst.clearRect(0,0,canvasEst.width,canvasEst.height);
+  for (const e of estrelles){
+    e.fase += e.vel;
+    const a = 0.2 + Math.abs(Math.sin(e.fase))*0.7;
+    ctxEst.beginPath();
+    ctxEst.arc(e.x*canvasEst.width, e.y*canvasEst.height, e.r, 0, Math.PI*2);
+    ctxEst.fillStyle = `rgba(${e.color},${a})`;
+    ctxEst.fill();
+  }
+  requestAnimationFrame(animaEst);
+}
+animaEst();
+
+/* ============================================================
+   SPARKLE
+   ============================================================ */
+const spkColors = ['#8b5cf6','#a78bfa','#c4b5fd','#22d3ee','#67e8f9'];
+let spkTimer = 0;
+addEventListener('mousemove', e => {
+  spkTimer++;
+  if (spkTimer % 5) return;
+  const s = document.createElement('div');
+  s.className = 'sparkle-trail';
+  s.style.left = e.clientX + 'px'; s.style.top = e.clientY + 'px';
+  const c = spkColors[Math.floor(Math.random()*spkColors.length)];
+  s.style.background = c; s.style.boxShadow = '0 0 8px ' + c;
+  const sz = 2 + Math.random()*3;
+  s.style.width = s.style.height = sz + 'px';
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 1000);
+});
+
+/* ============================================================
+   SIMULADOR
+   ============================================================ */
+const simCanvas = document.getElementById('simCanvas');
+const simCtx = simCanvas.getContext('2d');
+let simW, simH;
+
+let mode = 'fixa';
+const sim = {
+  R: 50,   // kg
+  n: 3,
+  liftP: 0,        // 0..1 progress pujada
+  animant: false,
+};
+
+function resizeSim(){
+  const wrap = simCanvas.parentElement;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  simW = wrap.clientWidth;
+  simH = wrap.clientHeight;
+  simCanvas.width = simW * dpr;
+  simCanvas.height = simH * dpr;
+  simCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resizeSim();
+addEventListener('resize', resizeSim);
+
+function getAM(){
+  if (mode === 'fixa') return 1;
+  if (mode === 'mobil') return 2;
+  return sim.n;
+}
+function getR_N(){ return sim.R * 9.81; }
+function getF(){ return getR_N() / getAM(); }
+function getCorda(){ return getAM(); }
+
+function actualitzaResultats(){
+  document.getElementById('valR').textContent = sim.R + ' kg';
+  document.getElementById('valN').textContent = sim.n;
+  document.getElementById('resR').textContent = getR_N().toFixed(0);
+  document.getElementById('resF').textContent = getF().toFixed(0);
+  document.getElementById('resAM').textContent = getAM();
+  document.getElementById('resCorda').textContent = getCorda().toFixed(1).replace('.', ',');
+}
+
+/* Controls */
+document.getElementById('ctrlR').addEventListener('input', e => {
+  sim.R = parseInt(e.target.value);
+  actualitzaResultats();
+});
+document.getElementById('ctrlN').addEventListener('input', e => {
+  sim.n = parseInt(e.target.value);
+  actualitzaResultats();
+});
+document.querySelectorAll('.sim-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.sim-tab').forEach(t => t.classList.remove('actiu'));
+    tab.classList.add('actiu');
+    mode = tab.dataset.mode;
+    document.getElementById('ctrlN-wrap').style.display = (mode === 'composta') ? 'block' : 'none';
+    sim.liftP = 0;
+    sim.animant = false;
+    actualitzaResultats();
+  });
+});
+
+document.getElementById('btnAixecar').addEventListener('click', () => {
+  if (sim.animant) return;
+  sim.animant = true;
+  sim.liftP = 0;
+  animaPujada();
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  sim.liftP = 0;
+  sim.animant = false;
+  actualitzaResultats();
+});
+
+function animaPujada(){
+  if (!sim.animant) return;
+  sim.liftP += 0.008;
+  if (sim.liftP >= 1){
+    sim.liftP = 1;
+    sim.animant = false;
+    setTimeout(() => {
+      sim.liftP = 0;
+      sim.animant = false;
+    }, 800);
+    return;
+  }
+  requestAnimationFrame(animaPujada);
+}
+
+/* ============================================================
+   DIBUIX
+   ============================================================ */
+function dibuixa(){
+  simCtx.clearRect(0, 0, simW, simH);
+
+  // Fons
+  const bg = simCtx.createRadialGradient(simW/2, simH/3, 20, simW/2, simH/3, simW);
+  bg.addColorStop(0, 'rgba(30,40,70,.35)');
+  bg.addColorStop(1, 'rgba(2,3,10,0)');
+  simCtx.fillStyle = bg;
+  simCtx.fillRect(0, 0, simW, simH);
+
+  // Sostre
+  simCtx.fillStyle = 'rgba(200,200,220,.15)';
+  simCtx.fillRect(0, 30, simW, 6);
+
+  if (mode === 'fixa') dibuixaFixa();
+  else if (mode === 'mobil') dibuixaMobil();
+  else dibuixaComposta();
+
+  requestAnimationFrame(dibuixa);
+}
+
+function dibuixaPolitja(cx, cy, r){
+  // Carcassa exterior
+  simCtx.beginPath();
+  simCtx.arc(cx, cy, r, 0, Math.PI*2);
+  const grad = simCtx.createRadialGradient(cx - r*0.3, cy - r*0.3, 2, cx, cy, r);
+  grad.addColorStop(0, '#a78bfa');
+  grad.addColorStop(0.6, '#7c3aed');
+  grad.addColorStop(1, '#4c1d95');
+  simCtx.fillStyle = grad;
+  simCtx.fill();
+  simCtx.strokeStyle = '#c4b5fd';
+  simCtx.lineWidth = 2;
+  simCtx.stroke();
+
+  // Canal (interior)
+  simCtx.beginPath();
+  simCtx.arc(cx, cy, r*0.7, 0, Math.PI*2);
+  simCtx.strokeStyle = 'rgba(0,0,0,.35)';
+  simCtx.lineWidth = 3;
+  simCtx.stroke();
+
+  // Eix central
+  simCtx.beginPath();
+  simCtx.arc(cx, cy, r*0.25, 0, Math.PI*2);
+  simCtx.fillStyle = '#1e1b4b';
+  simCtx.fill();
+  simCtx.strokeStyle = '#a78bfa';
+  simCtx.lineWidth = 2;
+  simCtx.stroke();
+
+  // Brillantor
+  simCtx.beginPath();
+  simCtx.arc(cx - r*0.35, cy - r*0.35, r*0.15, 0, Math.PI*2);
+  simCtx.fillStyle = 'rgba(255,255,255,.35)';
+  simCtx.fill();
+}
+
+function dibuixaCorda(x1, y1, x2, y2){
+  simCtx.beginPath();
+  simCtx.moveTo(x1, y1);
+  simCtx.lineTo(x2, y2);
+  simCtx.strokeStyle = '#e8ecf4';
+  simCtx.lineWidth = 2;
+  simCtx.stroke();
+}
+
+function dibuixaCarrega(cx, cy, massa, esquerra){
+  const r = 18 + sim.R * 0.08;
+  // Corda cap avall
+  simCtx.beginPath();
+  simCtx.moveTo(cx, cy);
+  simCtx.lineTo(cx, cy + 30);
+  simCtx.strokeStyle = '#e8ecf4';
+  simCtx.lineWidth = 2;
+  simCtx.stroke();
+
+  // Bloc
+  const bx = cx - r;
+  const by = cy + 30;
+  const bw = r * 2;
+  const bh = r * 1.4;
+
+  const grad = simCtx.createLinearGradient(bx, by, bx + bw, by + bh);
+  grad.addColorStop(0, '#f87171');
+  grad.addColorStop(1, '#b91c1c');
+  simCtx.fillStyle = grad;
+  simCtx.fillRect(bx, by, bw, bh);
+  simCtx.strokeStyle = '#fca5a5';
+  simCtx.lineWidth = 2;
+  simCtx.strokeRect(bx, by, bw, bh);
+
+  // Etiqueta
+  simCtx.fillStyle = '#fff';
+  simCtx.font = 'bold 13px Space Grotesk, sans-serif';
+  simCtx.textAlign = 'center';
+  simCtx.textBaseline = 'middle';
+  simCtx.fillText(sim.R + ' kg', cx, by + bh/2);
+}
+
+function dibuixaMa(cx, cy){
+  // Fletxa que representa la força
+  simCtx.beginPath();
+  simCtx.moveTo(cx, cy + 40);
+  simCtx.lineTo(cx, cy);
+  simCtx.strokeStyle = '#22d3ee';
+  simCtx.lineWidth = 3;
+  simCtx.stroke();
+  // Punta
+  simCtx.beginPath();
+  simCtx.moveTo(cx - 6, cy + 8);
+  simCtx.lineTo(cx, cy);
+  simCtx.lineTo(cx + 6, cy + 8);
+  simCtx.strokeStyle = '#22d3ee';
+  simCtx.lineWidth = 3;
+  simCtx.lineCap = 'round';
+  simCtx.lineJoin = 'round';
+  simCtx.stroke();
+
+  // Etiqueta F
+  simCtx.fillStyle = '#22d3ee';
+  simCtx.font = 'bold 14px Space Grotesk, sans-serif';
+  simCtx.textAlign = 'center';
+  simCtx.textBaseline = 'middle';
+  simCtx.fillText('F = ' + getF().toFixed(0) + ' N', cx, cy + 55);
+}
+
+/* ---------- POLITJA FIXA ---------- */
+function dibuixaFixa(){
+  const cx = simW / 2;
+  const cy = 100;
+  const r = 45;
+
+  // Suport al sostre
+  dibuixaCorda(cx, 36, cx, cy - r);
+
+  dibuixaPolitja(cx, cy, r);
+
+  // Pujada
+  const h = sim.liftP * (simH - cy - r - 120);
+
+  // Costat esquerre: càrrega
+  const cyLoad = cy + r + 20 + 80 - h;
+  dibuixaCorda(cx - r, cy, cx - r, cyLoad);
+  dibuixaCarrega(cx - r, cyLoad - 20, sim.R, true);
+
+  // Costat dret: força
+  const cyForca = cy + r + 60 + 80 + h; // baixa quan puges
+  dibuixaCorda(cx + r, cy, cx + r, cyForca);
+  dibuixaMa(cx + r, cyForca);
+}
+
+/* ---------- POLITJA MÒBIL ---------- */
+function dibuixaMobil(){
+  const cx = simW / 2;
+  const cyFix = 80;
+  const r = 40;
+
+  // Politja fixa al sostre
+  dibuixaCorda(cx, 36, cx, cyFix - r);
+  dibuixaPolitja(cx, cyFix, r);
+
+  // Politja mòbil baixa a mesura que puja
+  const liftMax = 120;
+  const cyMob = 240 - sim.liftP * liftMax;
+
+  // Corda esquerra: del sostre a la politja mòbil
+  dibuixaCorda(cx - r, 36, cx - r, cyMob);
+
+  // Politja mòbil
+  dibuixaPolitja(cx - r, cyMob, r);
+
+  // Corda dreta: de la politja mòbil a la politja fixa (passa per sobre)
+  dibuixaCorda(cx - r + r*2, cyMob, cx + r, cyFix);
+
+  // Càrrega penjada de la politja mòbil
+  dibuixaCarrega(cx - r, cyMob + r, sim.R, true);
+
+  // Força al final de la corda (costat dret de la politja fixa)
+  const cyForca = cyFix + r + 60 + sim.liftP * 60;
+  dibuixaCorda(cx + r, cyFix, cx + r, cyForca);
+  dibuixaMa(cx + r, cyForca);
+}
+
+/* ---------- POLITJA COMPOSTA ---------- */
+function dibuixaComposta(){
+  const cx = simW / 2;
+  const n = sim.n;
+  const r = 35;
+
+  // Politja fixa a dalt (una de sola, gran)
+  const cyFix = 90;
+  dibuixaCorda(cx, 36, cx, cyFix - r);
+  dibuixaPolitja(cx, cyFix, r);
+
+  // Politja mòbil a baix amb n segments efectius
+  const liftMax = 100;
+  const cyMob = 280 - sim.liftP * liftMax;
+
+  // Dibuixem la politja mòbil
+  dibuixaPolitja(cx, cyMob, r);
+
+  // Dibuixem els segments de corda (n)
+  // Comencem pel costat esquerre (fix al sostre) i acabem on hi ha la força
+  for (let i = 0; i < n; i++){
+    const offsetX = cx - r + (i * (r*2 / (n - 1)));
+    if (i === 0){
+      // Primer segment: del sostre a la politja mòbil (esquerra)
+      dibuixaCorda(offsetX, 36, offsetX, cyMob);
+    } else if (i === n - 1){
+      // Últim segment: de la politja mòbil cap amunt (costat dret)
+      dibuixaCorda(offsetX, cyMob, offsetX, cyFix + r + 40 + sim.liftP * 60);
+    } else {
+      // Segments intermedis: passen per sobre o per sota
+      // Simplifiquem dibuixant-los com a línies verticals al voltant de la politja mòbil
+      const alt = cyMob - (i % 2 === 0 ? r*0.8 : r*0.5);
+      dibuixaCorda(offsetX, cyMob, offsetX, Math.min(cyFix + r*0.5, alt));
+    }
+  }
+
+  // Càrrega
+  dibuixaCarrega(cx, cyMob + r, sim.R, true);
+
+  // Força al final
+  const cyForca = cyFix + r + 40 + sim.liftP * 60;
+  const xForca = cx + r;
+  dibuixaCorda(xForca, cyForca - 30, xForca, cyForca);
+  dibuixaMa(xForca, cyForca);
+
+  // Etiqueta "n segments"
+  simCtx.fillStyle = '#a78bfa';
+  simCtx.font = 'bold 14px Space Grotesk, sans-serif';
+  simCtx.textAlign = 'center';
+  simCtx.fillText(n + ' segments de corda', cx, 340);
+}
+
+actualitzaResultats();
+dibuixa();
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+const preguntesQuiz = [
+  {
+    pregunta: "Una politja fixa...",
+    opcions: ["Redueix la força a la meitat", "Canvia la direcció de la força però no la seva magnitud", "Multiplica la força per 2", "No serveix per aixecar pesos"],
+    correcte: 1,
+    explicacio: "Correcte! La politja fixa només canvia la direcció de la força, però l'esforç és el mateix que el pes."
+  },
+  {
+    pregunta: "Amb una politja mòbil, quina força necessites per aixecar 100 kg?",
+    opcions: ["100 kgf", "50 kgf", "200 kgf", "25 kgf"],
+    correcte: 1,
+    explicacio: "Correcte! La politja mòbil divideix la força per 2 (AM = 2). Per aixecar 100 kg, només necessites 50 kgf."
+  },
+  {
+    pregunta: "Si una politja composta té 4 segments de corda, quin és l'avantatge mecànic?",
+    opcions: ["2", "4", "8", "Depèn del pes"],
+    correcte: 1,
+    explicacio: "Correcte! AM = n, és a dir, el nombre de segments de corda que sostenen la càrrega. Amb 4 segments, AM = 4."
+  },
+  {
+    pregunta: "Què passa amb la corda quan augmenta l'avantatge mecànic?",
+    opcions: ["Es necessita menys corda", "Es necessita la mateixa corda", "Es necessita més corda", "No influeix"],
+    correcte: 2,
+    explicacio: "Correcte! Com més avantatge mecànic, més corda has de tibar. El que estalvies en força ho pagues en distància."
+  },
+  {
+    pregunta: "Qui va ser el primer a dissenyar politges compostes?",
+    opcions: ["Isaac Newton", "Arquimedes", "Leonardo da Vinci", "Galileo Galilei"],
+    correcte: 1,
+    explicacio: "Correcte! Arquimedes (s. III aC) va dissenyar els primers sistemes de politges compostes i va defensar Siracusa amb ells."
+  }
+];
+
+let quizActual = 0;
+let quizEncerts = 0;
+
+function mostrarPregunta(){
+  const contingut = document.getElementById('quizContingut');
+  const final = document.getElementById('quizFinal');
+  const bar = document.getElementById('quizBar');
+
+  if (quizActual >= preguntesQuiz.length){
+    contingut.innerHTML = '';
+    final.classList.add('show');
+    bar.style.width = '100%';
+    document.getElementById('quizPuntuacio').textContent = quizEncerts + '/' + preguntesQuiz.length;
+    let missatge = '';
+    if (quizEncerts === 5) missatge = '🌟 Perfecte! Ets un expert en politges!';
+    else if (quizEncerts >= 3) missatge = '👏 Molt bé! Ho has entès força bé.';
+    else missatge = '📚 Continua aprenent! Torna a llegir la teoria.';
+    document.getElementById('quizMissatge').textContent = missatge;
+    return;
+  }
+
+  final.classList.remove('show');
+  const p = preguntesQuiz[quizActual];
+  bar.style.width = (quizActual / preguntesQuiz.length * 100) + '%';
+
+  const lletres = ['A', 'B', 'C', 'D'];
+  let opcionsHTML = '';
+  p.opcions.forEach((op, i) => {
+    opcionsHTML += `
+      <button class="quiz-opcio" data-i="${i}">
+        <span class="lletra">${lletres[i]}</span>
+        <span>${op}</span>
+      </button>
+    `;
+  });
+
+  contingut.innerHTML = `
+    <div class="quiz-pregunta">${quizActual + 1}. ${p.pregunta}</div>
+    <div class="quiz-opcions">${opcionsHTML}</div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+  `;
+
+  document.querySelectorAll('.quiz-opcio').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.i);
+      const correcte = i === p.correcte;
+      const feedback = document.getElementById('quizFeedback');
+
+      document.querySelectorAll('.quiz-opcio').forEach(b => {
+        b.disabled = true;
+        const bi = parseInt(b.dataset.i);
+        if (bi === p.correcte) b.classList.add('correcte');
+        else if (bi === i && !correcte) b.classList.add('incorrecte');
+      });
+
+      if (correcte){
+        quizEncerts++;
+        feedback.className = 'quiz-feedback ok show';
+        feedback.textContent = '✅ ' + p.explicacio;
+      } else {
+        feedback.className = 'quiz-feedback ko show';
+        feedback.textContent = '❌ ' + p.explicacio;
+      }
+
+      setTimeout(() => {
+        quizActual++;
+        mostrarPregunta();
+      }, 2200);
+    });
+  });
+}
+
+function reiniciarQuiz(){
+  quizActual = 0;
+  quizEncerts = 0;
+  document.getElementById('quizFinal').classList.remove('show');
+  mostrarPregunta();
+}
+
+mostrarPregunta();
+</script>
+</body>
+</html>
