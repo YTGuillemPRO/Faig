@@ -3,476 +3,532 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Menú de Tecnologia · Sol Interactiu</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Menú de Tecnologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
 <style>
-  /* ---------- ESTILS GENERALS ---------- */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:#04060c;color:#e8ecf4;overflow-x:hidden;min-height:100vh}
+
+  /* ============================================================
+     INTRO: l'animació ORIGINAL (animacio.html via iframe)
+     ============================================================ */
+  #intro{position:fixed;inset:0;z-index:3000;background:#02030a;transition:opacity .7s}
+  #intro.marxant{opacity:0;pointer-events:none}
+  #intro iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+  #intro-entrar{
+    position:absolute;left:50%;bottom:9%;transform:translateX(-50%);z-index:2;
+    padding:15px 36px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;
+    font-weight:700;font-size:1.05rem;color:#0a0c12;background:#fcd34d;
+    box-shadow:0 0 30px rgba(252,211,77,.5);
+    animation:batze 1.6s ease-in-out infinite;
+    transition:filter .2s;
   }
-  body {
-    font-family: 'Space Grotesk', sans-serif;
-    background: #04060c;
-    color: #e8ecf4;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow-x: hidden;
+  #intro-entrar:hover{filter:brightness(1.08)}
+  #intro-entrar[hidden]{display:none}
+  @keyframes batze{
+    0%,100%{transform:translateX(-50%) scale(1)}
+    50%{transform:translateX(-50%) scale(1.06)}
   }
-  canvas#estrelles {
-    position: fixed;
-    inset: 0;
-    z-index: -3;
+
+  #intro-saltar{
+    position:absolute;top:16px;right:16px;z-index:2;
+    padding:9px 18px;border-radius:999px;cursor:pointer;font-family:inherit;
+    font-size:.85rem;color:#cfd6e0;
+    background:rgba(14,17,26,.7);border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(6px);transition:color .3s,border-color .3s;
   }
-  .nebulosa {
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    background: radial-gradient(ellipse 700px 500px at 20% 15%, rgba(70,100,170,.08), transparent),
-                radial-gradient(ellipse 600px 450px at 80% 85%, rgba(130,80,150,.06), transparent);
-    pointer-events: none;
-  }
-  /* ---------- CONTENIDOR PRINCIPAL ---------- */
-  .contenidor {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 1100px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-  }
-  /* ---------- SOL ---------- */
-  .sol-wrap {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    margin: 0 auto 2rem;
-    cursor: pointer;
-    transition: transform .2s;
-    z-index: 5;
-  }
-  .sol-wrap:active {
-    transform: scale(.94);
-  }
-  .sol-wrap canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-    position: relative;
-    z-index: 1;
-    border-radius: 50%;
-  }
-  .corona {
-    position: absolute;
-    inset: -55%;
-    z-index: 0;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,150,50,.26) 0%, rgba(255,110,20,.09) 42%, transparent 68%);
-    animation: pols 9s ease-in-out infinite;
-  }
-  @keyframes pols {
-    0%,100% { transform: scale(1); opacity: .85; }
-    50% { transform: scale(1.05); opacity: 1; }
-  }
-  /* ---------- TÍTOL ---------- */
-  h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    color: #f4f6fb;
-    letter-spacing: .02em;
-    margin-bottom: .5rem;
-  }
-  .subtitol {
-    color: #9aa5b5;
-    font-size: 1.05rem;
-    max-width: 520px;
-    margin: 0 auto 2.5rem;
-    line-height: 1.6;
-  }
-  /* ---------- GRAELLA DE TARGETES ---------- */
-  .graella {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.2rem;
-    justify-content: center;
-    margin-top: 2rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity .6s ease, transform .6s ease;
-    pointer-events: none;
-  }
-  .graella.visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-  .targeta {
-    background: rgba(255,255,255,.035);
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 16px;
-    padding: 1.8rem 1rem 1.5rem;
-    cursor: pointer;
-    transition: transform .3s, border-color .3s, box-shadow .3s;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .6rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .targeta:hover {
-    transform: translateY(-6px) scale(1.02);
-    border-color: rgba(252,211,77,.4);
-    box-shadow: 0 12px 40px -8px rgba(252,211,77,.2);
-  }
-  .targeta .icona {
-    font-size: 2.4rem;
-    line-height: 1;
-    filter: drop-shadow(0 0 12px rgba(252,211,77,.4));
-  }
-  .targeta h2 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #fde68a;
-  }
-  .targeta p {
-    font-size: .82rem;
-    color: #8b95a7;
-    line-height: 1.4;
-    margin: 0;
-  }
-  /* ---------- MODAL ---------- */
-  .modal-fons {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    background: rgba(2,3,10,.85);
-    backdrop-filter: blur(8px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-  }
-  .modal-fons.obert {
-    display: flex;
-  }
-  .modal {
-    width: 100%;
-    max-width: 480px;
-    background: #0d1119;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 20px;
-    padding: 2rem;
-    text-align: left;
-    animation: apareix .3s;
-  }
-  @keyframes apareix {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .modal h3 {
-    color: #fde68a;
-    font-size: 1.4rem;
-    margin-bottom: .8rem;
-  }
-  .modal p {
-    color: #c3ccd9;
-    font-size: .95rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-  .modal .boto {
-    display: inline-block;
-    padding: .8rem 1.8rem;
-    border-radius: 999px;
-    background: #fcd34d;
-    color: #0a0c12;
-    font-weight: 700;
-    text-decoration: none;
-    font-size: .9rem;
-    transition: filter .2s;
-  }
-  .modal .boto:hover {
-    filter: brightness(1.1);
-  }
-  .modal .tancar {
-    float: right;
-    background: none;
-    border: none;
-    color: #9aa5b5;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: .2rem .5rem;
-  }
-  .modal .tancar:hover {
-    color: #f87171;
-  }
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width: 600px) {
-    .graella {
-      grid-template-columns: 1fr 1fr;
-      gap: .8rem;
-    }
-    .targeta {
-      padding: 1.2rem .8rem;
-    }
-    .targeta .icona {
-      font-size: 1.8rem;
-    }
-    .targeta h2 {
-      font-size: .95rem;
-    }
-    .sol-wrap {
-      width: 120px;
-      height: 120px;
-    }
+  #intro-saltar:hover{color:#fde68a;border-color:rgba(252,211,77,.5)}
+
+  /* ============================================================
+     SITE PRINCIPAL
+     ============================================================ */
+  #mainSite{opacity:0;pointer-events:none;transition:opacity 1.2s ease;position:relative;z-index:1}
+  #mainSite.active{opacity:1;pointer-events:auto}
+
+  #estrelles{position:fixed;inset:0;z-index:-3}
+  .nebulosa{position:fixed;inset:0;z-index:-2;pointer-events:none;
+    transform:translate(calc(var(--mx,0)*-10px),calc(var(--my,0)*-8px));background:
+    radial-gradient(ellipse 700px 500px at 20% 15%, rgba(70,100,170,.08), transparent),
+    radial-gradient(ellipse 600px 450px at 80% 85%, rgba(130,80,150,.06), transparent)}
+  .vialactia{position:fixed;top:-15%;left:-15%;width:130%;height:75%;z-index:-2;pointer-events:none;
+    transform:translate(calc(var(--mx,0)*14px),calc(var(--my,0)*10px)) rotate(-14deg);
+    background:linear-gradient(115deg, transparent 32%, rgba(190,205,255,.045) 46%,
+      rgba(255,255,255,.03) 50%, rgba(190,205,255,.045) 54%, transparent 68%);
+    filter:blur(28px)}
+
+  header{text-align:center;padding:80px 20px 30px;position:relative;z-index:2}
+  .sol-wrap{position:relative;width:150px;height:150px;margin:0 auto 30px;cursor:pointer;transition:transform .2s}
+  .sol-wrap:active{transform:scale(.94)}
+  .sol-wrap canvas{width:100%;height:100%;display:block;position:relative;z-index:1;border-radius:50%}
+  .corona{position:absolute;inset:-55%;z-index:0;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,150,50,.26) 0%, rgba(255,110,20,.09) 42%, transparent 68%);
+    animation:pols 9s ease-in-out infinite}
+  @keyframes pols{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.05);opacity:1}}
+  h1{font-size:clamp(2rem,5vw,3rem);color:#f4f6fb;letter-spacing:.02em;margin-bottom:12px;font-weight:700}
+  .subtitol{color:#9aa5b5;font-size:1.02rem;max-width:520px;margin:0 auto;line-height:1.6}
+
+  .contenidor{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:20px 22px 90px}
+  .graella{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:20px}
+  .nav-card{position:relative;background:rgba(255,255,255,.04);border-radius:22px;padding:28px 24px 26px;
+    cursor:pointer;transition:all .5s cubic-bezier(.16,1,.3,1);text-align:left;overflow:hidden;
+    backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07)}
+  .nav-card .card-glow{position:absolute;inset:0;border-radius:22px;opacity:0;transition:opacity .5s;pointer-events:none;
+    background:radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%),
+      var(--glow-color,rgba(37,99,235,.15)), transparent 50%)}
+  .nav-card:hover .card-glow{opacity:1}
+  .nav-card:hover{transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-10px) scale(1.03);
+    opacity:1;border-color:rgba(252,211,77,.35);box-shadow:0 18px 50px -8px rgba(0,0,0,.5)}
+  .nav-card:active{transform:perspective(800px) scale(.97)!important;transition-duration:.1s}
+  .nav-card .card-inner{position:relative;z-index:3}
+  .icon-circle{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;font-size:24px;transition:all .5s cubic-bezier(.34,1.56,.64,1)}
+  .nav-card:hover .icon-circle{transform:scale(1.2) rotate(-10deg)}
+  .icon-circle.blue{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);color:#3b82f6}
+  .icon-circle.orange{background:rgba(234,88,12,.1);border:1px solid rgba(234,88,12,.25);color:#f97316}
+  .icon-circle.green{background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.25);color:#10b981}
+  .icon-circle.purple{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);color:#8b5cf6}
+  .icon-circle.cyan{background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);color:#22d3ee}
+  .icon-circle.amber{background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.25);color:#f59e0b}
+  .icon-circle.rose{background:rgba(225,29,72,.1);border:1px solid rgba(225,29,72,.25);color:#f43f5e}
+  .nav-card h2{font-size:17px;font-weight:700;margin-bottom:5px;color:#f4f6fb}
+  .nav-card p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.5;transition:color .3s}
+  .nav-card:hover p{color:rgba(255,255,255,.82)}
+  .nav-card .arrow{position:absolute;bottom:22px;right:20px;color:rgba(255,255,255,.5);
+    transition:all .5s cubic-bezier(.34,1.56,.64,1);opacity:0;transform:translateX(-12px);z-index:4}
+  .nav-card:hover .arrow{opacity:1;transform:translateX(0)}
+
+  #modalOverlay{position:fixed;inset:0;z-index:99999;background:rgba(2,3,10,.8);backdrop-filter:blur(10px);
+    display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s}
+  #modalOverlay.active{display:flex;opacity:1}
+  .modal-content{background:#0d1119;border:1px solid rgba(255,255,255,.12);border-radius:20px;
+    padding:30px;max-width:480px;width:100%;text-align:center;position:relative;
+    transform:scale(.9);transition:transform .3s}
+  #modalOverlay.active .modal-content{transform:scale(1)}
+  .modal-content h3{color:#fde68a;font-size:1.5rem;margin-bottom:10px}
+  .modal-content p{color:#c3ccd9;font-size:.95rem;line-height:1.6;margin-bottom:22px}
+  .modal-content .btn{display:inline-block;padding:12px 28px;border-radius:999px;
+    background:#fcd34d;color:#0a0c12;font-weight:700;text-decoration:none;transition:filter .2s, transform .2s}
+  .modal-content .btn:hover{filter:brightness(1.1);transform:translateY(-2px)}
+  .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;
+    color:#9aa5b5;font-size:1.3rem;cursor:pointer;padding:4px 8px;border-radius:8px;transition:color .2s}
+  .modal-close:hover{color:#f87171}
+
+  .sparkle-trail{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;
+    animation:sparkleFade 1s ease-out forwards}
+  @keyframes sparkleFade{0%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
+
+  @media(max-width:640px){
+    header{padding:50px 16px 20px}
+    .sol-wrap{width:110px;height:110px;margin-bottom:20px}
+    .contenidor{padding:10px 14px 60px}
+    .graella{grid-template-columns:1fr 1fr;gap:10px}
+    .nav-card{padding:18px 14px 18px;border-radius:18px}
+    .icon-circle{width:42px;height:42px;font-size:20px;border-radius:12px;margin-bottom:12px}
+    .nav-card h2{font-size:14px}
+    .nav-card p{font-size:11px}
+    .nav-card .arrow{display:none}
+    #intro-entrar{padding:13px 28px;font-size:.95rem;bottom:7%}
   }
 </style>
 </head>
 <body>
 
-<canvas id="estrelles"></canvas>
-<div class="nebulosa"></div>
+<!-- ==================== INTRO: L'ANIMACIÓ ORIGINAL ==================== -->
+<div id="intro">
+  <iframe id="intro-frame" title="Rotació i translació" src="animacio.html"></iframe>
+  <button id="intro-entrar" hidden>Entrar a la web ✨</button>
+  <button id="intro-saltar">Saltar ▸</button>
+</div>
 
-<div class="contenidor">
-  <!-- SOL INTERACTIU -->
-  <div class="sol-wrap" id="sol-wrap" title="Clica el sol per veure el menú">
-    <div class="corona"></div>
-    <canvas id="sol"></canvas>
-  </div>
+<!-- ==================== SITE PRINCIPAL ==================== -->
+<div id="mainSite">
+  <canvas id="estrelles"></canvas>
+  <div class="nebulosa"></div>
+  <div class="vialactia"></div>
 
-  <h1>Menú de Tecnologia</h1>
-  <p class="subtitol">
-    Clica el sol per desplegar les activitats de teoria.<br>
-    TikTok Propi, Pèndol, Palanca, Politja, Pla Inclinat, Cargol i Roda.
-  </p>
+  <header>
+    <div class="sol-wrap" id="sol-wrap" title="Clica'm! ☀️">
+      <div class="corona"></div>
+      <canvas id="sol"></canvas>
+    </div>
+    <h1>Menú de Tecnologia</h1>
+    <p class="subtitol">Tria una activitat de teoria. Clica el sol per una sorpresa 🚀</p>
+  </header>
 
-  <!-- GRAELLA DE TARGETES (oculta fins que es clica el sol) -->
-  <div class="graella" id="graella">
-    <!-- TIKTOK PROPI -->
-    <div class="targeta" data-tema="tiktok" data-titol="TikTok Propi" data-desc="El nostre feed vertical de vídeos. Puja clips curts, explica el projecte i comparteix-lo amb el món." data-enllac="#">
-      <span class="icona">📱</span>
-      <h2>TikTok Propi</h2>
-      <p>Feed vertical de vídeos</p>
-    </div>
-    <!-- PÈNDOL -->
-    <div class="targeta" data-tema="pendol" data-titol="Pèndol" data-desc="Moviment oscil·latori. Un pèndol simple, el seu període i les seves aplicacions en rellotges i mecanismes." data-enllac="#">
-      <span class="icona">⏱️</span>
-      <h2>Pèndol</h2>
-      <p>Moviment oscil·latori</p>
-    </div>
-    <!-- PALANCA -->
-    <div class="targeta" data-tema="palanca" data-titol="Palanca" data-desc="Màquina simple que amplifica la força. Palanques de primer, segon i tercer grau amb exemples quotidians." data-enllac="#">
-      <span class="icona">⚖️</span>
-      <h2>Palanca</h2>
-      <p>Màquina simple</p>
-    </div>
-    <!-- POLITJA -->
-    <div class="targeta" data-tema="politja" data-titol="Politja" data-desc="Roda amb un canal per on passa una corda. Politges fixes i mòbils per reduir l'esforç en aixecar càrregues." data-enllac="#">
-      <span class="icona">🔄</span>
-      <h2>Politja</h2>
-      <p>Corriola i politges</p>
-    </div>
-    <!-- PLA INCLINAT -->
-    <div class="targeta" data-tema="pla-inclinat" data-titol="Pla Inclinat" data-desc="Rampa que permet pujar objectes pesants amb menys força. El tascó i el cargol són aplicacions del pla inclinat." data-enllac="#">
-      <span class="icona">📐</span>
-      <h2>Pla Inclinat</h2>
-      <p>Rampes i tascó</p>
-    </div>
-    <!-- CARGOL -->
-    <div class="targeta" data-tema="cargol" data-titol="Cargol" data-desc="Pla inclinat enrotllat al voltant d'un cilindre. S'utilitza per subjectar, aixecar o moure objectes amb poc esforç." data-enllac="#">
-      <span class="icona">🔩</span>
-      <h2>Cargol</h2>
-      <p>Pla inclinat enrotllat</p>
-    </div>
-    <!-- RODA -->
-    <div class="targeta" data-tema="roda" data-titol="Roda" data-desc="Màquina simple que redueix la fricció. La roda i l'eix són la base de molts mecanismes i vehicles." data-enllac="#">
-      <span class="icona">⚙️</span>
-      <h2>Roda</h2>
-      <p>Roda i eix</p>
-    </div>
+  <div class="contenidor">
+    <div class="graella" id="graella"></div>
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-fons" id="modal-fons">
-  <div class="modal">
-    <button class="tancar" id="tancar-modal">✕</button>
-    <h3 id="modal-titol"></h3>
-    <p id="modal-desc"></p>
-    <a class="boto" id="modal-enllac" href="#">Anar a la pàgina →</a>
+<div id="modalOverlay">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">✕</button>
+    <h3 id="modalTitle"></h3>
+    <p id="modalDesc"></p>
+    <a class="btn" id="modalLink" href="#">Anar a la pàgina →</a>
   </div>
 </div>
 
 <script>
-  /* ============================================================
-     1. SOL ANIMAT (basat en el codi de "El Nostre Univers")
-     ============================================================ */
+/* ============================================================
+   INTRO: l'animació original via iframe (animacio.html)
+   ============================================================ */
+const introEl = document.getElementById('intro');
+const introFrame = document.getElementById('intro-frame');
+const btnIntroEntrar = document.getElementById('intro-entrar');
+const btnIntroSaltar = document.getElementById('intro-saltar');
+let introAcabada = false;
+let mainInited = false;
+
+function tancaIntro(){
+  if (introAcabada) return;
+  introAcabada = true;
+  introEl.classList.add('marxant');
+  setTimeout(() => { introEl.style.display = 'none'; }, 750);
+  document.body.style.overflow = '';
+  document.getElementById('mainSite').classList.add('active');
+  if (!mainInited){
+    mainInited = true;
+    initMainSite();
+  }
+}
+
+btnIntroEntrar.onclick = tancaIntro;
+btnIntroSaltar.onclick = tancaIntro;
+
+// Mostrar el botó "Entrar" quan l'animació avisa que està llesta
+window.addEventListener('message', e => {
+  if (e.data && e.data.tipus === 'animacio-llest') btnIntroEntrar.hidden = false;
+});
+// Fallback: si no arriba cap missatge, mostrar el botó al cap de 9 segons
+setTimeout(() => { btnIntroEntrar.hidden = false; }, 9000);
+
+// Si ja s'ha vist la intro en aquesta sessió, saltar-la
+if (sessionStorage.getItem('intro_vista')){
+  introEl.style.display = 'none';
+  document.body.style.overflow = '';
+  document.getElementById('mainSite').classList.add('active');
+  mainInited = true;
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initMainSite);
+  } else {
+    initMainSite();
+  }
+} else {
+  document.body.style.overflow = 'hidden';
+}
+
+/* ============================================================
+   SITE PRINCIPAL: SOL, ESTRELLES, BOTONS
+   ============================================================ */
+function initMainSite(){
+  sessionStorage.setItem('intro_vista', '1');
+
+  /* ---------- SOL PROCEDURAL ---------- */
   const sol = document.getElementById('sol');
   const sctx = sol.getContext('2d');
   const S = 140;
   sol.width = S; sol.height = S;
-
   const G = 96;
   const soroll = new Float32Array(G * G);
   for (let i = 0; i < G * G; i++) soroll[i] = Math.random();
 
-  function val(x, y) {
-    x = ((x % G) + G) % G;
-    y = ((y % G) + G) % G;
+  function val(x, y){
+    x = ((x % G) + G) % G; y = ((y % G) + G) % G;
     const xi = Math.floor(x), yi = Math.floor(y);
     const xf = x - xi, yf = y - yi;
-    const u = xf * xf * (3 - 2 * xf);
-    const v = yf * yf * (3 - 2 * yf);
-    const x2 = (xi + 1) % G, y2 = (yi + 1) % G;
-    const a = soroll[yi * G + xi];
-    const b = soroll[yi * G + x2];
-    const c = soroll[y2 * G + xi];
-    const d = soroll[y2 * G + x2];
-    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+    const u = xf*xf*(3-2*xf), v = yf*yf*(3-2*yf);
+    const x2 = (xi+1)%G, y2 = (yi+1)%G;
+    const a = soroll[yi*G+xi], b = soroll[yi*G+x2];
+    const c = soroll[y2*G+xi], d = soroll[y2*G+x2];
+    return a + (b-a)*u + (c-a)*v + (a-b-c+d)*u*v;
   }
-
-  function fbm(x, y) {
-    return 0.5 * val(x, y) + 0.25 * val(x * 2, y * 2) +
-           0.125 * val(x * 4, y * 4) + 0.0625 * val(x * 8, y * 8);
+  function fbm(x, y){
+    return 0.5*val(x,y) + 0.25*val(x*2,y*2) + 0.125*val(x*4,y*4) + 0.0625*val(x*8,y*8);
   }
-
-  let ultim = 0;
-
-  function pintaSol(t) {
+  let ultimSol = 0;
+  function pintaSol(t){
     const img = sctx.createImageData(S, S);
     const d = img.data;
-    for (let y = 0; y < S; y++) {
-      const dy = (y - S / 2) / (S / 2);
-      for (let x = 0; x < S; x++) {
-        const dx = (x - S / 2) / (S / 2);
-        const r2 = dx * dx + dy * dy;
-        const i = (y * S + x) * 4;
-        if (r2 > 1) {
-          d[i + 3] = 0;
-          continue;
-        }
+    for (let y = 0; y < S; y++){
+      const dy = (y - S/2) / (S/2);
+      for (let x = 0; x < S; x++){
+        const dx = (x - S/2) / (S/2);
+        const r2 = dx*dx + dy*dy;
+        const i = (y*S + x) * 4;
+        if (r2 > 1){ d[i+3] = 0; continue; }
         const limb = Math.sqrt(1 - r2);
-        const n = fbm(x / 16 + t, y / 16 + t * 0.6);
-        const br = Math.min(1, Math.pow(limb, 0.55) * (0.62 + 0.55 * n));
-        d[i] = 255 * br;
-        d[i + 1] = 255 * Math.pow(br, 1.25);
-        d[i + 2] = 255 * Math.pow(br, 3.2);
-        d[i + 3] = 255;
+        const n = fbm(x/16 + t, y/16 + t*0.6);
+        const br = Math.min(1, Math.pow(limb, 0.55) * (0.62 + 0.55*n));
+        d[i]   = 255 * br;
+        d[i+1] = 255 * Math.pow(br, 1.25);
+        d[i+2] = 255 * Math.pow(br, 3.2);
+        d[i+3] = 255;
       }
     }
     sctx.putImageData(img, 0, 0);
   }
-
-  function bucleSol(ts) {
-    if (ts - ultim > 80) {
-      ultim = ts;
-      pintaSol(ts * 0.00006);
-    }
+  function bucleSol(ts){
+    if (ts - ultimSol > 80){ ultimSol = ts; pintaSol(ts * 0.00006); }
     requestAnimationFrame(bucleSol);
   }
   requestAnimationFrame(bucleSol);
 
-  /* ============================================================
-     2. FONS D'ESTRELLES
-     ============================================================ */
+  /* ---------- FAVICON ---------- */
+  const fav = document.createElement('canvas'); fav.width = fav.height = 64;
+  const fx = fav.getContext('2d');
+  const gf = fx.createRadialGradient(32,32,4,32,32,32);
+  gf.addColorStop(0,'#fff7d6'); gf.addColorStop(.45,'#fcd34d'); gf.addColorStop(1,'rgba(252,211,77,0)');
+  fx.fillStyle = gf; fx.fillRect(0,0,64,64);
+  fx.fillStyle = '#fbbf24'; fx.beginPath(); fx.arc(32,32,14,0,7); fx.fill();
+  const llink = document.createElement('link'); llink.rel = 'icon'; llink.href = fav.toDataURL();
+  document.head.appendChild(llink);
+
+  /* ---------- ESTRELLES PRINCIPALS ---------- */
   const canvas = document.getElementById('estrelles');
   const ctx = canvas.getContext('2d');
-  function mida() {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-  }
-  mida();
-  addEventListener('resize', mida);
+  let cometes = [], pols = [];
+  function mida(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+  mida(); addEventListener('resize', mida);
 
+  const tonalitats = ['255,255,255','255,255,255','255,255,255','205,218,255','255,228,196'];
   const estrelles = [];
   for (let i = 0; i < 260; i++) {
     estrelles.push({
-      x: Math.random(),
-      y: Math.random(),
+      x: Math.random(), y: Math.random(),
       r: Math.random() * 1.2 + 0.25,
       fase: Math.random() * Math.PI * 2,
       vel: 0.004 + Math.random() * 0.012,
-      color: ['255,255,255', '255,255,255', '255,255,255', '205,218,255', '255,228,196'][Math.floor(Math.random() * 5)]
+      color: tonalitats[Math.floor(Math.random() * tonalitats.length)]
     });
   }
 
-  function anima() {
+  let warpActiu = false, warpT0 = 0;
+  function activaWarp(){
+    if (warpActiu) return;
+    warpActiu = true; warpT0 = performance.now();
+    toast('🚀 Hipervelocitat!');
+  }
+  document.getElementById('sol-wrap').onclick = activaWarp;
+
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let kIdx = 0;
+  addEventListener('keydown', e => {
+    kIdx = (e.key === KONAMI[kIdx]) ? kIdx + 1 : (e.key === KONAMI[0] ? 1 : 0);
+    if (kIdx === KONAMI.length){ kIdx = 0; activaWarp(); }
+  });
+
+  let ultimRastre = 0;
+  addEventListener('mousemove', e => {
+    const ara = performance.now();
+    if (ara - ultimRastre < 28) return;
+    ultimRastre = ara;
+    pols.push({
+      x: e.clientX + (Math.random()-.5)*6, y: e.clientY + (Math.random()-.5)*6,
+      vx: (Math.random()-.5)*.6, vy: -.3 - Math.random()*.5,
+      vida: 1, r: .8 + Math.random()*1.4,
+      color: Math.random() < .3 ? '252,211,77' : '255,255,255'
+    });
+    if (pols.length > 90) pols.shift();
+  }, { passive: true });
+
+  function anima(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (const e of estrelles) {
-      e.fase += e.vel;
-      const px = e.x * canvas.width;
-      const py = e.y * canvas.height;
+    const w = canvas.width, h = canvas.height;
+    let wp = 0;
+    if (warpActiu){
+      const t = performance.now() - warpT0;
+      if (t < 500) wp = t / 500;
+      else if (t < 2300) wp = 1;
+      else if (t < 3300) wp = 1 - (t - 2300) / 1000;
+      else { warpActiu = false; wp = 0; }
+    }
+    for (const e of estrelles){
+      e.fase += e.vel * (1 + wp * 6);
+      const px = e.x * w, py = e.y * h;
       const a = 0.2 + Math.abs(Math.sin(e.fase)) * 0.7;
+      if (wp > 0.02){
+        const dx = px - w/2, dy = py - h/2;
+        const dist = Math.hypot(dx, dy) || 1;
+        const len = wp * wp * (dist * 0.4 + 50);
+        const g2 = ctx.createLinearGradient(px, py, px + dx/dist*len, py + dy/dist*len);
+        g2.addColorStop(0, `rgba(${e.color},${a})`);
+        g2.addColorStop(1, `rgba(${e.color},0)`);
+        ctx.strokeStyle = g2; ctx.lineWidth = e.r;
+        ctx.beginPath(); ctx.moveTo(px, py);
+        ctx.lineTo(px + dx/dist*len, py + dy/dist*len); ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(px, py, e.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${e.color},${a})`;
+        ctx.fill();
+      }
+    }
+    for (let i = pols.length - 1; i >= 0; i--){
+      const p = pols[i];
+      p.x += p.vx; p.y += p.vy; p.vida -= 0.025;
+      if (p.vida <= 0){ pols.splice(i, 1); continue; }
       ctx.beginPath();
-      ctx.arc(px, py, e.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${e.color},${a})`;
+      ctx.arc(p.x, p.y, p.r * p.vida, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color},${p.vida * .8})`;
       ctx.fill();
+    }
+    for (let i = cometes.length - 1; i >= 0; i--){
+      const c = cometes[i];
+      c.x += c.vx; c.y += c.vy; c.vida -= 0.01;
+      if (c.vida <= 0){ cometes.splice(i, 1); continue; }
+      const g = ctx.createLinearGradient(c.x, c.y, c.x - c.vx*12, c.y - c.vy*12);
+      g.addColorStop(0, `rgba(255,255,255,${c.vida * 0.85})`);
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.strokeStyle = g; ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.moveTo(c.x, c.y);
+      ctx.lineTo(c.x - c.vx*12, c.y - c.vy*12); ctx.stroke();
     }
     requestAnimationFrame(anima);
   }
   anima();
+  setInterval(() => {
+    if (cometes.length < 2){
+      cometes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height * 0.5,
+        vx: 5 + Math.random() * 5,
+        vy: 2 + Math.random() * 3,
+        vida: 0.9
+      });
+    }
+  }, 6500);
 
-  /* ============================================================
-     3. INTERACCIÓ: CLIC AL SOL → MOSTRAR MENÚ
-     ============================================================ */
-  const solWrap = document.getElementById('sol-wrap');
-  const graella = document.getElementById('graella');
+  /* ---------- PARALLAX ---------- */
+  addEventListener('mousemove', e => {
+    document.documentElement.style.setProperty('--mx', e.clientX / innerWidth - .5);
+    document.documentElement.style.setProperty('--my', e.clientY / innerHeight - .5);
+  }, { passive: true });
 
-  solWrap.addEventListener('click', () => {
-    // Efecte d'hipervelocitat (opcional, es pot desactivar)
-    // Aquí simplement mostrem la graella i amaguem el sol per donar protagonisme
-    solWrap.style.transition = 'transform .6s cubic-bezier(.34,1.56,.64,1), opacity .4s';
-    solWrap.style.transform = 'scale(0.3)';
-    solWrap.style.opacity = '0';
-    solWrap.style.pointerEvents = 'none';
-
-    graella.classList.add('visible');
+  /* ---------- SPARKLE TRAIL ---------- */
+  const spkColors = ['#60a5fa','#c084fc','#34d399','#f97316','#22d3ee','#fbbf24','#f472b6'];
+  let spkTimer = 0;
+  addEventListener('mousemove', e => {
+    spkTimer++;
+    if (spkTimer % 4) return;
+    const s = document.createElement('div');
+    s.className = 'sparkle-trail';
+    s.style.left = e.clientX + 'px';
+    s.style.top = e.clientY + 'px';
+    const c = spkColors[Math.floor(Math.random()*spkColors.length)];
+    s.style.background = c;
+    s.style.boxShadow = '0 0 8px ' + c;
+    const sz = 2 + Math.random()*4;
+    s.style.width = s.style.height = sz + 'px';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
   });
 
-  /* ============================================================
-     4. MODAL PER A CADA TARGETA
-     ============================================================ */
-  const modalFons = document.getElementById('modal-fons');
-  const modalTitol = document.getElementById('modal-titol');
-  const modalDesc = document.getElementById('modal-desc');
-  const modalEnllac = document.getElementById('modal-enllac');
-  const tancarModal = document.getElementById('tancar-modal');
+  /* ---------- TARGETES ---------- */
+  const topics = [
+    { title: 'TikTok Propi',  desc: 'Feed vertical de vídeos', icon: 'solar:videocamera-bold-duotone',    color: 'blue',   link: '#' },
+    { title: 'Pèndol',        desc: 'Moviment oscil·latori',   icon: 'solar:clock-circle-bold-duotone',   color: 'orange', link: '#' },
+    { title: 'Palanca',       desc: 'Màquina simple',          icon: 'solar:scale-bold-duotone',          color: 'green',  link: '#' },
+    { title: 'Politja',       desc: 'Corriola i politges',     icon: 'solar:refresh-circle-bold-duotone', color: 'purple', link: '#' },
+    { title: 'Pla Inclinat',  desc: 'Rampes i tascó',          icon: 'solar:graph-bold-duotone',          color: 'cyan',   link: '#' },
+    { title: 'Cargol',        desc: 'Pla inclinat enrotllat',  icon: 'solar:screwdriver-bold-duotone',    color: 'amber',  link: '#' },
+    { title: 'Roda',          desc: 'Roda i eix',              icon: 'solar:wheel-bold-duotone',          color: 'rose',   link: '#' }
+  ];
 
-  document.querySelectorAll('.targeta').forEach(targeta => {
-    targeta.addEventListener('click', () => {
-      const titol = targeta.dataset.titol;
-      const desc = targeta.dataset.desc;
-      const enllac = targeta.dataset.enllac || '#';
-      modalTitol.textContent = titol;
-      modalDesc.textContent = desc;
-      modalEnllac.href = enllac;
-      modalFons.classList.add('obert');
+  const glowMap = {
+    blue:'rgba(37,99,235,.18)', orange:'rgba(234,88,12,.18)', green:'rgba(5,150,105,.18)',
+    purple:'rgba(124,58,237,.18)', cyan:'rgba(6,182,212,.18)', amber:'rgba(217,119,6,.18)',
+    rose:'rgba(225,29,72,.18)'
+  };
+
+  const graella = document.getElementById('graella');
+  topics.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'nav-card';
+    card.dataset.title = t.title;
+    card.dataset.desc = t.desc;
+    card.dataset.link = t.link;
+    card.style.setProperty('--glow-color', glowMap[t.color]);
+    card.innerHTML = `
+      <div class="card-glow"></div>
+      <div class="card-inner">
+        <div class="icon-circle ${t.color}"><iconify-icon icon="${t.icon}"></iconify-icon></div>
+        <h2>${t.title}</h2>
+        <p>${t.desc}</p>
+        <span class="arrow"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
+      </div>
+    `;
+    graella.appendChild(card);
+  });
+
+  /* ---------- TILT 3D ---------- */
+  document.querySelectorAll('.nav-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      card.style.setProperty('--rx', ((y - r.height/2) / (r.height/2)) * -8 + 'deg');
+      card.style.setProperty('--ry', ((x - r.width/2) / (r.width/2)) * 8 + 'deg');
+      card.style.setProperty('--mouse-x', (x / r.width) * 100 + '%');
+      card.style.setProperty('--mouse-y', (y / r.height) * 100 + '%');
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+      card.style.transform = '';
     });
   });
 
-  function tancaModal() {
-    modalFons.classList.remove('obert');
-  }
-  tancarModal.addEventListener('click', tancaModal);
-  modalFons.addEventListener('click', (e) => {
-    if (e.target === modalFons) tancaModal();
+  /* ---------- MODAL ---------- */
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalLink = document.getElementById('modalLink');
+  const modalClose = document.getElementById('modalClose');
+
+  document.querySelectorAll('.nav-card').forEach(card => {
+    card.addEventListener('click', () => {
+      modalTitle.textContent = card.dataset.title;
+      modalDesc.textContent = card.dataset.desc;
+      modalLink.href = card.dataset.link;
+      modalOverlay.classList.add('active');
+    });
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') tancaModal();
+  modalClose.addEventListener('click', () => modalOverlay.classList.remove('active'));
+  modalOverlay.addEventListener('click', e => {
+    if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') modalOverlay.classList.remove('active');
   });
 
-  /* ============================================================
-     5. (OPCIONAL) EFECTE DE PARTICULES EN CLICAR EL SOL
-     ============================================================ */
-  // Es pot afegir un petit esclat de partícules, però per simplicitat
-  // ja tenim l'efecte de escala. Si vols partícules, es poden afegir aquí.
+  /* ---------- TOAST ---------- */
+  let toastTimer;
+  function toast(msg){
+    let t = document.getElementById('toastMini');
+    if (!t){
+      t = document.createElement('div');
+      t.id = 'toastMini';
+      t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(15px);z-index:99999;background:rgba(14,17,26,.92);border:1px solid rgba(255,255,255,.15);color:#e8ecf4;padding:11px 22px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;backdrop-filter:blur(8px);text-align:center;font-family:inherit';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    requestAnimationFrame(() => {
+      t.style.opacity = '1';
+      t.style.transform = 'translateX(-50%) translateY(0)';
+    });
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(-50%) translateY(15px)';
+    }, 2400);
+  }
+  window.toast = toast;
+}
 </script>
 </body>
 </html>
