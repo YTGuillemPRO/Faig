@@ -1,1 +1,602 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TikTok Propi · Menú de Tecnologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://www.youtube.com/iframe_api"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:'Space Grotesk',sans-serif;
+    background:#02030a;
+    color:#e8ecf4;
+    overflow:hidden;
+    height:100vh;
+    height:100svh;
+  }
 
+  /* ---------- BOTÓ TORNAR ---------- */
+  .btn-tornar{
+    position:fixed;top:14px;left:14px;z-index:20;
+    padding:9px 16px;border-radius:999px;cursor:pointer;
+    font-family:inherit;font-size:.85rem;font-weight:600;
+    color:#e8ecf4;background:rgba(14,17,26,.75);
+    border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(10px);
+    display:flex;align-items:center;gap:6px;
+    text-decoration:none;
+    transition:all .25s;
+  }
+  .btn-tornar:hover{
+    color:#fde68a;
+    border-color:rgba(252,211,77,.5);
+    background:rgba(252,211,77,.08);
+  }
+  .btn-tornar svg{
+    width:14px;height:14px;fill:currentColor;
+  }
+
+  /* ---------- TÍTOL ---------- */
+  .titol-feed{
+    position:fixed;top:16px;left:0;right:0;
+    text-align:center;z-index:15;pointer-events:none;
+    font-weight:700;letter-spacing:.05em;color:#fff;
+    text-shadow:0 1px 8px rgba(0,0,0,.9);
+    font-size:.95rem;
+  }
+
+  /* ---------- FEED ---------- */
+  .feed{
+    height:100%;
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    scrollbar-width:none;
+  }
+  .feed::-webkit-scrollbar{display:none}
+
+  .slide{
+    height:100%;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .video-box{
+    position:relative;
+    width:100%;height:100%;
+    background:#000;
+    overflow:hidden;
+  }
+  @media(min-width:760px){
+    .video-box{
+      height:min(94%,920px);
+      width:auto;
+      aspect-ratio:9/16;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 0 80px rgba(0,0,0,.8);
+    }
+  }
+
+  .video-box iframe{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    border:0;
+  }
+
+  .click-cap{
+    position:absolute;inset:0;z-index:1;
+    cursor:pointer;
+  }
+
+  .icona-pausa{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    z-index:2;
+    width:70px;height:70px;border-radius:50%;
+    background:rgba(0,0,0,.5);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity .25s;
+    pointer-events:none;
+    backdrop-filter:blur(4px);
+  }
+  .icona-pausa svg{width:32px;height:32px;fill:#fff}
+  .icona-pausa.visible{opacity:1}
+
+  /* ---------- INFO ---------- */
+  .info{
+    position:absolute;left:16px;bottom:22px;z-index:2;
+    max-width:70%;text-align:left;
+    pointer-events:none;
+  }
+  .usuari{
+    font-weight:700;font-size:1rem;margin-bottom:6px;
+    text-shadow:0 1px 6px rgba(0,0,0,.9);
+  }
+  .descripcio{
+    font-size:.9rem;color:#e5e9f0;line-height:1.45;
+    text-shadow:0 1px 6px rgba(0,0,0,.9);
+    margin-bottom:8px;
+  }
+  .so{
+    display:flex;align-items:center;gap:6px;
+    font-size:.82rem;color:#cfd6e0;
+    text-shadow:0 1px 4px rgba(0,0,0,.9);
+  }
+  .so svg{width:13px;height:13px;fill:#cfd6e0}
+
+  /* ---------- ACCIONS ---------- */
+  .accions{
+    position:absolute;right:14px;bottom:32px;z-index:2;
+    display:flex;flex-direction:column;gap:22px;
+  }
+  .acc{
+    background:none;border:none;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+    font-family:inherit;color:#fff;font-size:.72rem;
+    text-shadow:0 1px 4px rgba(0,0,0,.9);
+    transition:transform .15s;
+  }
+  .acc .cercle{
+    width:48px;height:48px;border-radius:50%;
+    background:rgba(255,255,255,.14);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .2s,background .2s;
+    backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .acc svg{width:23px;height:23px;fill:#fff;transition:fill .2s}
+  .acc:active .cercle{transform:scale(1.15)}
+  .acc:hover .cercle{background:rgba(255,255,255,.22)}
+  .acc.liker.actiu .cercle{
+    background:rgba(254,44,85,.25);
+    border-color:rgba(254,44,85,.4);
+  }
+  .acc.liker.actiu svg{fill:#fe2c55;animation:pop .3s}
+  @keyframes pop{50%{transform:scale(1.35)}}
+
+  /* ---------- MUTE ---------- */
+  .mute{
+    position:absolute;top:14px;right:14px;z-index:2;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.12);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(6px);
+    transition:background .2s;
+  }
+  .mute:hover{background:rgba(255,255,255,.15)}
+  .mute svg{width:20px;height:20px;fill:#fff}
+
+  /* ---------- PISTA ---------- */
+  .pista{
+    position:absolute;bottom:18px;left:50%;
+    transform:translateX(-50%);
+    z-index:2;
+    color:#aab4c4;font-size:.78rem;
+    animation:puja 1.8s ease-in-out infinite;
+    pointer-events:none;
+    text-shadow:0 1px 4px rgba(0,0,0,.9);
+    white-space:nowrap;
+  }
+  @keyframes puja{
+    0%,100%{transform:translate(-50%,0);opacity:.7}
+    50%{transform:translate(-50%,-8px);opacity:1}
+  }
+
+  /* ---------- ERROR YOUTUBE ---------- */
+  .yt-error{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:30px;text-align:center;
+    color:#c3ccd9;gap:14px;
+    z-index:3;
+    background:linear-gradient(135deg,#0a0e1a,#02030a);
+  }
+  .yt-error .emoji{font-size:2.5rem}
+  .yt-error p{font-size:.95rem;line-height:1.5;max-width:280px}
+  .yt-error a{
+    color:#fcd34d;text-decoration:underline;
+    font-weight:600;font-size:.9rem;
+    text-underline-offset:3px;
+  }
+  .yt-error a:hover{color:#ffe98a}
+
+  /* ---------- TOAST ---------- */
+  .toast{
+    position:fixed;bottom:30px;left:50%;
+    transform:translateX(-50%) translateY(15px);
+    z-index:100;
+    background:rgba(14,17,26,.95);
+    border:1px solid rgba(255,255,255,.15);
+    color:#e8ecf4;
+    padding:11px 22px;border-radius:999px;
+    font-size:.88rem;
+    opacity:0;pointer-events:none;
+    transition:opacity .3s,transform .3s;
+    backdrop-filter:blur(8px);
+    max-width:90vw;text-align:center;
+  }
+  .toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---------- LOADING ---------- */
+  .loading{
+    position:fixed;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    z-index:50;
+    background:#02030a;
+    gap:16px;
+    transition:opacity .5s;
+  }
+  .loading.hidden{opacity:0;pointer-events:none}
+  .spinner{
+    width:44px;height:44px;
+    border:3px solid rgba(252,211,77,.15);
+    border-top-color:#fcd34d;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading p{color:#9aa5b5;font-size:.9rem;letter-spacing:.5px}
+
+  @media(max-width:480px){
+    .acc .cercle{width:44px;height:44px}
+    .acc svg{width:21px;height:21px}
+    .acc{font-size:.68rem}
+    .accions{gap:18px;right:10px;bottom:26px}
+    .info{left:12px;bottom:18px;max-width:65%}
+    .usuari{font-size:.92rem}
+    .descripcio{font-size:.82rem}
+    .so{font-size:.75rem}
+    .titol-feed{font-size:.85rem;top:14px}
+    .btn-tornar{padding:7px 12px;font-size:.78rem;top:10px;left:10px}
+    .pista{font-size:.72rem}
+  }
+</style>
+</head>
+<body>
+
+<a class="btn-tornar" href="index.html">
+  <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  Tornar
+</a>
+
+<div class="titol-feed">Per a tu · TikTok Propi</div>
+
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <p>Carregant vídeos...</p>
+</div>
+
+<div class="feed" id="feed"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   CONFIGURACIÓ: AFEGEIX ELS VÍDEOS AQUÍ
+   ------------------------------------------------------------
+   tipus: 'yt'  → YouTube (id = codi del vídeo)
+   tipus: 'tt'  → TikTok (id = codi numèric del vídeo)
+   complet: true → controls de YouTube (per a vídeos llargs)
+   ============================================================ */
+const feedTikTok = [
+  { tipus: 'yt', id: 'K4DyBUG242c',  usuari: '@ncs', desc: 'TEST · On & On 🎵',          so: 'On & On · Cartoon',         base: 128 },
+  { tipus: 'yt', id: 'bM7SZ5SBzyY',  usuari: '@ncs', desc: 'TEST · Fade 🎵',             so: 'Fade · Alan Walker',        base: 342 },
+  { tipus: 'yt', id: '3nQNiWdeH2Q',  usuari: '@ncs', desc: 'TEST · Heroes Tonight 🎵',   so: 'Heroes Tonight · Janji',    base: 57 },
+  { tipus: 'yt', id: 'TW9d8vYrVFQ',  usuari: '@ncs', desc: 'TEST · Sky High 🎵',         so: 'Sky High · Elektronomia',   base: 211 },
+  { tipus: 'yt', id: 'EP625xQIGzs',  usuari: '@ncs', desc: 'TEST · Hope 🎵',             so: 'Hope · Tobu',               base: 94 },
+  { tipus: 'yt', id: 'J2X5mJ3HDYE',  usuari: '@ncs', desc: 'TEST · Invincible 🎵',       so: 'Invincible · Deaf Kev',     base: 63 },
+  // Exemple de vídeo complet (amb controls de YouTube):
+  // { tipus: 'yt', id: 'K4DyBUG242c', usuari: '@ncs', desc: 'Vídeo complet 🎬', so: 'On & On', base: 12, complet: true },
+  // TikTok real (només el codi numèric del vídeo, no l'URL sencer):
+  // { tipus: 'tt', id: '7106594312292457990', usuari: '@el_nostre_compte', desc: 'El nostre TikTok', so: 'so original', base: 0 },
+];
+
+/* ============================================================
+   ICONES SVG
+   ============================================================ */
+const svgCor = '<svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+const svgComentari = '<svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>';
+const svgCompartir = '<svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
+const svgNota = '<svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>';
+const svgSo = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05A4.47 4.47 0 0 0 16.5 12zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+const svgSilenci = '<svg viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
+const svgPlay = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+
+/* ============================================================
+   ESTAT
+   ============================================================ */
+let players = [];
+let soActiu = false;
+let tiktokConstruit = false;
+let buildPending = false;
+const likesFeed = JSON.parse(localStorage.getItem('likes_univers') || '{}');
+const fmt = n => n >= 1000 ? (n/1000).toFixed(1).replace('.0','') + 'K' : n;
+
+/* ============================================================
+   YOUTUBE API CALLBACK
+   ============================================================ */
+window.onYouTubeIframeAPIReady = () => {
+  console.log('YouTube API llesta');
+  buildTikTok();
+};
+
+/* ============================================================
+   CONSTRUCCIÓ DEL FEED
+   ============================================================ */
+function buildTikTok(){
+  if (tiktokConstruit) return;
+
+  // Esperar que l'API estigui a punt
+  if (typeof YT === 'undefined' || !YT.Player){
+    if (!buildPending){
+      buildPending = true;
+      setTimeout(() => { buildPending = false; buildTikTok(); }, 200);
+    }
+    return;
+  }
+
+  tiktokConstruit = true;
+  const feed = document.getElementById('feed');
+  feed.innerHTML = '';
+
+  // Crear les slides
+  feedTikTok.forEach((v, i) => {
+    const esTT = v.tipus === 'tt';
+    const esComplet = !!v.complet && !esTT;
+
+    const slide = document.createElement('div');
+    slide.className = 'slide';
+    slide.id = 'tiktok-' + i;
+    slide.innerHTML = `
+      <div class="video-box">
+        <div id="player-${i}"></div>
+        ${(!esTT && !esComplet) ? `
+          <div class="click-cap" data-i="${i}"></div>
+          <div class="icona-pausa" id="pausa-${i}">${svgPlay}</div>
+        ` : ''}
+        <div class="info">
+          <div class="usuari">${v.usuari}</div>
+          <div class="descripcio">${v.desc}</div>
+          <div class="so">${svgNota}<span>${v.so}</span></div>
+        </div>
+        <div class="accions">
+          <button class="acc liker" data-i="${i}">
+            <span class="cercle">${svgCor}</span>
+            <span class="n">${fmt(v.base + (likesFeed[v.id] ? 1 : 0))}</span>
+          </button>
+          <button class="acc comentar" data-i="${i}">
+            <span class="cercle">${svgComentari}</span>
+            <span>opina</span>
+          </button>
+          <button class="acc compartir" data-i="${i}">
+            <span class="cercle">${svgCompartir}</span>
+            <span>comparteix</span>
+          </button>
+        </div>
+        ${(!esTT && !esComplet) ? `<button class="mute">${svgSilenci}</button>` : ''}
+        ${i === 0 ? '<div class="pista">↓ llisca per veure més</div>' : ''}
+      </div>`;
+    feed.appendChild(slide);
+  });
+
+  // Crear els players
+  feedTikTok.forEach((v, i) => {
+    if (v.tipus === 'tt'){
+      // TikTok iframe
+      const holder = document.getElementById('player-' + i);
+      if (holder){
+        const f = document.createElement('iframe');
+        f.src = 'https://www.tiktok.com/embed/v2/' + v.id;
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.setAttribute('data-tt', '1');
+        holder.replaceWith(f);
+      }
+      players[i] = null;
+      return;
+    }
+
+    // YouTube
+    const esComplet = !!v.complet;
+    try {
+      players[i] = new YT.Player('player-' + i, {
+        videoId: v.id,
+        playerVars: {
+          autoplay: 0,
+          mute: 1,
+          controls: esComplet ? 1 : 0,
+          rel: 0,
+          loop: esComplet ? 0 : 1,
+          playlist: v.id,
+          modestbranding: 1,
+          playsinline: 1,
+          iv_load_policy: 3,
+          fs: esComplet ? 1 : 0,
+          origin: location.origin
+        },
+        events: {
+          'onError': (e) => mostraError(i, v),
+          'onReady': () => {
+            // Amagar loading el primer cop
+            const loading = document.getElementById('loading');
+            if (loading && !loading.classList.contains('hidden')){
+              setTimeout(() => loading.classList.add('hidden'), 300);
+            }
+          }
+        }
+      });
+    } catch(err){
+      console.error('Error creant player', i, err);
+      mostraError(i, v);
+    }
+  });
+
+  // Amagar loading per si de cas
+  setTimeout(() => {
+    const loading = document.getElementById('loading');
+    if (loading) loading.classList.add('hidden');
+  }, 2500);
+
+  // IntersectionObserver per autoplay
+  const feedEl = document.getElementById('feed');
+  const io = new IntersectionObserver(entrades => {
+    entrades.forEach(en => {
+      const i = +en.target.id.split('-')[1];
+      const p = players[i];
+      if (!p || !p.playVideo) return;
+      if (en.isIntersecting){
+        aplicaSo(p);
+        try { p.playVideo(); } catch(e){}
+      } else {
+        try { p.pauseVideo(); } catch(e){}
+      }
+    });
+  }, { root: feedEl, threshold: 0.6 });
+  document.querySelectorAll('.slide').forEach(s => io.observe(s));
+
+  // Play/pause al clicar el vídeo
+  document.querySelectorAll('.click-cap').forEach(cap => {
+    cap.onclick = () => {
+      const i = +cap.dataset.i;
+      const p = players[i];
+      if (!p || !p.getPlayerState) return;
+      if (p.getPlayerState() === YT.PlayerState.PLAYING){
+        p.pauseVideo();
+        document.getElementById('pausa-' + i).classList.add('visible');
+      } else {
+        p.playVideo();
+        document.getElementById('pausa-' + i).classList.remove('visible');
+      }
+    };
+  });
+
+  // Likes
+  document.querySelectorAll('.liker').forEach(b => {
+    const i = +b.dataset.i;
+    if (likesFeed[feedTikTok[i].id]) b.classList.add('actiu');
+    b.onclick = () => {
+      const v = feedTikTok[i];
+      likesFeed[v.id] = !likesFeed[v.id];
+      localStorage.setItem('likes_univers', JSON.stringify(likesFeed));
+      b.classList.toggle('actiu', likesFeed[v.id]);
+      b.querySelector('.n').textContent = fmt(v.base + (likesFeed[v.id] ? 1 : 0));
+    };
+  });
+
+  // Comentar → tornar al index amb la vista d'opinions
+  document.querySelectorAll('.comentar').forEach(b => {
+    b.onclick = () => { window.location.href = 'index.html#opinions'; };
+  });
+
+  // Compartir
+  document.querySelectorAll('.compartir').forEach(b => {
+    b.onclick = async () => {
+      const i = +b.dataset.i;
+      const v = feedTikTok[i];
+      const url = v.tipus === 'tt'
+        ? 'https://www.tiktok.com/video/' + v.id
+        : 'https://www.youtube.com/watch?v=' + v.id;
+      try {
+        if (navigator.share){
+          await navigator.share({ title: 'TikTok Propi', url });
+        } else {
+          await navigator.clipboard.writeText(url);
+          toast("Enllaç copiat! ✨");
+        }
+      } catch {}
+    };
+  });
+
+  // Mute
+  document.querySelectorAll('.mute').forEach(b => {
+    b.onclick = () => {
+      soActiu = !soActiu;
+      document.querySelectorAll('.mute').forEach(x => {
+        x.innerHTML = soActiu ? svgSo : svgSilenci;
+      });
+      players.forEach(p => {
+        if (p && p.playVideo) aplicaSo(p);
+      });
+    };
+  });
+}
+
+/* ============================================================
+   APLICAR SO
+   ============================================================ */
+function aplicaSo(p){
+  if (soActiu){
+    try { p.unMute(); p.setVolume(80); } catch(e){}
+  } else {
+    try { p.mute(); } catch(e){}
+  }
+}
+
+/* ============================================================
+   MOSTRAR ERROR DE YOUTUBE
+   ============================================================ */
+function mostraError(i, v){
+  const box = document.querySelector('#tiktok-' + i + ' .video-box');
+  if (!box || box.querySelector('.yt-error')) return;
+  const err = document.createElement('div');
+  err.className = 'yt-error';
+  err.innerHTML = `
+    <div class="emoji">⚠️</div>
+    <p>No s'ha pogut carregar aquest vídeo.</p>
+    <a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">Veure'l a YouTube ↗</a>
+  `;
+  box.appendChild(err);
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('visible'), 2600);
+}
+
+/* ============================================================
+   INICIALITZACIÓ
+   ============================================================ */
+// Si l'API triga massa, mostrem un missatge però continuem intentant
+setTimeout(() => {
+  if (!tiktokConstruit){
+    const loading = document.getElementById('loading');
+    if (loading) loading.classList.add('hidden');
+    toast('⚠️ Els vídeos estan trigant a carregar...');
+  }
+}, 5000);
+
+// Si l'API ja estava carregada abans (per cache), construïm directament
+if (typeof YT !== 'undefined' && YT.Player){
+  buildTikTok();
+}
+
+// Escolta de teclat per navegar
+document.addEventListener('keydown', e => {
+  if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+  const slides = [...document.querySelectorAll('.slide')];
+  const feedEl = document.getElementById('feed');
+  if (!feedEl || !slides.length) return;
+  const actual = Math.round(feedEl.scrollTop / feedEl.clientHeight);
+  const desti = Math.min(slides.length - 1, Math.max(0, actual + (e.key === 'ArrowDown' ? 1 : -1)));
+  slides[desti].scrollIntoView({ behavior: 'smooth' });
+});
+</script>
+</body>
+</html>
