@@ -1,1 +1,1473 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Pèndol · Menú de Tecnologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Space Grotesk',sans-serif;
+    background:#04060c;
+    color:#e8ecf4;
+    overflow-x:hidden;
+    line-height:1.6;
+  }
 
+  /* ============ FONS ESPACIAL ============ */
+  #estrelles{position:fixed;inset:0;z-index:-3}
+  .nebulosa{
+    position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(ellipse 700px 500px at 20% 15%, rgba(70,100,170,.08), transparent),
+      radial-gradient(ellipse 600px 450px at 80% 85%, rgba(130,80,150,.06), transparent);
+  }
+
+  /* ============ BOTÓ TORNAR ============ */
+  .btn-tornar{
+    position:fixed;top:16px;left:16px;z-index:100;
+    padding:10px 18px;border-radius:999px;cursor:pointer;
+    font-family:inherit;font-size:.88rem;font-weight:600;
+    color:#e8ecf4;background:rgba(14,17,26,.78);
+    border:1px solid rgba(255,255,255,.18);
+    backdrop-filter:blur(10px);
+    display:flex;align-items:center;gap:8px;
+    text-decoration:none;
+    transition:all .25s;
+  }
+  .btn-tornar:hover{
+    color:#fde68a;
+    border-color:rgba(252,211,77,.5);
+    background:rgba(252,211,77,.08);
+    transform:translateX(-3px);
+  }
+  .btn-tornar svg{width:14px;height:14px;fill:currentColor}
+
+  /* ============ HERO ============ */
+  .hero{
+    text-align:center;
+    padding:90px 20px 50px;
+    position:relative;
+    max-width:900px;
+    margin:0 auto;
+  }
+  .hero-icon{
+    width:110px;height:110px;
+    margin:0 auto 24px;
+    border-radius:30px;
+    background:linear-gradient(135deg, rgba(234,88,12,.15), rgba(251,146,60,.08));
+    border:1px solid rgba(234,88,12,.3);
+    display:flex;align-items:center;justify-content:center;
+    font-size:48px;color:#f97316;
+    box-shadow:0 0 60px rgba(234,88,12,.25), inset 0 1px 0 rgba(255,255,255,.1);
+    animation:flotaIcon 4s ease-in-out infinite;
+  }
+  @keyframes flotaIcon{
+    0%,100%{transform:translateY(0) rotate(-3deg)}
+    50%{transform:translateY(-8px) rotate(3deg)}
+  }
+  .hero h1{
+    font-size:clamp(2rem,6vw,3.4rem);
+    font-weight:900;
+    letter-spacing:-.02em;
+    line-height:1.1;
+    margin-bottom:14px;
+    background:linear-gradient(105deg,#fff 0%,#fff 40%,#f97316 50%,#fbbf24 60%,#fff 70%);
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:shimmer 5s linear infinite;
+  }
+  @keyframes shimmer{to{background-position:200% center}}
+  .hero .subtitol{
+    color:#9aa5b5;
+    font-size:1.05rem;
+    max-width:600px;
+    margin:0 auto;
+  }
+  .hero .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    margin-top:20px;
+    padding:8px 18px;border-radius:999px;
+    background:rgba(234,88,12,.1);
+    border:1px solid rgba(234,88,12,.25);
+    color:#fb923c;font-size:.82rem;font-weight:600;
+    letter-spacing:.5px;
+  }
+
+  /* ============ CONTENIDOR ============ */
+  .contenidor{
+    max-width:920px;
+    margin:0 auto;
+    padding:20px 20px 100px;
+  }
+  .seccio{margin-bottom:70px}
+  .seccio-titol{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:22px;
+    padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .seccio-titol .num{
+    flex-shrink:0;
+    width:38px;height:38px;
+    border-radius:11px;
+    background:linear-gradient(135deg, rgba(234,88,12,.2), rgba(251,146,60,.1));
+    border:1px solid rgba(234,88,12,.3);
+    color:#fb923c;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:1rem;
+  }
+  .seccio-titol h2{
+    font-size:clamp(1.3rem,3vw,1.7rem);
+    font-weight:700;
+    color:#f4f6fb;
+  }
+  .seccio p{
+    color:#c3ccd9;
+    margin-bottom:14px;
+    font-size:1rem;
+  }
+  .seccio p strong{color:#fff}
+  .seccio p em{color:#fde68a;font-style:normal}
+  .seccio a{color:#fbbf24;text-decoration:underline;text-underline-offset:3px}
+  .seccio a:hover{color:#fde68a}
+
+  /* ============ CAIXES DE DESTACAT ============ */
+  .destacat{
+    background:linear-gradient(135deg, rgba(234,88,12,.08), rgba(251,146,60,.04));
+    border:1px solid rgba(234,88,12,.2);
+    border-left:3px solid #f97316;
+    border-radius:12px;
+    padding:20px 24px;
+    margin:20px 0;
+  }
+  .destacat h4{
+    color:#fb923c;font-size:.95rem;font-weight:700;
+    margin-bottom:8px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .destacat p{margin-bottom:0;font-size:.95rem}
+
+  .info{
+    background:rgba(37,99,235,.06);
+    border:1px solid rgba(37,99,235,.2);
+    border-left:3px solid #3b82f6;
+    border-radius:12px;
+    padding:20px 24px;
+    margin:20px 0;
+  }
+  .info h4{
+    color:#60a5fa;font-size:.95rem;font-weight:700;
+    margin-bottom:8px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .info p{margin-bottom:0;font-size:.95rem}
+
+  .avis{
+    background:rgba(239,68,68,.06);
+    border:1px solid rgba(239,68,68,.2);
+    border-left:3px solid #ef4444;
+    border-radius:12px;
+    padding:20px 24px;
+    margin:20px 0;
+  }
+  .avis h4{
+    color:#f87171;font-size:.95rem;font-weight:700;
+    margin-bottom:8px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .avis p{margin-bottom:0;font-size:.95rem}
+
+  /* ============ PARTS DEL PÈNDOL (diagrama) ============ */
+  .diagrama{
+    background:rgba(255,255,255,.025);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:30px 20px;
+    margin:24px 0;
+    display:flex;
+    justify-content:center;
+  }
+  .diagrama svg{max-width:100%;height:auto}
+
+  /* ============ LÍSTES DE PARTS ============ */
+  .parts-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:14px;
+    margin:20px 0;
+  }
+  .part{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:18px;
+    transition:transform .3s, border-color .3s;
+  }
+  .part:hover{
+    transform:translateY(-3px);
+    border-color:rgba(251,146,60,.35);
+  }
+  .part .ico{
+    width:36px;height:36px;
+    border-radius:10px;
+    background:rgba(234,88,12,.12);
+    border:1px solid rgba(234,88,12,.25);
+    color:#fb923c;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+    margin-bottom:10px;
+  }
+  .part h3{font-size:.95rem;color:#f4f6fb;margin-bottom:4px}
+  .part p{font-size:.85rem;color:#9aa5b5;margin:0}
+
+  /* ============ FÓRMULA ============ */
+  .formula-card{
+    background:linear-gradient(135deg, rgba(124,58,237,.08), rgba(139,92,246,.03));
+    border:1px solid rgba(124,58,237,.25);
+    border-radius:20px;
+    padding:36px 24px;
+    text-align:center;
+    margin:26px 0;
+  }
+  .formula-principal{
+    font-family:'Times New Roman',serif;
+    font-size:clamp(2rem,6vw,3rem);
+    color:#c4b5fd;
+    margin:18px 0;
+    letter-spacing:2px;
+    font-style:italic;
+  }
+  .formula-principal .sqrt{display:inline-block;position:relative}
+  .formula-principal .frac{display:inline-block;vertical-align:middle;text-align:center;font-size:.6em;line-height:1;margin:0 4px}
+  .formula-principal .frac span{display:block}
+  .formula-principal .frac .num{border-bottom:2px solid #c4b5fd;padding-bottom:2px}
+  .formula-principal .frac .den{padding-top:2px}
+  .formula-legend{
+    display:flex;flex-wrap:wrap;gap:20px;justify-content:center;
+    margin-top:22px;color:#9aa5b5;font-size:.9rem;
+  }
+  .formula-legend span{display:flex;align-items:center;gap:6px}
+  .formula-legend strong{color:#c4b5fd;font-size:1.05rem}
+
+  /* ============ SIMULADOR ============ */
+  .simulador{
+    background:linear-gradient(180deg, rgba(15,20,35,.9), rgba(8,10,20,.9));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    overflow:hidden;
+    margin:26px 0;
+    box-shadow:0 20px 60px -20px rgba(0,0,0,.8);
+  }
+  .sim-canvas-wrap{
+    position:relative;
+    height:380px;
+    background:radial-gradient(ellipse at center, #0a1020 0%, #02030a 100%);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  #simCanvas{
+    width:100%;height:100%;display:block;
+  }
+  .sim-controls{
+    padding:24px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  .control{margin-bottom:14px}
+  .control label{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-size:.85rem;color:#9aa5b5;margin-bottom:8px;
+  }
+  .control label .val{
+    color:#fbbf24;font-weight:700;font-size:.95rem;
+    font-variant-numeric:tabular-nums;
+  }
+  .control input[type=range]{
+    -webkit-appearance:none;appearance:none;
+    width:100%;height:5px;border-radius:5px;
+    background:rgba(255,255,255,.1);
+    outline:none;
+  }
+  .control input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:18px;height:18px;border-radius:50%;
+    background:linear-gradient(135deg,#f97316,#fb923c);
+    cursor:pointer;
+    border:2px solid #0a0c12;
+    box-shadow:0 0 12px rgba(251,146,60,.6);
+  }
+  .control input[type=range]::-moz-range-thumb{
+    width:18px;height:18px;border-radius:50%;
+    background:linear-gradient(135deg,#f97316,#fb923c);
+    cursor:pointer;border:2px solid #0a0c12;
+    box-shadow:0 0 12px rgba(251,146,60,.6);
+  }
+  .sim-resultat{
+    grid-column:1/-1;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:18px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:16px;
+    text-align:center;
+  }
+  .resultat-item .r-label{
+    font-size:.75rem;color:#9aa5b5;
+    text-transform:uppercase;letter-spacing:.5px;
+    margin-bottom:6px;
+  }
+  .resultat-item .r-val{
+    font-size:1.4rem;font-weight:800;color:#fb923c;
+    font-variant-numeric:tabular-nums;
+  }
+  .resultat-item .r-unit{
+    font-size:.75rem;color:#7c8698;margin-left:2px;font-weight:600;
+  }
+  .sim-botons{
+    grid-column:1/-1;
+    display:flex;gap:12px;justify-content:center;
+    flex-wrap:wrap;
+  }
+  .sim-btn{
+    padding:11px 22px;border-radius:12px;cursor:pointer;
+    font-family:inherit;font-weight:600;font-size:.9rem;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.05);
+    color:#e8ecf4;
+    transition:all .25s;
+    display:flex;align-items:center;gap:8px;
+  }
+  .sim-btn:hover{
+    background:rgba(251,146,60,.12);
+    border-color:rgba(251,146,60,.4);
+    color:#fbbf24;
+  }
+  .sim-btn.primari{
+    background:linear-gradient(135deg,#ea580c,#f97316);
+    border-color:rgba(251,146,60,.5);
+    color:#fff;
+  }
+  .sim-btn.primari:hover{filter:brightness(1.1)}
+
+  /* ============ TAULA DE VARIABLES ============ */
+  .taula-wrap{
+    overflow-x:auto;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.08);
+    margin:24px 0;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.92rem;
+  }
+  thead{background:rgba(234,88,12,.1)}
+  th{
+    text-align:left;
+    padding:14px 18px;
+    color:#fb923c;
+    font-weight:700;
+    font-size:.85rem;
+    letter-spacing:.3px;
+    text-transform:uppercase;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  td{
+    padding:14px 18px;
+    color:#c3ccd9;
+    border-bottom:1px solid rgba(255,255,255,.05);
+  }
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(255,255,255,.02)}
+  .si{color:#34d399;font-weight:700}
+  .no{color:#f87171;font-weight:700}
+
+  /* ============ TIPUS DE PÈNDOLS ============ */
+  .tipus-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:16px;
+    margin:22px 0;
+  }
+  .tipus{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;
+    padding:22px;
+    transition:transform .3s, border-color .3s;
+  }
+  .tipus:hover{
+    transform:translateY(-4px);
+    border-color:rgba(251,146,60,.35);
+  }
+  .tipus .ico{
+    font-size:2rem;
+    margin-bottom:12px;
+    display:block;
+  }
+  .tipus h3{font-size:1rem;color:#f4f6fb;margin-bottom:8px}
+  .tipus p{font-size:.88rem;color:#9aa5b5;margin:0;line-height:1.55}
+
+  /* ============ TIMELINE ============ */
+  .timeline{
+    position:relative;
+    padding-left:36px;
+    margin:26px 0;
+  }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:11px;top:8px;bottom:8px;
+    width:2px;
+    background:linear-gradient(180deg, #f97316, rgba(251,146,60,.1));
+    border-radius:2px;
+  }
+  .timeline-item{
+    position:relative;
+    padding-bottom:28px;
+  }
+  .timeline-item:last-child{padding-bottom:0}
+  .timeline-item::before{
+    content:'';
+    position:absolute;
+    left:-31px;top:6px;
+    width:14px;height:14px;
+    border-radius:50%;
+    background:#f97316;
+    border:3px solid #0a0c12;
+    box-shadow:0 0 12px rgba(251,146,60,.6);
+  }
+  .timeline-item .any{
+    font-size:.8rem;
+    color:#fb923c;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:4px;
+  }
+  .timeline-item h4{
+    font-size:1rem;color:#f4f6fb;margin-bottom:6px;font-weight:700;
+  }
+  .timeline-item p{font-size:.9rem;color:#9aa5b5;margin:0;line-height:1.55}
+
+  /* ============ APLICACIONS ============ */
+  .apps-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:14px;
+    margin:20px 0;
+  }
+  .app{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:20px;
+    text-align:center;
+  }
+  .app .emoji{font-size:2.2rem;display:block;margin-bottom:10px}
+  .app h3{font-size:.95rem;color:#f4f6fb;margin-bottom:6px}
+  .app p{font-size:.82rem;color:#9aa5b5;margin:0;line-height:1.5}
+
+  /* ============ CURIOSITATS ============ */
+  .curiositats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px;
+    margin:22px 0;
+  }
+  .curiositat{
+    background:linear-gradient(135deg, rgba(251,191,36,.05), rgba(251,146,60,.02));
+    border:1px solid rgba(251,191,36,.2);
+    border-radius:16px;
+    padding:20px;
+  }
+  .curiositat .ico{
+    font-size:1.6rem;margin-bottom:10px;display:block;
+  }
+  .curiositat h3{font-size:.95rem;color:#fde68a;margin-bottom:6px}
+  .curiositat p{font-size:.86rem;color:#c3ccd9;margin:0;line-height:1.55}
+
+  /* ============ QUIZ ============ */
+  .quiz{
+    background:linear-gradient(135deg, rgba(15,20,35,.9), rgba(8,10,20,.9));
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:20px;
+    padding:28px;
+    margin:20px 0;
+  }
+  .quiz-progres{
+    height:6px;background:rgba(255,255,255,.08);
+    border-radius:6px;overflow:hidden;
+    margin-bottom:20px;
+  }
+  .quiz-progres-bar{
+    height:100%;width:0;
+    background:linear-gradient(90deg,#f97316,#fbbf24);
+    transition:width .4s ease;
+    border-radius:6px;
+  }
+  .quiz-pregunta{
+    font-size:1.05rem;
+    color:#f4f6fb;
+    font-weight:600;
+    margin-bottom:18px;
+    line-height:1.5;
+  }
+  .quiz-opcions{display:flex;flex-direction:column;gap:10px}
+  .quiz-opcio{
+    padding:14px 18px;
+    border-radius:12px;
+    background:rgba(255,255,255,.03);
+    border:1.5px solid rgba(255,255,255,.08);
+    cursor:pointer;
+    font-family:inherit;
+    font-size:.95rem;
+    color:#c3ccd9;
+    text-align:left;
+    transition:all .25s;
+    display:flex;align-items:center;gap:12px;
+  }
+  .quiz-opcio:hover:not(:disabled){
+    background:rgba(251,146,60,.06);
+    border-color:rgba(251,146,60,.3);
+    transform:translateX(4px);
+  }
+  .quiz-opcio .lletra{
+    flex-shrink:0;
+    width:28px;height:28px;border-radius:8px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+    display:flex;align-items:center;justify-content:center;
+    font-size:.75rem;font-weight:800;color:#9aa5b5;
+  }
+  .quiz-opcio.correcte{
+    background:rgba(5,150,105,.12);
+    border-color:rgba(16,185,129,.5);
+    color:#6ee7b7;
+  }
+  .quiz-opcio.correcte .lletra{
+    background:rgba(16,185,129,.25);
+    color:#6ee7b7;border-color:rgba(16,185,129,.5);
+  }
+  .quiz-opcio.incorrecte{
+    background:rgba(239,68,68,.08);
+    border-color:rgba(239,68,68,.4);
+    color:#fca5a5;
+  }
+  .quiz-opcio.incorrecte .lletra{
+    background:rgba(239,68,68,.2);
+    color:#fca5a5;border-color:rgba(239,68,68,.5);
+  }
+  .quiz-opcio:disabled{cursor:default}
+  .quiz-feedback{
+    margin-top:16px;padding:14px 18px;
+    border-radius:12px;font-size:.9rem;
+    display:none;
+  }
+  .quiz-feedback.show{display:block}
+  .quiz-feedback.ok{
+    background:rgba(5,150,105,.08);
+    border:1px solid rgba(16,185,129,.25);
+    color:#6ee7b7;
+  }
+  .quiz-feedback.ko{
+    background:rgba(239,68,68,.06);
+    border:1px solid rgba(239,68,68,.2);
+    color:#fca5a5;
+  }
+  .quiz-final{
+    text-align:center;
+    display:none;
+  }
+  .quiz-final.show{display:block}
+  .quiz-final .puntuacio{
+    font-size:3.5rem;
+    font-weight:900;
+    background:linear-gradient(135deg,#fb923c,#fbbf24);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    line-height:1;margin-bottom:10px;
+  }
+  .quiz-final p{color:#9aa5b5;margin-bottom:20px}
+
+  /* ============ SPARKLE ============ */
+  .sparkle-trail{
+    position:fixed;border-radius:50%;pointer-events:none;z-index:9998;
+    animation:sparkleFade 1s ease-out forwards;
+  }
+  @keyframes sparkleFade{0%{transform:scale(1);opacity:1}100%{transform:scale(0);opacity:0}}
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:640px){
+    .hero{padding:70px 16px 40px}
+    .hero-icon{width:88px;height:88px;font-size:38px}
+    .contenidor{padding:10px 16px 70px}
+    .sim-canvas-wrap{height:300px}
+    .sim-controls{grid-template-columns:1fr;padding:18px}
+    .formula-legend{font-size:.82rem;gap:12px}
+    .seccio{margin-bottom:50px}
+    .parts-grid{grid-template-columns:1fr}
+    .seccio-titol h2{font-size:1.2rem}
+    .quiz{padding:20px}
+    .btn-tornar{padding:8px 14px;font-size:.8rem}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="estrelles"></canvas>
+<div class="nebulosa"></div>
+
+<a class="btn-tornar" href="index.html">
+  <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  Tornar
+</a>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="hero-icon">⏱️</div>
+  <h1>El Pèndol</h1>
+  <p class="subtitol">Descobreix com un simple pes lligat a una corda pot mesurar el temps, demostrar que la Terra gira i ajudar-nos a construir rellotges precisos.</p>
+  <div class="badge">
+    <iconify-icon icon="solar:book-bold-duotone"></iconify-icon>
+    Teoria · Màquines simples · Física
+  </div>
+</div>
+
+<div class="contenidor">
+
+  <!-- ============ 1. QUÈ ÉS UN PÈNDOL ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">1</div>
+      <h2>Què és un pèndol?</h2>
+    </div>
+    <p>Un <strong>pèndol</strong> és un objecte pesat (anomenat <em>lluentor</em> o <em>massa</em>) que està penjat d'un punt fix (el <em>pivot</em>) mitjançant un fil, una cadena o una vareta. Quan el desplaces de la seva posició de repòs i el deixes anar, comença a <strong>oscil·lar</strong>: va d'un costat a l'altre, endavant i endarrere, de manera regular.</p>
+    <p>Aquest moviment repetitiu s'anomena <strong>moviment oscil·latori</strong> o <strong>moviment harmònic simple</strong> (quan l'amplitud és petita). És un dels moviments més estudiats de la física perquè apareix a tot arreu: rellotges, metrònoms, detectors de terratrèmols, instruments de mesura...</p>
+
+    <div class="destacat">
+      <h4>🎯 Idea clau</h4>
+      <p>El que fa especial un pèndol és la seva <strong>regularitat</strong>: triga el mateix temps a fer una oscil·lació completa, independentment de si l'amplitud és gran o petita (per a angles petits). Aquesta propietat s'anomena <em>isocronisme</em> i és la base dels primers rellotges precisos.</p>
+    </div>
+  </section>
+
+  <!-- ============ 2. PARTS ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">2</div>
+      <h2>Les parts del pèndol</h2>
+    </div>
+    <p>Un pèndol simple té quatre elements fonamentals. Fixa-t'hi:</p>
+
+    <div class="diagrama">
+      <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Fons -->
+        <rect width="500" height="400" fill="none"/>
+        
+        <!-- Suport horitzontal -->
+        <rect x="120" y="40" width="260" height="14" rx="4" fill="#3a4a5a" stroke="#5a6a7a" stroke-width="2"/>
+        
+        <!-- Punt pivot -->
+        <circle cx="250" cy="60" r="8" fill="#fb923c" stroke="#fbbf24" stroke-width="2"/>
+        
+        <!-- Fil -->
+        <line x1="250" y1="60" x2="330" y2="280" stroke="#9aa5b5" stroke-width="2" stroke-dasharray="none"/>
+        
+        <!-- Lluentor -->
+        <circle cx="330" cy="290" r="24" fill="#f97316" stroke="#fb923c" stroke-width="3"/>
+        <circle cx="322" cy="282" r="7" fill="rgba(255,255,255,.3)"/>
+        
+        <!-- Línia vertical discontínua -->
+        <line x1="250" y1="60" x2="250" y2="320" stroke="#4a5a6a" stroke-width="1.5" stroke-dasharray="6,6"/>
+        
+        <!-- Angle -->
+        <path d="M 250 100 A 40 40 0 0 1 280 130" fill="none" stroke="#60a5fa" stroke-width="2"/>
+        <text x="265" y="112" fill="#60a5fa" font-size="16" font-family="Arial" font-style="italic">θ</text>
+        
+        <!-- Etiqueta: Punt de suport -->
+        <line x1="250" y1="60" x2="380" y2="40" stroke="#fb923c" stroke-width="1"/>
+        <text x="385" y="44" fill="#fb923c" font-size="13" font-family="Arial" font-weight="bold">Pivot (punt fix)</text>
+        
+        <!-- Etiqueta: Fil -->
+        <line x1="290" y1="170" x2="370" y2="170" stroke="#9aa5b5" stroke-width="1"/>
+        <text x="375" y="174" fill="#9aa5b5" font-size="13" font-family="Arial" font-weight="bold">Fil o vareta</text>
+        
+        <!-- Etiqueta: Lluentor -->
+        <line x1="330" y1="314" x2="330" y2="350" stroke="#fb923c" stroke-width="1"/>
+        <text x="270" y="368" fill="#fb923c" font-size="13" font-family="Arial" font-weight="bold">Lluentor (massa)</text>
+        
+        <!-- Etiqueta: Longitud L -->
+        <line x1="200" y1="60" x2="200" y2="280" stroke="#22d3ee" stroke-width="1.5"/>
+        <line x1="196" y1="60" x2="204" y2="60" stroke="#22d3ee" stroke-width="1.5"/>
+        <line x1="196" y1="280" x2="204" y2="280" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="170" y="175" fill="#22d3ee" font-size="16" font-family="Arial" font-style="italic" font-weight="bold">L</text>
+        
+        <!-- Fletxa del moviment -->
+        <path d="M 355 250 Q 380 260 360 280" fill="none" stroke="#fbbf24" stroke-width="2"/>
+        <polygon points="355,250 358,262 348,258" fill="#fbbf24"/>
+      </svg>
+    </div>
+
+    <div class="parts-grid">
+      <div class="part">
+        <div class="ico">📌</div>
+        <h3>Punt de suport (pivot)</h3>
+        <p>El punt fix del qual penja el pèndol. Ha de ser estable i permetre el gir lliure.</p>
+      </div>
+      <div class="part">
+        <div class="ico">🧵</div>
+        <h3>Fil o vareta</h3>
+        <p>Connecta el pivot amb la massa. La seva <strong>longitud L</strong> és clau per al període.</p>
+      </div>
+      <div class="part">
+        <div class="ico">⚫</div>
+        <h3>Lluentor (massa)</h3>
+        <p>L'objecte pesat a l'extrem. La seva massa <em>no afecta</em> el període del pèndol.</p>
+      </div>
+      <div class="part">
+        <div class="ico">📐</div>
+        <h3>Angle (amplitud)</h3>
+        <p>L'angle màxim respecte a la vertical. Si és petit (&lt;15°), el moviment és harmònic.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. PERÍODE I FÓRMULA ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">3</div>
+      <h2>El període: quant triga a balancejar-se</h2>
+    </div>
+    <p>El <strong>període (T)</strong> és el temps que triga el pèndol a fer una oscil·lació completa (anar d'un extrem a l'altre i tornar). Es mesura en <strong>segons (s)</strong>.</p>
+    <p>La <strong>freqüència (f)</strong> és el nombre d'oscil·lacions per segon i es mesura en <strong>hertz (Hz)</strong>. Es relaciona amb el període així: <em>f = 1/T</em>.</p>
+
+    <div class="formula-card">
+      <p style="color:#9aa5b5;font-size:.9rem;margin-bottom:8px">Fórmula del període (per a angles petits)</p>
+      <div class="formula-principal">
+        T = 2π √<span style="border-top:2px solid #c4b5fd;padding:0 6px;margin-left:2px">
+          <span style="display:inline-block;text-align:center;font-size:.7em;line-height:1.1;vertical-align:middle">
+            <span style="display:block;border-bottom:1.5px solid #c4b5fd;padding-bottom:1px">L</span>
+            <span style="display:block;padding-top:1px">g</span>
+          </span>
+        </span>
+      </div>
+      <div class="formula-legend">
+        <span><strong>T</strong> = període (s)</span>
+        <span><strong>L</strong> = longitud del fil (m)</span>
+        <span><strong>g</strong> = gravetat (9,81 m/s² a la Terra)</span>
+        <span><strong>π</strong> = 3,1416...</span>
+      </div>
+    </div>
+
+    <p>Aquesta fórmula ens diu tres coses molt importants:</p>
+
+    <div class="info">
+      <h4>🔑 Les 3 claus del període</h4>
+      <p><strong>1. Depèn de la longitud (L):</strong> com més llarg és el fil, més triga a fer una oscil·lació. Si quadrupliques la longitud, el període es duplica.</p>
+      <p style="margin-top:8px"><strong>2. Depèn de la gravetat (g):</strong> a la Lluna, on la gravetat és 6 vegades menor, el pèndol oscil·la més lentament.</p>
+      <p style="margin-top:8px"><strong>3. NO depèn de la massa ni (per a angles petits) de l'amplitud:</strong> un pèndol amb una massa grossa i un amb una de petita triguen el mateix. I si l'angle és petit, tampoc no afecta.</p>
+    </div>
+
+    <div class="avis">
+      <h4>⚠️ Compte amb els angles grans!</h4>
+      <p>La fórmula T = 2π√(L/g) només és exacta per a <strong>angles petits (menys de 15°)</strong>. Per a angles grans, el període augmenta una mica. Aquesta diferència s'anomena <em>correcció d'amplitud</em> i va ser descoberta per matemàtics com Euler i Legendre.</p>
+    </div>
+  </section>
+
+  <!-- ============ 4. SIMULADOR ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">4</div>
+      <h2>Prova-ho tu mateix!</h2>
+    </div>
+    <p>Mou els controls i observa com canvia el moviment del pèndol <strong>en temps real</strong>. A sota veuràs el període calculat amb la fórmula.</p>
+
+    <div class="simulador">
+      <div class="sim-canvas-wrap">
+        <canvas id="simCanvas"></canvas>
+      </div>
+      <div class="sim-controls">
+        <div class="control">
+          <label>Longitud del fil (L) <span class="val" id="valL">1,00 m</span></label>
+          <input type="range" id="ctrlL" min="0.2" max="2" step="0.05" value="1">
+        </div>
+        <div class="control">
+          <label>Gravetat (g) <span class="val" id="valG">9,81 m/s²</span></label>
+          <input type="range" id="ctrlG" min="1.6" max="25" step="0.01" value="9.81">
+        </div>
+        <div class="control">
+          <label>Massa de la lluentor <span class="val" id="valM">1,0 kg</span></label>
+          <input type="range" id="ctrlM" min="0.5" max="10" step="0.1" value="1">
+        </div>
+        <div class="control">
+          <label>Angle inicial <span class="val" id="valA">15°</span></label>
+          <input type="range" id="ctrlA" min="5" max="45" step="1" value="15">
+        </div>
+        <div class="sim-resultat">
+          <div class="resultat-item">
+            <div class="r-label">Període (T)</div>
+            <div class="r-val"><span id="resT">2,01</span><span class="r-unit">s</span></div>
+          </div>
+          <div class="resultat-item">
+            <div class="r-label">Freqüència (f)</div>
+            <div class="r-val"><span id="resF">0,50</span><span class="r-unit">Hz</span></div>
+          </div>
+          <div class="resultat-item">
+            <div class="r-label">Longitud</div>
+            <div class="r-val"><span id="resL">1,00</span><span class="r-unit">m</span></div>
+          </div>
+        </div>
+        <div class="sim-botons">
+          <button class="sim-btn primari" id="btnPlay">
+            <iconify-icon icon="solar:pause-bold"></iconify-icon>
+            <span>Pausar</span>
+          </button>
+          <button class="sim-btn" id="btnReset">
+            <iconify-icon icon="solar:refresh-bold"></iconify-icon>
+            Reiniciar
+          </button>
+          <button class="sim-btn" id="btnReiniciaAngle">
+            <iconify-icon icon="solar:play-bold"></iconify-icon>
+            Tornar a deixar anar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="destacat">
+      <h4>💡 Experimenta això</h4>
+      <p>1. Canvia la <strong>massa</strong> i veuràs que el període <em>no canvia</em> (prova-ho!).</p>
+      <p style="margin-top:6px">2. Canvia la <strong>longitud</strong> i veuràs que el període <em>sí</em> que canvia.</p>
+      <p style="margin-top:6px">3. Tria <strong>g = 1,62</strong> (gravetat de la Lluna) i comprova que el pèndol va molt més lent!</p>
+    </div>
+  </section>
+
+  <!-- ============ 5. QUÈ AFECTA EL PERÍODE ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">5</div>
+      <h2>Què afecta el període... i què no</h2>
+    </div>
+    <p>Aquesta és una de les coses que més confonen a l'hora d'estudiar el pèndol. Aquí tens un resum clar:</p>
+
+    <div class="taula-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Factor</th>
+            <th>Afecta el període?</th>
+            <th>Per què</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Longitud (L)</strong></td>
+            <td class="si">SÍ</td>
+            <td>Com més llarg és el fil, més triga a recórrer l'arc.</td>
+          </tr>
+          <tr>
+            <td><strong>Gravetat (g)</strong></td>
+            <td class="si">SÍ</td>
+            <td>Si la gravetat és més gran, el pèndol cau més de pressa i oscil·la més ràpid.</td>
+          </tr>
+          <tr>
+            <td><strong>Massa (m)</strong></td>
+            <td class="no">NO</td>
+            <td>La força que estira cap avall i la inèrcia creixen igual, així que es cancel·len.</td>
+          </tr>
+          <tr>
+            <td><strong>Angle (petit)</strong></td>
+            <td class="no">NO*</td>
+            <td>* Per a angles petits (&lt;15°), la diferència és negligible. Per a grans, sí que afecta.</td>
+          </tr>
+          <tr>
+            <td><strong>Material del fil</strong></td>
+            <td class="no">NO</td>
+            <td>Només importa la longitud. El color o el material no hi fan res.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 6. TIPUS DE PÈNDOLS ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">6</div>
+      <h2>Tipus de pèndols</h2>
+    </div>
+    <p>No tots els pèndols són iguals. Depenent de com estiguin construïts i de què els faci moure's, hi ha diferents tipus:</p>
+
+    <div class="tipus-grid">
+      <div class="tipus">
+        <span class="ico">🎯</span>
+        <h3>Pèndol simple</h3>
+        <p>Una massa petita penjada d'un fil llarg i lleuger. És el model ideal que s'estudia a classe.</p>
+      </div>
+      <div class="tipus">
+        <span class="ico">🔩</span>
+        <h3>Pèndol compost</h3>
+        <p>Un objecte rígid (una barra, una porta, un disc) que gira al voltant d'un eix. El període depèn de com es distribueix la massa.</p>
+      </div>
+      <div class="tipus">
+        <span class="ico">🌀</span>
+        <h3>Pèndol de torsió</h3>
+        <p>Un disc penjat d'un fil prim que es <em>retorça</em> en lloc de balancejar-se. S'utilitza en rellotges i en experiments de física quàntica.</p>
+      </div>
+      <div class="tipus">
+        <span class="ico">🌍</span>
+        <h3>Pèndol de Foucault</h3>
+        <p>Un pèndol molt llarg que demostra que la Terra gira. El pla d'oscil·lació es va desviant lentament al llarg del dia.</p>
+      </div>
+      <div class="tipus">
+        <span class="ico">🧲</span>
+        <h3>Pèndol magnètic</h3>
+        <p>Una massa que es mou entre imants. S'utilitza en alguns sensors i en experiments de caos.</p>
+      </div>
+      <div class="tipus">
+        <span class="ico">⚖️</span>
+        <h3>Pèndol balístic</h3>
+        <p>Una massa pesant que rep l'impacte d'un projectil. Serveix per mesurar la velocitat de bales.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. HISTÒRIA ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">7</div>
+      <h2>Una mica d'història</h2>
+    </div>
+    <p>El pèndol ha estat clau en la història de la ciència. Aquests són els tres grans moments:</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="any">1583 · GALILEO GALILEI</div>
+        <h4>El descobriment de l'isocronisme</h4>
+        <p>Amb només 19 anys, Galileo va observar una làmpada que es balancejava a la catedral de Pisa. Es va adonar que el temps de cada oscil·lació era el mateix, tant si la làmpada es movia molt com si es movia poc. Havia descobert l'<strong>isocronisme</strong> del pèndol.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="any">1656 · CHRISTIAAN HUYGENS</div>
+        <h4>El primer rellotge de pèndol</h4>
+        <p>El científic neerlandès Huygens va construir el primer rellotge de pèndol funcional. Va reduir l'error dels rellotges de l'època de 15 minuts al dia a només 15 segons! Això va revolucionar la navegació i l'astronomia.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="any">1851 · LÉON FOUCAULT</div>
+        <h4>El pèndol que va fer girar la Terra</h4>
+        <p>Foucault va penjar un pèndol de 67 metres al Panteó de París. Mentre oscil·lava, el pla del moviment anava girant lentament. Aquesta era la prova visible que <strong>la Terra gira sobre el seu eix</strong>. Un dels experiments més elegants de la història!</p>
+      </div>
+      <div class="timeline-item">
+        <div class="any">Segle XX · AVUI</div>
+        <h4>Del rellotge al detector de terratrèmols</h4>
+        <p>Avui els pèndols ja no s'usen per mesurar el temps (els rellotges atòmics són molt més precisos), però sí que s'utilitzen en <strong>sismògrafs</strong> per detectar terratrèmols i en experiments científics per estudiar la gravetat.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8. APLICACIONS ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">8</div>
+      <h2>Aplicacions al món real</h2>
+    </div>
+    <p>El pèndol no és només una cosa de llibres de text. Aquí tens alguns llocs on el trobem:</p>
+
+    <div class="apps-grid">
+      <div class="app">
+        <span class="emoji">🕰️</span>
+        <h3>Rellotges de pèndol</h3>
+        <p>Els rellotges de paret tradicionals, els "de cucut", utilitzen un pèndol per comptar els segons.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🎵</span>
+        <h3>Metrònoms</h3>
+        <p>Els músics fan servir un pèndol invertit per marcar el tempo d'una peça musical amb precisió.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🌋</span>
+        <h3>Sismògrafs</h3>
+        <p>Per detectar terratrèmols: un pèndol molt sensible registra els moviments del terra sobre un paper.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🛰️</span>
+        <h3>Gravímetres</h3>
+        <p>Instruments que mesuren variacions de la gravetat terrestre amb pèndols ultraprecisos.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🎢</span>
+        <h3>Atraccions de fira</h3>
+        <p>Els "pèndols" gegants dels parcs d'atraccions funcionen amb el mateix principi físic.</p>
+      </div>
+      <div class="app">
+        <span class="emoji">🚗</span>
+        <h3>Sensors d'acceleració</h3>
+        <p>Alguns sensors dels mòbils i els cotxes funcionen amb micro-pèndols interns.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9. CURIOSITATS ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">9</div>
+      <h2>Curiositats</h2>
+    </div>
+
+    <div class="curiositats">
+      <div class="curiositat">
+        <span class="ico">🏛️</span>
+        <h3>El pèndol més famós del món</h3>
+        <p>El pèndol de Foucault al Panteó de París fa 67 metres de llarg i pesa 28 kg. La seva oscil·lació és tan lenta que un cop per minut no arriba a completar un arc sencer.</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🌙</span>
+        <h3>El pèndol lunar</h3>
+        <p>A la Lluna, un pèndol d'1 metre trigaria més de 5 segons a fer una oscil·lació completa (a la Terra en triga 2). Els astronautes de l'Apollo 15 ho van provar!</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🔬</span>
+        <h3>El pèndol més precís</h3>
+        <p>Els científics utilitzen pèndols de torsió ultraprecisos per mesurar la constant gravitatòria G, la força fonamental que regeix l'univers.</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🎯</span>
+        <h3>Els rellotges de pèndol més cars</h3>
+        <p>Alguns rellotges de pèndol antics es venen per milions d'euros. Són considerats obres d'art, no només instruments.</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">🌍</span>
+        <h3>Pèndol a l'equador vs als pols</h3>
+        <p>Un pèndol de Foucault a l'equador no gira gens (el pla queda fix), però als pols fa una volta completa cada 24 hores!</p>
+      </div>
+      <div class="curiositat">
+        <span class="ico">📏</span>
+        <h3>La longitud i el metre</h3>
+        <p>Abans de 1983, el metre es definia amb un pèndol: com la longitud d'un pèndol que triga exactament 1 segon a fer mitja oscil·lació. La ciència ha canviat molt!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 10. QUIZ ============ -->
+  <section class="seccio">
+    <div class="seccio-titol">
+      <div class="num">10</div>
+      <h2>Posa't a prova!</h2>
+    </div>
+    <p>5 preguntes ràpides per veure si ho has entès. Endavant!</p>
+
+    <div class="quiz" id="quiz">
+      <div class="quiz-progres">
+        <div class="quiz-progres-bar" id="quizBar"></div>
+      </div>
+      <div id="quizContingut"></div>
+      <div class="quiz-final" id="quizFinal">
+        <div class="puntuacio" id="quizPuntuacio">0/5</div>
+        <p id="quizMissatge">Continua aprenent!</p>
+        <button class="sim-btn primari" onclick="reiniciarQuiz()">
+          <iconify-icon icon="solar:refresh-bold"></iconify-icon>
+          Tornar-ho a provar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div style="text-align:center;padding:20px;color:#5c6678;font-size:.85rem">
+    <p>Fet amb 🧡 per a l'aula de Tecnologia · 2n d'ESO</p>
+    <p style="margin-top:6px"><a href="index.html" style="color:#fb923c;text-decoration:none">← Tornar al menú principal</a></p>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   ESTRELLES DE FONS
+   ============================================================ */
+const canvasEst = document.getElementById('estrelles');
+const ctxEst = canvasEst.getContext('2d');
+function midaEst(){ canvasEst.width = innerWidth; canvasEst.height = innerHeight; }
+midaEst(); addEventListener('resize', midaEst);
+const estrelles = [];
+for (let i = 0; i < 220; i++){
+  estrelles.push({
+    x: Math.random(), y: Math.random(),
+    r: Math.random()*1.2+0.25,
+    fase: Math.random()*Math.PI*2,
+    vel: 0.004+Math.random()*0.012,
+    color: ['255,255,255','255,255,255','205,218,255','255,228,196'][Math.floor(Math.random()*4)]
+  });
+}
+function animaEst(){
+  ctxEst.clearRect(0,0,canvasEst.width,canvasEst.height);
+  for (const e of estrelles){
+    e.fase += e.vel;
+    const a = 0.2 + Math.abs(Math.sin(e.fase))*0.7;
+    ctxEst.beginPath();
+    ctxEst.arc(e.x*canvasEst.width, e.y*canvasEst.height, e.r, 0, Math.PI*2);
+    ctxEst.fillStyle = `rgba(${e.color},${a})`;
+    ctxEst.fill();
+  }
+  requestAnimationFrame(animaEst);
+}
+animaEst();
+
+/* ============================================================
+   SPARKLE TRAIL
+   ============================================================ */
+const spkColors = ['#f97316','#fb923c','#fbbf24','#fde68a','#60a5fa'];
+let spkTimer = 0;
+addEventListener('mousemove', e => {
+  spkTimer++;
+  if (spkTimer % 5) return;
+  const s = document.createElement('div');
+  s.className = 'sparkle-trail';
+  s.style.left = e.clientX + 'px'; s.style.top = e.clientY + 'px';
+  const c = spkColors[Math.floor(Math.random()*spkColors.length)];
+  s.style.background = c;
+  s.style.boxShadow = '0 0 8px ' + c;
+  const sz = 2 + Math.random()*3;
+  s.style.width = s.style.height = sz + 'px';
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 1000);
+});
+
+/* ============================================================
+   SIMULADOR DEL PÈNDOL
+   ============================================================ */
+const simCanvas = document.getElementById('simCanvas');
+const simCtx = simCanvas.getContext('2d');
+let simW, simH;
+
+function resizeSim(){
+  const wrap = simCanvas.parentElement;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  simW = wrap.clientWidth;
+  simH = wrap.clientHeight;
+  simCanvas.width = simW * dpr;
+  simCanvas.height = simH * dpr;
+  simCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resizeSim();
+addEventListener('resize', () => { resizeSim(); });
+
+// Paràmetres del simulador
+const sim = {
+  L: 1.0,       // metres
+  g: 9.81,      // m/s²
+  m: 1.0,       // kg (només visual)
+  angleIni: 15, // graus
+  theta: 15 * Math.PI / 180, // angle actual en radians
+  omega: 0,     // velocitat angular (rad/s)
+  actiu: true,
+  lastTime: 0
+};
+
+// Reiniciar estat
+function reiniciarPendol(){
+  sim.theta = sim.angleIni * Math.PI / 180;
+  sim.omega = 0;
+  sim.actiu = true;
+  document.getElementById('btnPlay').innerHTML = '<iconify-icon icon="solar:pause-bold"></iconify-icon><span>Pausar</span>';
+}
+
+// Actualitzar valors mostrats
+function actualitzaValors(){
+  document.getElementById('valL').textContent = sim.L.toFixed(2).replace('.', ',') + ' m';
+  document.getElementById('valG').textContent = sim.g.toFixed(2).replace('.', ',') + ' m/s²';
+  document.getElementById('valM').textContent = sim.m.toFixed(1).replace('.', ',') + ' kg';
+  document.getElementById('valA').textContent = sim.angleIni + '°';
+
+  const T = 2 * Math.PI * Math.sqrt(sim.L / sim.g);
+  const f = 1 / T;
+  document.getElementById('resT').textContent = T.toFixed(2).replace('.', ',');
+  document.getElementById('resF').textContent = f.toFixed(2).replace('.', ',');
+  document.getElementById('resL').textContent = sim.L.toFixed(2).replace('.', ',');
+}
+
+// Controls
+document.getElementById('ctrlL').addEventListener('input', e => {
+  sim.L = parseFloat(e.target.value);
+  actualitzaValors();
+});
+document.getElementById('ctrlG').addEventListener('input', e => {
+  sim.g = parseFloat(e.target.value);
+  actualitzaValors();
+});
+document.getElementById('ctrlM').addEventListener('input', e => {
+  sim.m = parseFloat(e.target.value);
+  actualitzaValors();
+});
+document.getElementById('ctrlA').addEventListener('input', e => {
+  sim.angleIni = parseInt(e.target.value);
+  reiniciarPendol();
+  actualitzaValors();
+});
+
+document.getElementById('btnPlay').addEventListener('click', () => {
+  sim.actiu = !sim.actiu;
+  const btn = document.getElementById('btnPlay');
+  btn.innerHTML = sim.actiu
+    ? '<iconify-icon icon="solar:pause-bold"></iconify-icon><span>Pausar</span>'
+    : '<iconify-icon icon="solar:play-bold"></iconify-icon><span>Reprendre</span>';
+});
+document.getElementById('btnReset').addEventListener('click', () => {
+  document.getElementById('ctrlL').value = 1;
+  document.getElementById('ctrlG').value = 9.81;
+  document.getElementById('ctrlM').value = 1;
+  document.getElementById('ctrlA').value = 15;
+  sim.L = 1; sim.g = 9.81; sim.m = 1; sim.angleIni = 15;
+  reiniciarPendol();
+  actualitzaValors();
+});
+document.getElementById('btnReiniciaAngle').addEventListener('click', () => {
+  reiniciarPendol();
+});
+
+// Dibuix del pèndol
+function dibuixaPendol(){
+  if (simW === undefined) resizeSim();
+
+  // Fons
+  simCtx.clearRect(0, 0, simW, simH);
+  const gradFons = simCtx.createRadialGradient(simW/2, simH*0.3, 10, simW/2, simH*0.3, simW);
+  gradFons.addColorStop(0, 'rgba(30,40,70,.4)');
+  gradFons.addColorStop(1, 'rgba(2,3,10,0)');
+  simCtx.fillStyle = gradFons;
+  simCtx.fillRect(0, 0, simW, simH);
+
+  // Punt de suport
+  const pivotX = simW / 2;
+  const pivotY = 40;
+  const marge = 60;
+
+  // Calcular longitud en píxels (màxim perquè no surti)
+  const maxL = simH - pivotY - marge - 20;
+  const minL = 40;
+  const Lp = minL + (maxL - minL) * (sim.L - 0.2) / (2 - 0.2);
+
+  // Posició de la massa
+  const x = pivotX + Lp * Math.sin(sim.theta);
+  const y = pivotY + Lp * Math.cos(sim.theta);
+
+  // Línia vertical discontínua (referència)
+  simCtx.beginPath();
+  simCtx.setLineDash([5, 6]);
+  simCtx.moveTo(pivotX, pivotY);
+  simCtx.lineTo(pivotX, pivotY + maxL + 20);
+  simCtx.strokeStyle = 'rgba(255,255,255,.08)';
+  simCtx.lineWidth = 1.5;
+  simCtx.stroke();
+  simCtx.setLineDash([]);
+
+  // Arc de l'angle
+  simCtx.beginPath();
+  simCtx.arc(pivotX, pivotY, 35, Math.PI/2 - Math.abs(sim.theta), Math.PI/2 + Math.abs(sim.theta));
+  simCtx.strokeStyle = 'rgba(96,165,250,.4)';
+  simCtx.lineWidth = 2;
+  simCtx.stroke();
+
+  // Fil
+  simCtx.beginPath();
+  simCtx.moveTo(pivotX, pivotY);
+  simCtx.lineTo(x, y);
+  simCtx.strokeStyle = '#9aa5b5';
+  simCtx.lineWidth = 2;
+  simCtx.stroke();
+
+  // Punt de suport
+  simCtx.beginPath();
+  simCtx.arc(pivotX, pivotY, 7, 0, Math.PI*2);
+  simCtx.fillStyle = '#fb923c';
+  simCtx.fill();
+  simCtx.beginPath();
+  simCtx.arc(pivotX, pivotY, 12, 0, Math.PI*2);
+  simCtx.strokeStyle = 'rgba(251,146,60,.3)';
+  simCtx.lineWidth = 3;
+  simCtx.stroke();
+
+  // Suport
+  simCtx.fillStyle = 'rgba(255,255,255,.15)';
+  simCtx.fillRect(pivotX - 60, pivotY - 10, 120, 6);
+
+  // Rastre de la massa (efecte estel)
+  const radiMassa = 10 + sim.m * 1.5;
+  const glow = simCtx.createRadialGradient(x, y, 0, x, y, radiMassa * 3);
+  glow.addColorStop(0, 'rgba(251,146,60,.4)');
+  glow.addColorStop(0.5, 'rgba(251,146,60,.1)');
+  glow.addColorStop(1, 'rgba(251,146,60,0)');
+  simCtx.fillStyle = glow;
+  simCtx.beginPath();
+  simCtx.arc(x, y, radiMassa * 3, 0, Math.PI*2);
+  simCtx.fill();
+
+  // Massa
+  const gradMassa = simCtx.createRadialGradient(x - radiMassa*0.3, y - radiMassa*0.3, 0, x, y, radiMassa);
+  gradMassa.addColorStop(0, '#fb923c');
+  gradMassa.addColorStop(0.7, '#ea580c');
+  gradMassa.addColorStop(1, '#9a3412');
+  simCtx.beginPath();
+  simCtx.arc(x, y, radiMassa, 0, Math.PI*2);
+  simCtx.fillStyle = gradMassa;
+  simCtx.fill();
+  simCtx.strokeStyle = 'rgba(251,146,60,.6)';
+  simCtx.lineWidth = 2;
+  simCtx.stroke();
+
+  // Brillantor a la massa
+  simCtx.beginPath();
+  simCtx.arc(x - radiMassa*0.3, y - radiMassa*0.35, radiMassa*0.25, 0, Math.PI*2);
+  simCtx.fillStyle = 'rgba(255,255,255,.4)';
+  simCtx.fill();
+}
+
+// Bucle d'animació
+function animaSim(ts){
+  if (!sim.lastTime) sim.lastTime = ts;
+  const dt = Math.min((ts - sim.lastTime) / 1000, 0.05); // limitar a 50ms
+  sim.lastTime = ts;
+
+  if (sim.actiu){
+    // Equació del pèndol: theta'' = -(g/L) * sin(theta)
+    // Aproximació per a angles petits: sin(theta) ≈ theta
+    const accel = -(sim.g / sim.L) * Math.sin(sim.theta);
+    sim.omega += accel * dt;
+    sim.theta += sim.omega * dt;
+  }
+
+  dibuixaPendol();
+  requestAnimationFrame(animaSim);
+}
+
+actualitzaValors();
+requestAnimationFrame(animaSim);
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+const preguntesQuiz = [
+  {
+    pregunta: "Quin d'aquests factors NO afecta el període d'un pèndol simple?",
+    opcions: ["La longitud del fil", "La massa de la lluentor", "La gravetat", "Cap de les anteriors"],
+    correcte: 1,
+    explicacio: "Correcte! La massa no afecta el període. Un pèndol amb una massa grossa i un amb una de petita triguen el mateix a fer una oscil·lació."
+  },
+  {
+    pregunta: "Si dupliques la longitud del fil d'un pèndol, què passa amb el període?",
+    opcions: ["Es manté igual", "Es duplica", "Es multiplica per √2 (aprox. 1,41)", "Es redueix a la meitat"],
+    correcte: 2,
+    explicacio: "Correcte! Com que T = 2π√(L/g), si L es duplica, el període augmenta en un factor √2 (≈ 1,41)."
+  },
+  {
+    pregunta: "A la Lluna (on g és 6 vegades menor que a la Terra), un pèndol oscil·la...",
+    opcions: ["Més ràpid", "Igual", "Més lent", "No oscil·la"],
+    correcte: 2,
+    explicacio: "Correcte! Com que g és més petita, el pèndol oscil·la més lentament. Un pèndol d'1m que a la Terra triga 2s, a la Lluna en trigaria uns 5s."
+  },
+  {
+    pregunta: "Qui va descobrir que el període del pèndol no depèn de l'amplitud (isocronisme)?",
+    opcions: ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Léon Foucault"],
+    correcte: 2,
+    explicacio: "Correcte! Galileo Galilei ho va descobrir el 1583 observant una làmpada que es balancejava a la catedral de Pisa."
+  },
+  {
+    pregunta: "Què demostra el pèndol de Foucault?",
+    opcions: ["Que la Terra és rodona", "Que la Terra gira sobre el seu eix", "Que la gravetat no existeix", "Que el temps és relatiu"],
+    correcte: 1,
+    explicacio: "Correcte! El pla d'oscil·lació del pèndol de Foucault es desvia al llarg del dia, demostrant que la Terra gira sobre el seu eix."
+  }
+];
+
+let quizActual = 0;
+let quizEncerts = 0;
+
+function mostrarPregunta(){
+  const contingut = document.getElementById('quizContingut');
+  const final = document.getElementById('quizFinal');
+  const bar = document.getElementById('quizBar');
+
+  if (quizActual >= preguntesQuiz.length){
+    // Mostrar resultat final
+    contingut.innerHTML = '';
+    final.classList.add('show');
+    bar.style.width = '100%';
+    document.getElementById('quizPuntuacio').textContent = quizEncerts + '/' + preguntesQuiz.length;
+    let missatge = '';
+    if (quizEncerts === 5) missatge = '🌟 Perfecte! Ets un expert en pèndols!';
+    else if (quizEncerts >= 3) missatge = '👏 Molt bé! Ho has entès força bé.';
+    else missatge = '📚 Continua aprenent! Torna a llegir la teoria.';
+    document.getElementById('quizMissatge').textContent = missatge;
+    return;
+  }
+
+  final.classList.remove('show');
+  const p = preguntesQuiz[quizActual];
+  bar.style.width = (quizActual / preguntesQuiz.length * 100) + '%';
+
+  const lletres = ['A', 'B', 'C', 'D'];
+  let opcionsHTML = '';
+  p.opcions.forEach((op, i) => {
+    opcionsHTML += `
+      <button class="quiz-opcio" data-i="${i}">
+        <span class="lletra">${lletres[i]}</span>
+        <span>${op}</span>
+      </button>
+    `;
+  });
+
+  contingut.innerHTML = `
+    <div class="quiz-pregunta">${quizActual + 1}. ${p.pregunta}</div>
+    <div class="quiz-opcions">${opcionsHTML}</div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+  `;
+
+  // Gestionar clics
+  document.querySelectorAll('.quiz-opcio').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.i);
+      const correcte = i === p.correcte;
+      const feedback = document.getElementById('quizFeedback');
+
+      // Desactivar tots
+      document.querySelectorAll('.quiz-opcio').forEach(b => {
+        b.disabled = true;
+        const bi = parseInt(b.dataset.i);
+        if (bi === p.correcte) b.classList.add('correcte');
+        else if (bi === i && !correcte) b.classList.add('incorrecte');
+      });
+
+      if (correcte){
+        quizEncerts++;
+        feedback.className = 'quiz-feedback ok show';
+        feedback.textContent = '✅ ' + p.explicacio;
+      } else {
+        feedback.className = 'quiz-feedback ko show';
+        feedback.textContent = '❌ ' + p.explicacio;
+      }
+
+      // Següent pregunta al cap d'un moment
+      setTimeout(() => {
+        quizActual++;
+        mostrarPregunta();
+      }, 2200);
+    });
+  });
+}
+
+function reiniciarQuiz(){
+  quizActual = 0;
+  quizEncerts = 0;
+  document.getElementById('quizFinal').classList.remove('show');
+  mostrarPregunta();
+}
+
+mostrarPregunta();
+</script>
+</body>
+</html>
