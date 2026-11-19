@@ -1605,7 +1605,7 @@ async function desarOpinions(arr) {
       const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/Faig`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(arr)
+        body: JSON.stringify({ opinions: arr })
       });
       return r.ok;
     } catch (e) {
