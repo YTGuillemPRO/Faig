@@ -1778,18 +1778,18 @@ document.addEventListener('keydown', e => {
 });
 
 document.getElementById('admin-save').onclick = () => {
-  const url = adminInput.value.trim();
-  if (!url) {
-    showToast('Enganxa una URL vàlida');
+  const val = adminInput.value.trim();
+  if (!val) {
+    showToast('Enganxa el teu Pantry ID');
     return;
   }
-  if (!url.startsWith('http')) {
-    showToast('La URL ha de començar per http');
-    return;
-  }
-  localStorage.setItem('blob_url', url);
-  showToast('✅ Mur públic configurat!');
+  
+  // Guardem el Pantry ID perquè la web el faci servir
+  localStorage.setItem('pantry_id', val);
+  showToast('✅ Mur públic configurat amb Pantry!');
   adminPanel.classList.remove('active');
+  
+  // Refresquem les opinions perquè es connecti al núvol
   carregarOpinions();
 };
 
