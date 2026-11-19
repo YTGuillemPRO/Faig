@@ -257,7 +257,7 @@ footer a:hover { text-decoration: underline; }
 <body class="intro-activa">
 
 <!-- ============================================================
-     INTRO ANIMACIÓ (ARA SÍ)
+     INTRO ANIMACIÓ
      ============================================================ -->
 <div id="intro">
   <iframe id="intro-frame" title="Intro" src="animacio.html"></iframe>
@@ -378,7 +378,7 @@ footer a:hover { text-decoration: underline; }
 
     <div class="ops-banner" id="ops-banner" style="display:none">
       <iconify-icon icon="solar:info-circle-bold"></iconify-icon>
-      <div><strong>Mode local.</strong> Les opinions només es veuen en aquest navegador. Perquè tothom les pugui veure, l'administrador ha de configurar el mur públic (prem <strong>Ctrl+Shift+A</strong>).</div>
+      <div><strong>Mode local.</strong> Les opinions només es veuen en aquest navegador. Perquè tothom les pugui veure, l'administrador ha de configurar el mur públic.</div>
     </div>
 
     <form class="opinio-form fade-in" id="opinio-form">
@@ -423,10 +423,10 @@ footer a:hover { text-decoration: underline; }
 <!-- ADMIN PANEL -->
 <div class="admin-panel" id="admin-panel">
   <h4><iconify-icon icon="solar:shield-user-bold"></iconify-icon> Panell d'administració</h4>
-  <p>Enganxa aquí el teu <strong>Pantry ID</strong> (només el codi, sense enllaços).</p>
+  <p>Enganxa aquí el teu <strong>Pantry ID</strong> (només el codi).</p>
   <input type="text" class="admin-input" id="admin-blob-input" placeholder="Ex: 40182777-25a5...">
   <button class="admin-btn primary" id="admin-save">Desar Pantry ID</button>
-  <button class="admin-btn danger" id="admin-toggle-delete">Activar Mode Esborrar</button>
+  <button class="admin-btn danger" id="admin-toggle-delete">Desactivar Mode Esborrar</button>
   <button class="admin-btn" id="admin-clear">Esborrar configuració</button>
   <button class="admin-btn" id="admin-close">Tancar</button>
 </div>
@@ -446,8 +446,9 @@ footer a:hover { text-decoration: underline; }
 /* ============================================================
    CONFIGURACIÓ
    ============================================================ */
-const PANTRY_ID_DEFAULT = ''; // Deixa-ho buit si ja ho poses al panell d'admin
-const BASKET_NAME = 'Faig';   // Nom de la teva cistella a Pantry
+const ADMIN_PASSWORD = '2ESOA'; // 🔐 Canvia això si vols una altra contrasenya
+const PANTRY_ID_DEFAULT = ''; 
+const BASKET_NAME = 'Faig';   
 const LOCAL_KEY = 'opinions_2eso_v2';
 
 function getPantryId() {
@@ -476,8 +477,6 @@ btnIntroSaltar.onclick = tancaIntro;
 window.addEventListener('message', e => {
   if (e.data && e.data.tipus === 'animacio-llest') btnIntroEntrar.hidden = false;
 });
-
-// Si l'iframe triga massa, mostrem el botó igualment al cap de 9 segons
 setTimeout(()=>{ btnIntroEntrar.hidden = false; }, 9000);
 
 /* ============================================================
@@ -520,8 +519,7 @@ animaEst();
 const sol = document.getElementById('sol');
 const sctx = sol.getContext('2d');
 const S = 160;
-sol.width = S;
-sol.height = S;
+sol.width = S; sol.height = S;
 const G = 96;
 const soroll = new Float32Array(G * G);
 for (let i = 0; i < G * G; i++) soroll[i] = Math.random();
@@ -840,8 +838,26 @@ let isAdmin = false;
 document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
     e.preventDefault();
-    adminPanel.classList.toggle('active');
-    adminInput.value = getPantryId();
+    
+    if (!isAdmin) {
+      const pass = prompt('👑 Introdueix la contrasenya d\'administrador:');
+      if (pass === ADMIN_PASSWORD) {
+        isAdmin = true;
+        document.body.classList.add('admin-mode'); // Mostra les creus per esborrar
+        adminPanel.classList.add('active');
+        adminInput.value = getPantryId();
+        btnToggleDelete.textContent = 'Desactivar Mode Esborrar';
+        btnToggleDelete.style.background = 'var(--green)';
+        btnToggleDelete.style.borderColor = 'var(--green)';
+        btnToggleDelete.style.color = '#04060c';
+        showToast('✅ Sessió d\'admin iniciada');
+      } else if (pass !== null) {
+        showToast('❌ Contrasenya incorrecta');
+      }
+    } else {
+      adminPanel.classList.toggle('active');
+      adminInput.value = getPantryId();
+    }
   }
   if (e.key === 'Escape' && adminPanel.classList.contains('active')) {
     adminPanel.classList.remove('active');
@@ -862,14 +878,16 @@ btnToggleDelete.onclick = () => {
   if (isAdmin) {
     document.body.classList.add('admin-mode');
     btnToggleDelete.textContent = 'Desactivar Mode Esborrar';
-    btnToggleDelete.classList.remove('danger');
     btnToggleDelete.style.background = 'var(--green)';
-    showToast('👑 Mode Admin Actiu. Ja pots esborrar comentaris.');
+    btnToggleDelete.style.borderColor = 'var(--green)';
+    btnToggleDelete.style.color = '#04060c';
+    showToast('👑 Mode Admin Actiu.');
   } else {
     document.body.classList.remove('admin-mode');
     btnToggleDelete.textContent = 'Activar Mode Esborrar';
-    btnToggleDelete.classList.add('danger');
-    btnToggleDelete.style.background = '';
+    btnToggleDelete.style.background = 'rgba(239, 68, 68, 0.1)';
+    btnToggleDelete.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+    btnToggleDelete.style.color = '#fca5a5';
     showToast('Sessió d\'admin tancada.');
   }
 };
