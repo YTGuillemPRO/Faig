@@ -1569,7 +1569,7 @@ async function carregarOpinions() {
     // MODE NÚVOL (Pantry)
     document.getElementById('ops-banner').style.display = 'none';
     try {
-      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/opinions`);
+      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/Faig`);
       
       if (r.status === 400) {
         // Si la cistella encara no existeix, la creem
@@ -1602,7 +1602,7 @@ async function desarOpinions(arr) {
   if (pantryId) {
     // DESAR A PANTRY
     try {
-      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/opinions`, {
+      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/Faig`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(arr)
