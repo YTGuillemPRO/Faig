@@ -1547,63 +1547,76 @@ document.getElementById('sol-wrap').onclick = () => {
 };
 
 /* ============================================================
-   OPINIONS - BACKEND (jsonblob o localStorage)
+   OPINIONS - BACKEND (Pantry o localStorage)
    ============================================================ */
 let cacheOpinions = [];
 
+function getPantryId() {
+  return localStorage.getItem('pantry_id') || '';
+}
+
 function llegirLocal() {
-  try {
-    return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]');
-  } catch { return []; }
+  try { return JSON.parse(localStorage.getItem('opinions_2eso_v2') || '[]'); } catch { return []; }
 }
 function desarLocal(arr) {
-  localStorage.setItem(LOCAL_KEY, JSON.stringify(arr));
+  localStorage.setItem('opinions_2eso_v2', JSON.stringify(arr));
 }
 
 async function carregarOpinions() {
-  const blob = getBlobUrl();
-  if (!blob) {
-    // Mode local
-    document.getElementById('ops-banner').style.display = 'flex';
-    cacheOpinions = llegirLocal();
-    renderOpinions();
-    return;
+  const pantryId = getPantryId();
+  
+  if (pantryId) {
+    // MODE NÚVOL (Pantry)
+    document.getElementById('ops-banner').style.display = 'none';
+    try {
+      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/opinions`);
+      
+      if (r.status === 400) {
+        // Si la cistella encara no existeix, la creem
+        cacheOpinions = [];
+        await desarOpinions([]);
+      } else {
+        const data = await r.json();
+        // Pantry pot retornar l'array directament o dins d'un objecte
+        cacheOpinions = Array.isArray(data) ? data : (data.opinions || []);
+      }
+      renderOpinions();
+      return;
+    } catch (e) {
+      console.error('Error connectant a Pantry:', e);
+      // Si falla, no posem el cartell groc, simplement no carrega
+      renderOpinions();
+      return;
+    }
   }
-  // Mode compartit
-  try {
-    const r = await fetch(blob);
-    const data = await r.json();
-    let arr;
-    if (Array.isArray(data)) arr = data;
-    else if (data && Array.isArray(data.opinions)) arr = data.opinions;
-    else arr = [];
-    cacheOpinions = arr;
-    renderOpinions();
-  } catch (e) {
-    console.error('Error carregant opinions:', e);
-    cacheOpinions = llegirLocal();
-    renderOpinions();
-    showToast('⚠️ No s\'han pogut carregar les opinions compartides');
-  }
+  
+  // MODE LOCAL (si no hi ha Pantry ID)
+  document.getElementById('ops-banner').style.display = 'flex';
+  cacheOpinions = llegirLocal();
+  renderOpinions();
 }
 
 async function desarOpinions(arr) {
-  const blob = getBlobUrl();
-  if (!blob) {
-    desarLocal(arr);
-    return true;
+  const pantryId = getPantryId();
+  
+  if (pantryId) {
+    // DESAR A PANTRY
+    try {
+      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/opinions`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(arr)
+      });
+      return r.ok;
+    } catch (e) {
+      console.error('Error desant a Pantry:', e);
+      return false;
+    }
   }
-  try {
-    const r = await fetch(blob, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(arr)
-    });
-    return r.ok;
-  } catch (e) {
-    console.error('Error desant opinions:', e);
-    return false;
-  }
+  
+  // DESAR LOCAL
+  desarLocal(arr);
+  return true;
 }
 
 /* ============================================================
