@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Menú de Tecnologia · 2n d'ESO</title>
+<title>El Cost del que Mengem · 2n d'ESO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -540,7 +540,6 @@ body {
   letter-spacing: .05em;
   color: var(--text-dim);
 }
-/* Colors temàtics per a les targetes */
 .machine-card.c-orange .mc-icon { background: rgba(251,146,60,.12); border: 1px solid rgba(251,146,60,.3); color: var(--orange); }
 .machine-card.c-orange { --mc-glow: rgba(251,146,60,.15); }
 .machine-card.c-purple .mc-icon { background: rgba(167,139,250,.12); border: 1px solid rgba(167,139,250,.3); color: var(--purple); }
@@ -934,14 +933,6 @@ body {
   line-height: 1.5;
   margin-bottom: 12px;
 }
-.admin-panel code {
-  background: rgba(0,0,0,.4);
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: var(--amber-light);
-  font-family: monospace;
-  font-size: .78rem;
-}
 .admin-input {
   width: 100%;
   background: rgba(0,0,0,.4);
@@ -1080,7 +1071,7 @@ footer a:hover { text-decoration: underline; }
      ============================================================ -->
 <div class="stats-bar">
   <div class="stat-box">
-    <div class="stat-val" id="statTopics">0</div>
+    <div class="stat-val" id="statTopics">6</div>
     <div class="stat-label">Temes de teoria</div>
   </div>
   <div class="stat-box">
@@ -1272,9 +1263,9 @@ footer a:hover { text-decoration: underline; }
      ============================================================ -->
 <div class="admin-panel" id="admin-panel">
   <h4><iconify-icon icon="solar:shield-user-bold"></iconify-icon> Panell d'administració</h4>
-  <p>Enganxa aquí l'URL del teu <strong>jsonblob</strong> per activar el mur compartit. Si no en tens, crea'n un gratuïtament a <code>jsonblob.com</code>.</p>
-<input type="text" class="admin-input" id="admin-blob-input" placeholder="Enganxa el teu Pantry ID (ex: a1b2c3...)">
-  <button class="admin-btn primary" id="admin-save">Desar URL del mur</button>
+  <p>Enganxa aquí el teu <strong>Pantry ID</strong> per activar el mur compartit. El nom de la cistella al codi és <code>Faig</code>.</p>
+  <input type="text" class="admin-input" id="admin-blob-input" placeholder="Pantry ID (ex: a1b2c3...)">
+  <button class="admin-btn primary" id="admin-save">Desar Pantry ID</button>
   <button class="admin-btn" id="admin-clear">Esborrar configuració</button>
   <button class="admin-btn" id="admin-close">Tancar</button>
 </div>
@@ -1299,15 +1290,12 @@ footer a:hover { text-decoration: underline; }
 /* ============================================================
    CONFIGURACIÓ
    ============================================================ */
-// ✏️ IMPORTANT: Perquè les opinions es vegin entre tots,
-// crea un blob gratuït a https://jsonblob.com i enganxa l'URL aquí.
-// Si el deixes buit, funciona en mode local (només al teu navegador).
-const BLOB_URL_DEFAULT = '';
+const PANTRY_ID_DEFAULT = ''; // Deixa-ho buit per començar en mode local
+const BASKET_NAME = 'Faig';   // Nom de la teva cistella a Pantry
 const LOCAL_KEY = 'opinions_2eso_v2';
 
-// Llegeix de localStorage (per si l'admin l'ha configurat des del panell)
-function getBlobUrl() {
-  return localStorage.getItem('blob_url') || BLOB_URL_DEFAULT;
+function getPantryId() {
+  return localStorage.getItem('pantry_id') || PANTRY_ID_DEFAULT;
 }
 
 /* ============================================================
@@ -1458,14 +1446,6 @@ addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ============================================================
-   PARALLAX
-   ============================================================ */
-addEventListener('mousemove', e => {
-  document.documentElement.style.setProperty('--mx', (e.clientX / innerWidth) * 100 + '%');
-  document.documentElement.style.setProperty('--my', (e.clientY / innerHeight) * 100 + '%');
-}, { passive: true });
-
-/* ============================================================
    HOVER 3D A LES TARGETES
    ============================================================ */
 document.querySelectorAll('.feat-card, .machine-card').forEach(card => {
@@ -1551,15 +1531,11 @@ document.getElementById('sol-wrap').onclick = () => {
    ============================================================ */
 let cacheOpinions = [];
 
-function getPantryId() {
-  return localStorage.getItem('pantry_id') || '';
-}
-
 function llegirLocal() {
-  try { return JSON.parse(localStorage.getItem('opinions_2eso_v2') || '[]'); } catch { return []; }
+  try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch { return []; }
 }
 function desarLocal(arr) {
-  localStorage.setItem('opinions_2eso_v2', JSON.stringify(arr));
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(arr));
 }
 
 async function carregarOpinions() {
@@ -1569,28 +1545,33 @@ async function carregarOpinions() {
     // MODE NÚVOL (Pantry)
     document.getElementById('ops-banner').style.display = 'none';
     try {
-      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/Faig`);
+      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/${BASKET_NAME}`);
       
       if (r.status === 400) {
-        // Si la cistella encara no existeix, la creem
         cacheOpinions = [];
-        await desarOpinions([]);
+        await desarOpinions([]); // Creem l'objecte buit
       } else {
         const data = await r.json();
-        // Pantry pot retornar l'array directament o dins d'un objecte
-        cacheOpinions = Array.isArray(data) ? data : (data.opinions || []);
+        // Pantry retorna un objecte amb la clau "opinions"
+        cacheOpinions = data.opinions || [];
       }
       renderOpinions();
       return;
     } catch (e) {
       console.error('Error connectant a Pantry:', e);
-      // Si falla, no posem el cartell groc, simplement no carrega
+      // Si estem a file:// donem un avís
+      if (window.location.protocol === 'file:') {
+        showToast('⚠️ Obre el fitxer amb Live Server per connectar al núvol!');
+      } else {
+        showToast('⚠️ No s\'ha pogut connectar al mur compartit');
+      }
+      cacheOpinions = llegirLocal();
       renderOpinions();
       return;
     }
   }
   
-  // MODE LOCAL (si no hi ha Pantry ID)
+  // MODE LOCAL
   document.getElementById('ops-banner').style.display = 'flex';
   cacheOpinions = llegirLocal();
   renderOpinions();
@@ -1600,12 +1581,11 @@ async function desarOpinions(arr) {
   const pantryId = getPantryId();
   
   if (pantryId) {
-    // DESAR A PANTRY
     try {
-      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/Faig`, {
+      const r = await fetch(`https://getpantry.cloud/apiv1/pantry/${pantryId}/basket/${BASKET_NAME}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ opinions: arr })
+        body: JSON.stringify({ opinions: arr }) // Guardem com un objecte!
       });
       return r.ok;
     } catch (e) {
@@ -1614,7 +1594,6 @@ async function desarOpinions(arr) {
     }
   }
   
-  // DESAR LOCAL
   desarLocal(arr);
   return true;
 }
@@ -1637,15 +1616,14 @@ function estrellesHTML(n) {
 }
 
 function renderOpinions() {
-  // Ordena per data desc
   const ops = [...cacheOpinions].sort((a, b) => b.data - a.data);
   const llista = document.getElementById('opinions-list');
 
-  // Stats globals
   const ambEst = ops.filter(o => o.estrelles > 0);
   const mitj = ambEst.length > 0
     ? ambEst.reduce((s, o) => s + o.estrelles, 0) / ambEst.length
     : 0;
+    
   document.getElementById('stat-avg-val').innerHTML = mitj > 0
     ? mitj.toFixed(1) + '<span class="unit">/5</span>'
     : '—<span class="unit">/5</span>';
@@ -1654,11 +1632,9 @@ function renderOpinions() {
     : '☆☆☆☆☆';
   document.getElementById('stat-count-val').textContent = ops.length;
 
-  // Stats de la capçalera
   document.getElementById('statOps').textContent = ops.length;
   document.getElementById('statAvg').textContent = mitj > 0 ? mitj.toFixed(1) : '—';
 
-  // Llista
   if (ops.length === 0) {
     llista.innerHTML = '<div class="ops-empty">Encara no hi ha opinions. Sigues la primera persona en deixar la teva empremta! ✨</div>';
     return;
@@ -1697,16 +1673,6 @@ starBtns.forEach(btn => {
       b.classList.toggle('on', parseInt(b.dataset.v) <= starValue);
     });
   });
-  btn.addEventListener('mouseenter', () => {
-    const v = parseInt(btn.dataset.v);
-    starBtns.forEach(b => {
-      const active = parseInt(b.dataset.v) <= v;
-      b.style.transform = active ? 'scale(1.15)' : '';
-    });
-  });
-  btn.addEventListener('mouseleave', () => {
-    starBtns.forEach(b => b.style.transform = '');
-  });
 });
 
 const txtArea = document.getElementById('opinio-text');
@@ -1720,7 +1686,6 @@ const btnSubmit = document.getElementById('btn-submit');
 
 formOpinio.addEventListener('submit', async e => {
   e.preventDefault();
-  // Honeypot
   if (document.getElementById('honeypot').value) return;
 
   const nom = document.getElementById('opinio-nom').value.trim();
@@ -1748,12 +1713,10 @@ formOpinio.addEventListener('submit', async e => {
   btnSubmit.innerHTML = '<svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg> Publicar opinió';
 
   if (ok) {
-    // Reset
     formOpinio.reset();
     starValue = 0;
     starBtns.forEach(b => b.classList.remove('on'));
     charCount.textContent = '0';
-    // Confetti
     confetti({
       particleCount: 80,
       spread: 90,
@@ -1769,11 +1732,6 @@ formOpinio.addEventListener('submit', async e => {
 });
 
 /* ============================================================
-   STATS DELS TEMES
-   ============================================================ */
-document.getElementById('statTopics').textContent = '8';
-
-/* ============================================================
    ADMIN PANEL
    ============================================================ */
 const adminPanel = document.getElementById('admin-panel');
@@ -1783,7 +1741,7 @@ document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
     e.preventDefault();
     adminPanel.classList.toggle('active');
-    adminInput.value = getBlobUrl();
+    adminInput.value = getPantryId();
   }
   if (e.key === 'Escape' && adminPanel.classList.contains('active')) {
     adminPanel.classList.remove('active');
@@ -1793,21 +1751,19 @@ document.addEventListener('keydown', e => {
 document.getElementById('admin-save').onclick = () => {
   const val = adminInput.value.trim();
   if (!val) {
-    showToast('Enganxa el teu Pantry ID');
+    showToast('Enganxa un Pantry ID vàlid');
     return;
   }
   
-  // Guardem el Pantry ID perquè la web el faci servir
+  // Guardem el Pantry ID
   localStorage.setItem('pantry_id', val);
-  showToast('✅ Mur públic configurat amb Pantry!');
+  showToast('✅ Mur públic configurat!');
   adminPanel.classList.remove('active');
-  
-  // Refresquem les opinions perquè es connecti al núvol
   carregarOpinions();
 };
 
 document.getElementById('admin-clear').onclick = () => {
-  localStorage.removeItem('blob_url');
+  localStorage.removeItem('pantry_id');
   showToast('🗑️ Configuració esborrada');
   adminInput.value = '';
   carregarOpinions();
@@ -1824,7 +1780,7 @@ carregarOpinions();
 
 // Refresca cada 30s si estem en mode compartit
 setInterval(() => {
-  if (getBlobUrl() && !document.hidden) {
+  if (getPantryId() && !document.hidden) {
     carregarOpinions();
   }
 }, 30000);
